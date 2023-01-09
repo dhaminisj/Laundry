@@ -37,3 +37,47 @@ Opentickets
 
 
 
+
+api for user:
+get profile :
+.userId
+*name, profilepic , plan, phone, 
+
+my profile :
+.userId
+* name , phone , email
+
+
+
+edit profile:
+edit phone:
+.phone Number
+*get otp
+*verify otp
+edit email:
+.email
+*get otp 
+*verify otp
+
+edit address:
+delete address:
+refer&earn:
+gen refcode:
+
+.userId
+.referal code
+*earn
+
+
+
+my wallet:
+
+
+
+
+
+
+
+
+
+

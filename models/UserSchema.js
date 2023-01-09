@@ -21,21 +21,28 @@ const UserSchema = new mongoose.Schema({
     },
     coordinates: {
       type: [Number],
-      required: true,
     },
   },
   address: [
     {
-      houseNo: { type: String },
+      houseNo: { type: String, required: true },
       Flat: { type: String },
-      pinCode: { type: String },
-      city: { type: String },
-      Type: { type: String, enum: ["Home", "Work", "Other"], required: true },
+      pinCode: { type: String, required: true },
+      city: { type: String, required: true },
+      types: { type: String, enum: ["Home", "Work", "Other"], required: true },
+      primary: { type: Boolean, required: true },
     },
   ],
-  referalCode: { type: String },
-  refreshToken: { type: String },
+  //referalCode: { type: String, required: true },
+  refreshToken: { type: String, required: true },
   wallet: { type: Number, required: true },
+  plan: { type: Number, required: true },
+  totalearned: { type: Number },
+ // referandearn :{
+    code: { type: String, },
+    //reward:{ type: Number, default: 40 },
+ // }
+
 });
 UserSchema.index({ location: "2dsphere" });
 const UserModel = mongoose.model("UserModel", UserSchema);
