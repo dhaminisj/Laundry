@@ -10,7 +10,7 @@ const register = async (req, res) => {
     res
       .status(400)
       .json({ status: false, statusCode: 400, message: "body not found" });
-  const { name, phone, latitude, longitude, address, referalCode } = req.body;
+  const { name, phone,email, latitude, longitude, address, code } = req.body;
   const validationErrors = validationResult(req);
 
   if (!validationErrors.isEmpty())
@@ -27,7 +27,7 @@ const register = async (req, res) => {
       statusCode: 403,
       message: "User with this phone number already present",
     });
-  let code = random(6, (err, uniqueString) => {
+  let usercode = random(6, (err, uniqueString) => {
     if (err) return err;
     else return uniqueString;
   });
@@ -35,44 +35,56 @@ const register = async (req, res) => {
     const user = new User({
       name,
       phone,
-
+      email,
       latitude,
       longitude,
       address,
-      code,
+      code: usercode,
     });
-    const result = await user.save();
-    if (result) {
-      const accessToken = jwt.sign(
-        { userId: result._id, phone: result.phone },
-        process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "60d" }
+    console.log("user", user);
+    const codefound = await User.findOne({ code }, { _id: 1, totalearned: 1 });
+    console.log("codefound",codefound);
+    if (codefound) {
+      await User.findByIdAndUpdate(
+        codefound._id,
+        { totalearned: codefound.totalearned + 40 },
+        { new: true }
       );
+    }
 
-      const refreshToken = jwt.sign(
-        { userId: result._id, phone: result.phone },
-        process.env.REFRESH_TOKEN_SECRET,
-        { expiresIn: "100d" }
-      );
-      await User.findOneAndUpdate(
-        { _id: result._id },
-        { refreshToken: refreshToken }
-      );
+      const result = await user.save();
+      if (result) {
+        const accessToken = jwt.sign(
+          { userId: result._id, phone: result.phone },
+          process.env.ACCESS_TOKEN_SECRET,
+          { expiresIn: "60d" }
+        );
 
-      //   res.header("Refresh-Token", refreshToken);
-      res.header("Authorization", "Bearer " + accessToken);
-      res.status(200).json({
-        status: true,
-        statusCode: 200,
-        message: " User succesfully registered",
-      });
-    } else
-      res.status(500).json({
-        status: false,
-        statusCode: 200,
-        message: "couldnt register user",
-        data: {},
-      });
+        const refreshToken = jwt.sign(
+          { userId: result._id, phone: result.phone },
+          process.env.REFRESH_TOKEN_SECRET,
+          { expiresIn: "100d" }
+        );
+        await User.findOneAndUpdate(
+          { _id: result._id },
+          { refreshToken: refreshToken }
+        );
+
+        //   res.header("Refresh-Token", refreshToken);
+        res.header("Authorization", "Bearer " + accessToken);
+        res.status(200).json({
+          status: true,
+          statusCode: 200,
+          message: " User succesfully registered",
+        });
+      } else
+        res.status(500).json({
+          status: false,
+          statusCode: 200,
+          message: "couldnt register user",
+          data: {},
+        });
+    
   } catch (error) {
     console.log("error from register", error);
   }
