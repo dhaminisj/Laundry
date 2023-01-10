@@ -19,25 +19,19 @@ const laundryListSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
-  addOn: 
-    {
-      packaging: 
-        {
-          singlePack: {
-            type: Number,
-            default: 8,
-          },
-          hanger: { type: Number, default: 10 },
-          multiplePack: { type: Number, default: 20 },
-        },
-      extras: 
-        {
-          starch: { type: Number, default: 8 },
-          noStrach: { type: Number, default: 10 },
-        },
-      
-    },
-  
+  image: {
+    type: String,
+  },
+
+  singlePack: {
+    type: Number,
+    default: 8,
+  },
+  hanger: { type: Number, default: 10 },
+  multiplePack: { type: Number, default: 20 },
+
+  starch: { type: Number, default: 8 },
+  noStrach: { type: Number, default: 10 },
 });
 
 module.exports = mongoose.model("laundryList", laundryListSchema);

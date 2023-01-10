@@ -1,13 +1,19 @@
 const mongoose = require("mongoose");
 const laundryList = require("../models/laundryListSchema");
-
+const cloudinary = require("../utils/cloudinaryConfig");
 const addLaundryList = async (req, res) => {
   try {
+    uploadFiles = req.file.path;
+    const upload = await cloudinary.uploader.upload(uploadFiles, {
+      folder: "profile-Image",
+      use_filename: true,
+    });
     await laundryList.create({
       type: req.body.type,
       category: req.body.category,
       cloth: req.body.cloth,
       price: req.body.price,
+      image:upload.url
     });
     res.status(200).send({ message: "laundry list added successfully" });
   } catch (error) {
