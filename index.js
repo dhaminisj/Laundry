@@ -3,12 +3,14 @@ const app = express();
 const mongoose = require("mongoose");
 const loginRouter = require("./routes/login");
 const subscriptionRouter = require("./routes/subscription");
-const laundryRouter = require("./routes/laundry")
+const laundryRouter = require("./routes/laundry");
+const userRouter = require("./routes/user");
 require("dotenv").config();
 app.use(express.json());
 app.use("/api/v1", loginRouter);
 app.use("/api/v1", subscriptionRouter);
-app.use("/api/v1",laundryRouter)
+app.use("/api/v1", laundryRouter);
+app.use("/api/user", userRouter);
 app.get("/", (req, res) => {
   res.send("Welcome to laundry app.............");
 });
