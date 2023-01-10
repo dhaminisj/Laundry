@@ -158,8 +158,49 @@ const getProfile = async (req, res) => {
   }
 };
 
+const addAddress = async (req, res) => {
+  try {
+    const { userId } = req.users;
+    const { houseNo, flat, pinCode, city, types, primary } = req.body;
+    const obj = {
+      houseNo,
+      flat,
+      pinCode,
+      city,
+      types,
+      primary,
+    };
+    console.log(obj)
+    const result = await User.findByIdAndUpdate(
+      { _id: userId },
+      { $push: { address: obj } },
+      { new: true }
+    );
+    res.status(200).json({
+      status: true,
+      statusCode: 200,
+      message: "Added address successfully",
+      data: result,
+    });
+  } catch (error) {
+    console.log("Error, couldn't add ground", error);
+  }
+};
+
+const updateAddress = async (req, res) => {
+  try {
+  } catch (error) {}
+};
+const deleteAddress = async (req, res) => {
+  try {
+  } catch (error) {}
+};
+
 module.exports = {
   register,
   updateUserProfilePic,
   getProfile,
+  addAddress,
+  updateAddress,
+  deleteAddress,
 };

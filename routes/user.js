@@ -11,4 +11,11 @@ router
   .route("/updateProfilePic")
   .post(upload.single("image"), userController.updateUserProfilePic)
   .get(checkUserLoggedIn, userController.getProfile);
+
+router
+  .route("/add-address")
+  .post(checkUserLoggedIn, userController.addAddress)
+  .put(checkUserLoggedIn, userController.addAddress)
+  .delete(checkUserLoggedIn, userController.addAddress);
+
 module.exports = router;
