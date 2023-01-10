@@ -91,20 +91,18 @@ const register = async (req, res) => {
 };
 const updateUserProfilePic = async (req, res) => {
   try {
-   
     const { userId } = req.body;
-        if (req.file) {
+    if (req.file) {
       profilePic = req.file.path;
       cloudinaryResult = await cloudinary.uploader.upload(profilePic, {
         folder: "image",
         use_filename: true,
       });
-       user = await User.findOneAndUpdate(
+      user = await User.findOneAndUpdate(
         { _id: userId },
         { profilePic: cloudinaryResult.url }
       );
       console.log(cloudinaryResult.url);
-      
 
       //profilePic = cloudinaryResult.secure_url;
     } else {
@@ -139,9 +137,9 @@ const updateUserProfilePic = async (req, res) => {
 const getProfile = async (req, res) => {
   try {
     const { userId } = req.users;
-    //console.log("zzzzzzzzzzzz", userId);
+    console.log(userId);
     const user = await User.find({ _id: userId }).select(
-      " name profilePic plan phone "
+      " name profilePic plan phone email "
     );
     if (user)
       return res.status(200).json({
