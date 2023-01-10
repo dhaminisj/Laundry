@@ -23,7 +23,6 @@ const checkUserIsLoggedIn = (req, res, next) => {
       }); //invalid token
 
     req.users = { userId: decoded.userId };
-    console.log("verified", req.users, decoded);
     next();
   });
 };

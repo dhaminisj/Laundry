@@ -15,7 +15,9 @@ router
 router
   .route("/add-address")
   .post(checkUserLoggedIn, userController.addAddress)
-  .put(checkUserLoggedIn, userController.addAddress)
+  router
+  .route("/update-address")
+  .put(checkUserLoggedIn, userController.updateAddress)
   .delete(checkUserLoggedIn, userController.addAddress);
 
 module.exports = router;
