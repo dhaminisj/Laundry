@@ -170,7 +170,7 @@ const addAddress = async (req, res) => {
       types,
       primary,
     };
-    console.log(obj)
+    console.log(obj);
     const result = await User.findByIdAndUpdate(
       { _id: userId },
       { $push: { address: obj } },
@@ -189,11 +189,66 @@ const addAddress = async (req, res) => {
 
 const updateAddress = async (req, res) => {
   try {
-  } catch (error) {}
+    const { userId } = req.users;
+    const { addressId, houseNo, flat, pinCode, city, types, primary } =
+      req.body;
+
+    const addressFound = await User.find({
+      $and: [{ _id: userId }, { "address._id": addressId }],
+    });
+    if (addressFound.length != 0) {
+      console.log("abc");
+
+      const obj = {
+        houseNo,
+        flat,
+        pinCode,
+        city,
+        types,
+        primary,
+      };
+      console.log("add", addressFound);
+      console.log("ob", obj);
+      const result = await User.findOneAndUpdate(
+        {
+          _id: userId,
+          "address._id": addressId,
+        },
+        {
+          $set: {
+            "address.$.houseNo": req.body.houseNo,
+            "address.$.flat": req.body.flat,
+            "address.$.pinCode": req.body.pinCode,
+            "address.$.city": req.body.city,
+            "address.$.types": req.body.types,
+            "address.$.primary": req.body.primary,
+          },
+        },
+        { new: true }
+      );
+      console.log("result", result);
+      res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "updated address successfully",
+        data: result,
+      });
+    } else
+      res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "Cannot update address ",
+        data: result,
+      });
+  } catch (error) {
+    console.log("Error from updateAddress", error);
+  }
 };
 const deleteAddress = async (req, res) => {
   try {
-  } catch (error) {}
+  } catch (error) {
+    console.log("Error from deleteAddress", error);
+  }
 };
 
 module.exports = {
