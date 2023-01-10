@@ -3,18 +3,10 @@ const app = express();
 const mongoose = require("mongoose");
 const loginRouter = require("./routes/login");
 const subscriptionRouter = require("./routes/subscription");
-const userRouter = require("./routes/user");
-var bodyParser = require("body-parser");
-
 require("dotenv").config();
 app.use(express.json());
 app.use("/api/v1", loginRouter);
 app.use("/api/v1", subscriptionRouter);
-app.use("/api/user", userRouter);
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
 app.get("/", (req, res) => {
   res.send("Welcome to laundry app.............");
 });
