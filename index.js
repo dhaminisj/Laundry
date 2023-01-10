@@ -3,10 +3,12 @@ const app = express();
 const mongoose = require("mongoose");
 const loginRouter = require("./routes/login");
 const subscriptionRouter = require("./routes/subscription");
+const laundaryRouter = require("./routes/laundary");
 require("dotenv").config();
 app.use(express.json());
 app.use("/api/v1", loginRouter);
 app.use("/api/v1", subscriptionRouter);
+app.use("/api/v1", laundaryRouter);
 app.get("/", (req, res) => {
   res.send("Welcome to laundry app.............");
 });
