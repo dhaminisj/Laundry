@@ -78,4 +78,5 @@ const getLaundryList = async (req, res) => {
     });
   }
 };
+
 module.exports = { addLaundryList, getLaundryList };
