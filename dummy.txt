@@ -39,16 +39,10 @@ Opentickets
 
 
 api for user:
-get profile :
-.userId
-*name, profilepic , plan, phone, 
-
-my profile :
-.userId
-* name , phone , email
 
 
-edit profile pic:
+
+
 
 edit profile:
 edit phone:
@@ -62,12 +56,23 @@ edit email:
 
 edit address:
 delete address:
+
+
+
+Done:
 refer&earn:
 gen refcode:
-
 .userId
 .referal code
 *earn
+get profile :
+.userId
+*name, profilepic , plan, phone, 
+
+my profile :
+.userId
+* name , phone , email
+edit profile pic:
 
 
 
