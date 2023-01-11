@@ -246,8 +246,24 @@ const updateAddress = async (req, res) => {
 };
 const deleteAddress = async (req, res) => {
   try {
+    const { addressId } = req.body;
+    const { userId } = req.users;
+
+    User.findByIdAndDelete({ _id: userId, addressId }),
+      function (err) {
+        if (err)
+          return res
+            .status(400)
+            .json({ status: false, statusCode: 400, message: " error" });
+        else
+          return res.status(200).json({
+            status: true,
+            statusCode: 200,
+            message: "address deleted ",
+          });
+      };
   } catch (error) {
-    console.log("Error from deleteAddress", error);
+    console.log("Error from delete Address", error);
   }
 };
 
