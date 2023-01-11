@@ -18,6 +18,6 @@ router
   router
   .route("/update-address")
   .put(checkUserLoggedIn, userController.updateAddress)
-  .delete(checkUserLoggedIn, userController.addAddress);
+  .delete(checkUserLoggedIn, userController.deleteAddress);
 
 module.exports = router;
