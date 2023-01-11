@@ -1,0 +1,11 @@
+�я модулем, но этот файл не содержит импортов или экспортов. Рекомендуется добавить пустой элемент \"export {}\", чтобы сделать этот файл модулем.",
+  "for_await_loops_are_only_allowed_within_async_functions_and_at_the_top_levels_of_modules_1103": "Циклы \"for await\" допускаются только в асинхронных функциях и на верхних уровнях модулей.",
+  "get_and_set_accessors_cannot_declare_this_parameters_2784": "Методы доступа \"get\" и \"set\" не могут объявлять параметры \"this\".",
+  "if_files_is_specified_otherwise_Asterisk_Asterisk_Slash_Asterisk_6908": "\"[]\", если указаны \"files\", в противном случае \"[\"**/*\"]5D;\"",
+  "implements_clause_already_seen_1175": "Предложение implements уже существует.",
+  "implements_clauses_can_only_be_used_in_TypeScript_files_8005": "Предложения \"implements\" можно использовать только в файлах TypeScript.",
+  "import_can_only_be_used_in_TypeScript_files_8002": "Элемент \"import ... =\" можно использовать только в файлах TypeScript.",
+  "infer_declarations_are_only_permitted_in_the_extends_clause_of_a_conditional_type_1338": "Объявления \"infer\" допустимы только в предложении \"extends\" условного типа.",
+  "let_declarations_can_only_be_declared_inside_a_block_1157": "Объявления let можно задать только в блоке.",
+  "let_is_not_allowed_to_be_used_as_a_name_in_let_or_const_declarations_2480": "Не допускается использование let в качестве имени в объявлениях let или const.",
+  "module_AMD_or_UMD_or_System_or_ES6_then_Classic_Othe

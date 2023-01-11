@@ -1,0 +1,89 @@
+subscription
+
+subduration
+subcost
+noofpickups
+startdate
+endate
+pickupdays
+deliverydays
+deliverytype
+pickupslots
+deliveryslots
+orderid
+paymenttype
+feedback
+invoice
+
+help and support
+
+FAQ:
+orders&payments
+offers&discounts
+cashbacks
+AvailableServices
+Pickup&delivery
+covid-19Protocols
+subscriprtion
+returns&reprocessing
+addressManagement                      
+
+
+CustomerSupport:
+
+
+
+Opentickets
+
+
+
+
+api for user:
+
+
+
+
+
+edit profile:
+edit phone:
+.phone Number
+*get otp
+*verify otp
+edit email:
+.email
+*get otp 
+*verify otp
+
+edit address:
+delete address:
+
+
+
+Done:
+refer&earn:
+gen refcode:
+.userId
+.referal code
+*earn
+get profile :
+.userId
+*name, profilepic , plan, phone, 
+
+my profile :
+.userId
+* name , phone , email
+edit profile pic:
+
+
+
+my wallet:
+
+
+
+
+
+
+
+
+
+
