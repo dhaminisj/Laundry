@@ -3,12 +3,12 @@ const mongoose = require("mongoose");
 const laundryListSchema = mongoose.Schema({
   type: {
     type: String,
-    enum: ["wash+fold", "wash+iron", "steamIron", "dryClean"],
+    enum: ["WASH+FOLD", "WASH+IRON", "STEAM IRON", "DRY CLEAN"],
     required: true,
   },
   category: {
     type: String,
-    enum: ["men", "women", "kids", "home"],
+    enum: ["MEN", "WOMEN", "KIDS", "HOME"],
     required: true,
   },
   cloth: {
