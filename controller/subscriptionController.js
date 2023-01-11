@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const subscriptionList = require("../models/subscriptionList");
+const subscription = require("../models/subscriptionSchema");
 
 const addSubscriptionList = async (req, res) => {
   try {
@@ -32,4 +33,47 @@ const getSubscriptionList = async (req, res) => {
   }
 };
 
-module.exports = { addSubscriptionList, getSubscriptionList };
+const buySubscription = async (req, res) => {
+  try {
+    await subscription.create({
+      // userId:req.users.userId,
+      pickupDays: req.body.pickupDays,
+      amount: req.body.amount,
+      months: req.body.months,
+      numberOfPickups: req.body.numberOfPickups,
+      subscriptionStart: req.body.subscriptionStart,
+      subscriptionEnd: req.body.subscriptionEnd,
+      deliveryType: req.body.deliveryType,
+      deliverySlot: req.body.deliverySlot,
+      address: req.body.address,
+    });
+    res.status(200).send({
+      message: "subscription order completed",
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: error,
+    });
+  }
+};
+
+const viewSubscription = async (req, res) => {
+  try {
+    const viewPlans = await subscription.findOne({});
+    console.log(viewPlans);
+    res.status(200).send({
+      viewPlans,
+    });
+  } catch (error) {
+    res.status(400).json({
+      message: error,
+    });
+  }
+};
+
+module.exports = {
+  addSubscriptionList,
+  getSubscriptionList,
+  buySubscription,
+  viewSubscription,
+};
