@@ -1,59 +1,75 @@
 const mongoose = require("mongoose");
 const subscriptionSchema = mongoose.Schema({
-    userId:{
-        type:String
+  userId: {
+    type: String,
+  },
+  pickupDays: [
+    {
+      pickupDays: [],
+      deliveryDays: [],
     },
-    pickupDays:[{
-        pickupDays:[],
-        deliveryDays:[]
-    }],
-    amount:{
-        type:Number
+  ],
+  amount: {
+    type: Number,
+  },
+  months: {
+    type: Number,
+  },
+  numberOfPickups: {
+    type: Number,
+  },
+  isPaused: {
+    type: Boolean,
+    default: false,
+  },
+  ifPaused: [
+    {
+      from: {
+        type: Date,
+      },
+      to: {
+        type: Date,
+      },
     },
-    months:{
-        type:Number
+  ],
+  subscriptionStart: {
+    type: Date,
+  },
+  subscriptionEnd: {
+    type: Date,
+  },
+  deliveryType: {
+    type: String,
+  },
+  deliverySlot: {
+    type: String,
+  },
+  address: {
+    title: {
+      type: String,
     },
-    numberOfPickups:{
-        type:Number
+    address: {
+      type: String,
     },
-    isPaused:{
-        type:Boolean,
-        default:false
+    district: {
+      type: String,
     },
-    ifPaused:[{
-        from:{
-            type:Date
-        },
-        to:{
-            type:Date
-        }
-    }],
-    subscriptionStart:{
-        type:Date
+    pincode: {
+      type: String,
     },
-    subscriptionEnd:{
-        type:Date
-    },
-    deliveryType:{
-        type:String
-    },
-    deliverySlot:{
-        type:String
-    },
-    address:{
-        title:{
-            type:String
-        },
-        address:{
-            type:String
-        },
-        district:{
-            type:String
-        },
-        pincode:{
-            type:String
-        }
-    }
-})
+  },
 
-module.exports = mongoose.model("buySubscription",subscriptionSchema)
+  card: {
+    number: {
+      type: String,
+    },
+    name: {
+      type: String,
+    },
+    expDate: {
+      type: String,
+    }
+  },
+});
+
+module.exports = mongoose.model("buySubscription", subscriptionSchema);
