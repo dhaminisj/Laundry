@@ -60,7 +60,7 @@ const buySubscription = async (req, res) => {
 
 const viewSubscription = async (req, res) => {
   try {
-    const viewPlans = await subscription.findOne({ userId: req.users.userId });
+    const viewPlans = await subscription.find({ userId: req.users.userId });
     console.log(viewPlans);
     res.status(200).send({
       viewPlans,
