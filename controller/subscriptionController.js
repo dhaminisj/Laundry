@@ -46,6 +46,7 @@ const buySubscription = async (req, res) => {
       deliveryType: req.body.deliveryType,
       deliverySlot: req.body.deliverySlot,
       address: req.body.address,
+      card:req.body.card
     });
     res.status(200).send({
       message: "subscription order completed",
