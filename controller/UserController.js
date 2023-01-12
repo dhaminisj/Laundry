@@ -11,7 +11,8 @@ const register = async (req, res) => {
     res
       .status(400)
       .json({ status: false, statusCode: 400, message: "body not found" });
-  const { name, phone, email, latitude, longitude, address, code } = req.body;
+  const { name, phone, email, latitude, longitude, address, invitedCode } =
+    req.body;
   const validationErrors = validationResult(req);
 
   if (!validationErrors.isEmpty())
@@ -43,9 +44,12 @@ const register = async (req, res) => {
       code: usercode,
     });
     console.log("user", user);
-    const codefound = await User.findOne({ code }, { _id: 1, totalearned: 1 });
+    const codefound = await User.findOne(
+      { invitedCode },
+      { _id: 1, totalearned: 1 }
+    );
     console.log("codefound", codefound);
-    if (codefound) {
+    if (codefound != "") {
       await User.findByIdAndUpdate(
         codefound._id,
         { totalearned: codefound.totalearned + 40 },
@@ -249,14 +253,15 @@ const deleteAddress = async (req, res) => {
     const { addressId } = req.body;
     const { userId } = req.users;
 
-    User.findOneAndUpdate({ _id: userId, "address._id" : addressId },
-    {
-      $pull: {
-        address: {
-          _id: addressId,
+    User.findOneAndUpdate(
+      { _id: userId, "address._id": addressId },
+      {
+        $pull: {
+          address: {
+            _id: addressId,
+          },
         },
       },
-    },
       function (err) {
         if (err)
           return res
@@ -268,7 +273,8 @@ const deleteAddress = async (req, res) => {
             statusCode: 200,
             message: "address deleted ",
           });
-      })
+      }
+    );
   } catch (error) {
     console.log("Error from delete Address", error);
   }
