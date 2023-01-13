@@ -90,10 +90,24 @@ const editSubscription = async(req,res)=>{
     });
   }
 }
+
+const viewPickupDetails = async(req,res)=>{
+  try{
+    const details = await subscription.find({userId:req.users.userId}).select(["pickupDays","deliverySlot","deliveryType","-_id"])
+    res.status(200).send({
+      details:details
+    })
+  }catch (error) {
+    res.status(400).json({
+      message: error,
+    });
+  }
+}
 module.exports = {
   addSubscriptionList,
   getSubscriptionList,
   buySubscription,
   viewSubscription,
-  editSubscription
+  editSubscription,
+  viewPickupDetails
 };
