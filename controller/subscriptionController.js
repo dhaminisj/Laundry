@@ -74,10 +74,26 @@ const viewSubscription = async (req, res) => {
     });
   }
 };
-
+const editSubscription = async(req,res)=>{
+  try{
+    await subscription.findOneAndUpdate({$and:[{userId:req.users.userId},{_id:req.body._id}]},{
+      pickupDays:req.body.pickupDays,
+      deliverySlot:req.body.deliverySlot,
+      deliveryType:req.body.deliveryType
+    })
+    res.status(200).send({
+      message:"subscription edited"
+    })
+  }catch (error) {
+    res.status(400).json({
+      message: error,
+    });
+  }
+}
 module.exports = {
   addSubscriptionList,
   getSubscriptionList,
   buySubscription,
   viewSubscription,
+  editSubscription
 };
