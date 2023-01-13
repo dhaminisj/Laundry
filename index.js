@@ -5,7 +5,7 @@ const loginRouter = require("./routes/login");
 const subscriptionRouter = require("./routes/subscription");
 const laundryRouter = require("./routes/laundry");
 const userRouter = require("./routes/user");
-const laundryList = require("./models/laundryListSchema");
+// const laundryList = require("./models/laundryListSchema");
 require("dotenv").config();
 app.use(express.json());
 app.use("/api/v1", loginRouter);
@@ -21,34 +21,34 @@ mongoose.connect(process.env.MONGO_URI).then(() => {
   console.log("connected to DB");
 });
 
-app.get("/update", async (req, res) => {
-  const result = await laundryList
-    .updateMany(
-      {},
-      {
-        $set: {
-          singlePackDescription:
-            "Want each piece packed single, not ready to mingle? No, that's not unreasonable. To each garment, its own! Items are packed individually, with a cardboard support and in a white paper bag.",
-          singlePackUrl: "https://www.youtube.com/watch?v=CPUKWMPyOvA",
-          hangerDescription:
-            "No creases, no folds? Why not let them hang out uncrushed till you waer them? We pack your garment on a hanger, with a compostable outer cover.",
-          hangerUrl: "https://www.youtube.com/watch?v=GmHgusGNoec",
-          multiplePack: 0,
-          multiPackDescription:
-            "Pack it together, stack it together, you say. Okay. After all, you know your cupboard or suitcase better. Your garments come neatly packed and primed, in a brown paper bag.",
-          multiPackUrl: "https://www.youtube.com/watch?v=jF3dgfXEgB8",
-          starchDescription:
-            "The process for making clothes wrinkle-free longer",
-          starchUrl: "https://www.youtube.com/watch?v=GI9Uer-r8cg",
-          noStarchDescription:
-            "It just means that starch is not used in the process of steaming or ironing clothes.",
-          noStarchUrl: "https://www.youtube.com/watch?v=QsyPECwiolw",
-        },
-      }
-    )
-    .clone();
-  res.send(result);
-});
+// app.get("/update", async (req, res) => {
+//   const result = await laundryList
+//     .updateMany(
+//       {},
+//       {
+//         $set: {
+//           singlePackDescription:
+//             "Want each piece packed single, not ready to mingle? No, that's not unreasonable. To each garment, its own! Items are packed individually, with a cardboard support and in a white paper bag.",
+//           singlePackUrl: "https://www.youtube.com/watch?v=CPUKWMPyOvA",
+//           hangerDescription:
+//             "No creases, no folds? Why not let them hang out uncrushed till you waer them? We pack your garment on a hanger, with a compostable outer cover.",
+//           hangerUrl: "https://www.youtube.com/watch?v=GmHgusGNoec",
+//           multiplePack: 0,
+//           multiPackDescription:
+//             "Pack it together, stack it together, you say. Okay. After all, you know your cupboard or suitcase better. Your garments come neatly packed and primed, in a brown paper bag.",
+//           multiPackUrl: "https://www.youtube.com/watch?v=jF3dgfXEgB8",
+//           starchDescription:
+//             "The process for making clothes wrinkle-free longer",
+//           starchUrl: "https://www.youtube.com/watch?v=GI9Uer-r8cg",
+//           noStarchDescription:
+//             "It just means that starch is not used in the process of steaming or ironing clothes.",
+//           noStarchUrl: "https://www.youtube.com/watch?v=QsyPECwiolw",
+//         },
+//       }
+//     )
+//     .clone();
+//   res.send(result);
+// });
 
 app.listen(process.env.PORT || 5000, () => {
   console.log(`running on port ${process.env.PORT}...`);
