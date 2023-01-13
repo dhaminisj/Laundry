@@ -35,8 +35,10 @@ const getSubscriptionList = async (req, res) => {
 
 const buySubscription = async (req, res) => {
   try {
+    const id = "#id" + Math.random().toString(10).slice(3)
     await subscription.create({
       userId: req.users.userId,
+      orderId:id,
       pickupDays: req.body.pickupDays,
       amount: req.body.amount,
       months: req.body.months,
@@ -50,6 +52,7 @@ const buySubscription = async (req, res) => {
     });
     res.status(200).send({
       message: "subscription order completed",
+      orderId:id
     });
   } catch (error) {
     res.status(400).json({
