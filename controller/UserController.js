@@ -95,7 +95,9 @@ const register = async (req, res) => {
 };
 const updateUserProfilePic = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const { userId } = req.users;
+    console.log(req.users);
+
     if (req.file) {
       profilePic = req.file.path;
       cloudinaryResult = await cloudinary.uploader.upload(profilePic, {
@@ -126,7 +128,6 @@ const updateUserProfilePic = async (req, res) => {
         status: true,
         statusCode: 200,
         message: "profile updated successfully",
-        data: user,
       });
     res.status(404).json({
       status: false,
@@ -141,7 +142,6 @@ const updateUserProfilePic = async (req, res) => {
 const getProfile = async (req, res) => {
   try {
     const { userId } = req.users;
-    console.log(userId);
     const user = await User.find({ _id: userId }).select(
       " name profilePic plan phone email "
     );
@@ -201,8 +201,6 @@ const updateAddress = async (req, res) => {
       $and: [{ _id: userId }, { "address._id": addressId }],
     });
     if (addressFound.length != 0) {
-      console.log("abc");
-
       const obj = {
         houseNo,
         flat,
@@ -211,8 +209,7 @@ const updateAddress = async (req, res) => {
         types,
         primary,
       };
-      console.log("add", addressFound);
-      console.log("ob", obj);
+
       const result = await User.findOneAndUpdate(
         {
           _id: userId,
@@ -242,7 +239,6 @@ const updateAddress = async (req, res) => {
         status: true,
         statusCode: 200,
         message: "Cannot update address ",
-        data: result,
       });
   } catch (error) {
     console.log("Error from updateAddress", error);
