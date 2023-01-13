@@ -2,17 +2,17 @@ const subscriptionList = require("../models/subscriptionList");
 const User = require("../models/UserSchema");
 
 const addRating = async (req, res) => {
-    const { _id } = req.users;
+    const { userId } = req.users;
     const { star, subscriptionId } = req.body;
     try {
         const subscription = await subscriptionList.findById(subscriptionId);
-        let alreadyRated = await subscription.ratings.find(
-            (userId) => userId.postedby.toString() === _id.toString()
+        let alreadyRated = await subscriptionList.findOne(
+            { ratings: { $elemMatch: { postedby: userId } } }
         );
         if (alreadyRated) {
             const updateRating = await subscriptionList.updateOne(
                 {
-                    ratings: { $elemMatch: alreadyRated },
+                    ratings: { $elemMatch: { postedby: userId } },
                 },
                 {
                     $set: {
@@ -33,7 +33,7 @@ const addRating = async (req, res) => {
                     $push: {
                         ratings: {
                             star: star,
-                            postedby: _id,
+                            postedby: userId,
                         },
                     },
                 },
@@ -46,6 +46,7 @@ const addRating = async (req, res) => {
             });
         }
     } catch (error) {
+        console.log(error);
         res.status(400).json({ message: error.message });
     }
 };
