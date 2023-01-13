@@ -5,13 +5,16 @@ const addRating = async (req, res) => {
     const { userId } = req.users;
     const { star, subscriptionId } = req.body;
     try {
-        const subscription = await subscriptionList.findById(subscriptionId);
-        let alreadyRated = await subscriptionList.findOne(
-            { ratings: { $elemMatch: { postedby: userId } } }
-        );
+        // const subscription = await subscriptionList.findById(subscriptionId);
+        let alreadyRated = await subscriptionList.findOne({
+            _id: subscriptionId,
+            ratings: { $elemMatch: { postedby: userId } },
+        });
+        //console.log(alreadyRated);
         if (alreadyRated) {
-            const updateRating = await subscriptionList.updateOne(
+            const updateRating = await subscriptionList.findOneAndUpdate(
                 {
+                    _id: subscriptionId,
                     ratings: { $elemMatch: { postedby: userId } },
                 },
                 {
@@ -24,11 +27,11 @@ const addRating = async (req, res) => {
                 }
             );
             res.status(200).json({
-                message: "Rating Updated",
+                message: "Rating Updated Successfully",
             });
         } else {
-            const rate = await subscriptionList.findByIdAndUpdate(
-                subscriptionId,
+            const rate = await subscriptionList.updateOne(
+                { _id: subscriptionId },
                 {
                     $push: {
                         ratings: {
@@ -46,7 +49,7 @@ const addRating = async (req, res) => {
             });
         }
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         res.status(400).json({ message: error.message });
     }
 };
