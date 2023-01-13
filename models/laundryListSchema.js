@@ -70,7 +70,7 @@ const laundryListSchema = mongoose.Schema({
     type: String,
     default: "The process for making clothes wrinkle-free longer",
   },
-  StarchUrl: {
+  starchUrl: {
     type: String,
     default: "https://www.youtube.com/watch?v=GI9Uer-r8cg",
   },
