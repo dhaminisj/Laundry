@@ -35,8 +35,10 @@ const getSubscriptionList = async (req, res) => {
 
 const buySubscription = async (req, res) => {
   try {
+    const id = "#id" + Math.random().toString(10).slice(3)
     await subscription.create({
       userId: req.users.userId,
+      orderId:id,
       pickupDays: req.body.pickupDays,
       amount: req.body.amount,
       months: req.body.months,
@@ -50,6 +52,7 @@ const buySubscription = async (req, res) => {
     });
     res.status(200).send({
       message: "subscription order completed",
+      orderId:id
     });
   } catch (error) {
     res.status(400).json({
@@ -71,10 +74,26 @@ const viewSubscription = async (req, res) => {
     });
   }
 };
-
+const editSubscription = async(req,res)=>{
+  try{
+    await subscription.findOneAndUpdate({$and:[{userId:req.users.userId},{_id:req.body._id}]},{
+      pickupDays:req.body.pickupDays,
+      deliverySlot:req.body.deliverySlot,
+      deliveryType:req.body.deliveryType
+    })
+    res.status(200).send({
+      message:"subscription edited"
+    })
+  }catch (error) {
+    res.status(400).json({
+      message: error,
+    });
+  }
+}
 module.exports = {
   addSubscriptionList,
   getSubscriptionList,
   buySubscription,
   viewSubscription,
+  editSubscription
 };

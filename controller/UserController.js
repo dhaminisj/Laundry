@@ -93,6 +93,46 @@ const register = async (req, res) => {
     console.log("error from register", error);
   }
 };
+const login = async (req, res) => {
+  try{
+  if (!req.body)
+    res
+      .status(400)
+      .json({ status: false, statusCode: 400, message: "body not found" });
+  const { phone } = req.body;
+  const userfound = await User.findOne({ phone });
+  if (userfound){
+  // const accessToken = jwt.sign(
+  //   { userId: userfound._id, phone: userfound.phone },
+  //   process.env.ACCESS_TOKEN_SECRET,
+  //   { expiresIn: "6h" }
+  // );
+  // const refreshToken = jwt.sign(
+  //   { userId: userfound._id, phone: userfound.phone },
+  //   process.env.REFRESH_TOKEN_SECRET,
+  //   { expiresIn: "1d" }
+  // );
+  // await User.updateOne({ _id: userfound._id }, { refreshToken });
+  // //res.header("Refreh-Token", refreshToken);
+  // res.header("Authorization", "Bearer " + accessToken);
+    return res.status(200).json({
+      status: true,
+      statusCode: 200,
+      message: "User Logged in Succesfully",
+    });
+  }
+    else
+    return res.status(403).json({
+      status: true,
+      statusCode: 403,
+      message: "Phone number does not exist.",
+    });
+
+
+  } catch (error) {
+    console.log("error from login", error);
+  }
+}
 const updateUserProfilePic = async (req, res) => {
   try {
     const { userId } = req.users;
@@ -278,6 +318,7 @@ const deleteAddress = async (req, res) => {
 
 module.exports = {
   register,
+  login,
   updateUserProfilePic,
   getProfile,
   addAddress,
