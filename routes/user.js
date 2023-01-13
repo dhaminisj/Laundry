@@ -8,6 +8,7 @@ const verifyJWT = require("../middleware/verifyJWT");
 //const upload = require("../../multer");
 require("dotenv").config();
 router.route("/register").post(userController.register);
+router.route("/login").post(userController.login);
 router
   .route("/updateProfilePic")
   .post(upload.single("image"), verifyJWT, userController.updateUserProfilePic)
