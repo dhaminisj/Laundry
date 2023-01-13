@@ -13,4 +13,5 @@ router.route("/addSubscriptionList").post(addSubscriptionList);
 router.route("/getSubscriptionList").get(getSubscriptionList);
 router.route("/buySubscription").post(verifyJWT, buySubscription);
 router.route("/viewSubscription").post(verifyJWT, viewSubscription);
+
 module.exports = router;
