@@ -3,8 +3,8 @@ const subscriptionSchema = mongoose.Schema({
   userId: {
     type: String,
   },
-  orderId:{
-    type:String
+  orderId: {
+    type: String,
   },
   pickupDays: [
     {
@@ -71,7 +71,10 @@ const subscriptionSchema = mongoose.Schema({
     },
     expDate: {
       type: String,
-    }
+    },
+    cardType: {
+      type: String,
+    },
   },
 });
 
