@@ -35,28 +35,32 @@ const getSubscriptionList = async (req, res) => {
 
 const buySubscription = async (req, res) => {
   try {
+    console.log("hi");
+    const [sub] = await subscription.find({ userId: req.users.userId });
     const id = "#id" + Math.random().toString(10).slice(3);
-    await subscription.create({
-      userId: req.users.userId,
-      orderId: id,
-      pickupDays: req.body.pickupDays,
-      amount: req.body.amount,
-      months: req.body.months,
-      numberOfPickups: req.body.numberOfPickups,
-      subscriptionStart: req.body.subscriptionStart,
-      subscriptionEnd: req.body.subscriptionEnd,
-      deliveryType: req.body.deliveryType,
-      deliverySlot: req.body.deliverySlot,
-      address: req.body.address,
-      card: req.body.card,
-    });
-    res.status(200).send({
-      message: "subscription order completed",
-      orderId: id,
-    });
+    console.log(sub);
+    if (!sub) {
+      await subscription.create({
+        userId: req.users.userId,
+        orderId: id,
+        pickupDays: req.body.pickupDays,
+        numberOfPickups: req.body.numberOfPickups,
+        subscription: req.body.subscription,
+        address: req.body.address,
+        card: req.body.card,
+      });
+      res.status(200).send({
+        message: "subscription order completed",
+        orderId: id,
+      });
+    } else {
+      res.status(200).send({
+        message: "subscription already purchased",
+      });
+    }
   } catch (error) {
     res.status(400).json({
-      message: error,
+      message: error.message,
     });
   }
 };
@@ -70,7 +74,7 @@ const viewSubscription = async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({
-      message: error,
+      message: error.message,
     });
   }
 };
@@ -89,7 +93,7 @@ const editSubscription = async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({
-      message: error,
+      message: error.message,
     });
   }
 };
@@ -98,31 +102,52 @@ const viewPickupDetails = async (req, res) => {
   try {
     const details = await subscription
       .find({ userId: req.users.userId })
-      .select(["pickupDays", "deliverySlot", "deliveryType", "-_id"]);
+      .select(["pickupDays"]);
     res.status(200).send({
       details: details,
     });
   } catch (error) {
     res.status(400).json({
-      message: error,
+      message: error.message,
     });
   }
 };
 
 const cancelSubscription = async (req, res) => {
   try {
+    const [sub] = await subscription
+      .find({
+        $and: [{ userId: req.users.userId }, { orderId: req.body.orderId }],
+      })
+      .select(["pickupDays", "subscription", "card", "-_id"]);
+    const day1 = sub.pickupDays.subscriptionEnd;
+    const day2 = Date.now();
+    const diffTime = Math.abs(day2 - day1);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    if (sub.subscription.months === 12) {
+      refund = 1.367 * diffDays;
+    } else if (sub.subscription.months === 6) {
+      refund = 2.2166 * diffDays;
+    } else if (sub.subscription.months === 3) {
+      refund = 3.32 * diffDays;
+    } else {
+      refund = 6.633 * diffDays;
+    }
     await subscription.findOneAndDelete({
       $and: [{ userId: req.users.userId }, { orderId: req.body.orderId }],
     });
     res.status(200).send({
       message: "subscription canceled successfully",
+      refund: "refund of amount " + refund + "to your " + sub.card.cardType,
     });
   } catch (error) {
     res.status(400).json({
-      message: error,
+      message: error.message,
     });
   }
 };
+
+const pauseSubscription = async (req, res) => {};
 
 module.exports = {
   addSubscriptionList,
@@ -131,5 +156,5 @@ module.exports = {
   viewSubscription,
   editSubscription,
   viewPickupDetails,
-  cancelSubscription
+  cancelSubscription,
 };
