@@ -22,7 +22,7 @@ const UserSchema = new mongoose.Schema({
   ],
   //referalCode: { type: String, required: true },
   refreshToken: { type: String },
-  wallet: { type: Number },
+  wallet: { type: Number, default: 0 },
   plan: { type: Number },
   totalearned: { type: Number, default: 0 },
   // referandearn :{
