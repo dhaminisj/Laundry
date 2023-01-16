@@ -6,25 +6,23 @@ const subscriptionSchema = mongoose.Schema({
   orderId: {
     type: String,
   },
-  pickupDays: [
-    {
-      pickupDays: [],
-      deliveryDays: [],
-      subscriptionStart: {
-        type: Date,
-      },
-      subscriptionEnd: {
-        type: Date,
-      },
-      deliveryType: {
-        type: String,
-      },
-      deliverySlot: {
-        type: String,
-      }
+  pickupDays: {
+    pickupDays: [],
+    deliveryDays: [],
+    subscriptionStart: {
+      type: Date,
     },
-  ],
-  subscription:{
+    subscriptionEnd: {
+      type: Date,
+    },
+    deliveryType: {
+      type: String,
+    },
+    deliverySlot: {
+      type: String,
+    },
+  },
+  subscription: {
     amount: {
       type: Number,
     },
@@ -33,7 +31,7 @@ const subscriptionSchema = mongoose.Schema({
     },
     numberOfPickups: {
       type: Number,
-    }
+    },
   },
   isPaused: {
     type: Boolean,
