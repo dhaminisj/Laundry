@@ -43,10 +43,7 @@ const buySubscription = async (req, res) => {
       amount: req.body.amount,
       months: req.body.months,
       numberOfPickups: req.body.numberOfPickups,
-      subscriptionStart: req.body.subscriptionStart,
-      subscriptionEnd: req.body.subscriptionEnd,
-      deliveryType: req.body.deliveryType,
-      deliverySlot: req.body.deliverySlot,
+      subscription: req.body.subscription,
       address: req.body.address,
       card: req.body.card,
     });
@@ -124,6 +121,8 @@ const cancelSubscription = async (req, res) => {
   }
 };
 
+const pauseSubscription = async (req, res) => {};
+
 module.exports = {
   addSubscriptionList,
   getSubscriptionList,
@@ -131,5 +130,5 @@ module.exports = {
   viewSubscription,
   editSubscription,
   viewPickupDetails,
-  cancelSubscription
+  cancelSubscription,
 };

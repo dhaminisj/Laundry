@@ -10,16 +10,30 @@ const subscriptionSchema = mongoose.Schema({
     {
       pickupDays: [],
       deliveryDays: [],
+      subscriptionStart: {
+        type: Date,
+      },
+      subscriptionEnd: {
+        type: Date,
+      },
+      deliveryType: {
+        type: String,
+      },
+      deliverySlot: {
+        type: String,
+      }
     },
   ],
-  amount: {
-    type: Number,
-  },
-  months: {
-    type: Number,
-  },
-  numberOfPickups: {
-    type: Number,
+  subscription:{
+    amount: {
+      type: Number,
+    },
+    months: {
+      type: Number,
+    },
+    numberOfPickups: {
+      type: Number,
+    }
   },
   isPaused: {
     type: Boolean,
@@ -35,18 +49,6 @@ const subscriptionSchema = mongoose.Schema({
       },
     },
   ],
-  subscriptionStart: {
-    type: Date,
-  },
-  subscriptionEnd: {
-    type: Date,
-  },
-  deliveryType: {
-    type: String,
-  },
-  deliverySlot: {
-    type: String,
-  },
   address: {
     title: {
       type: String,
