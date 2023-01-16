@@ -109,7 +109,7 @@ const viewPickupDetails = async (req, res) => {
 const cancelSubscription = async (req, res) => {
   try {
     const [sub] = await subscription
-      .findOne({
+      .find({
         $and: [{ userId: req.users.userId }, { orderId: req.body.orderId }],
       })
       .select(["pickupDays", "subscription", "card", "-_id"]);
