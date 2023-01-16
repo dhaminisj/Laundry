@@ -35,25 +35,32 @@ const getSubscriptionList = async (req, res) => {
 
 const buySubscription = async (req, res) => {
   try {
+    console.log("hi");
+    const [sub] = await subscription.find({ userId: req.users.userId });
     const id = "#id" + Math.random().toString(10).slice(3);
-    await subscription.create({
-      userId: req.users.userId,
-      orderId: id,
-      pickupDays: req.body.pickupDays,
-      amount: req.body.amount,
-      months: req.body.months,
-      numberOfPickups: req.body.numberOfPickups,
-      subscription: req.body.subscription,
-      address: req.body.address,
-      card: req.body.card,
-    });
-    res.status(200).send({
-      message: "subscription order completed",
-      orderId: id,
-    });
+    console.log(sub);
+    if (!sub) {
+      await subscription.create({
+        userId: req.users.userId,
+        orderId: id,
+        pickupDays: req.body.pickupDays,
+        numberOfPickups: req.body.numberOfPickups,
+        subscription: req.body.subscription,
+        address: req.body.address,
+        card: req.body.card,
+      });
+      res.status(200).send({
+        message: "subscription order completed",
+        orderId: id,
+      });
+    } else {
+      res.status(200).send({
+        message: "subscription already purchased",
+      });
+    }
   } catch (error) {
     res.status(400).json({
-      message: error,
+      message: error.message,
     });
   }
 };
@@ -67,7 +74,7 @@ const viewSubscription = async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({
-      message: error,
+      message: error.message,
     });
   }
 };
@@ -86,7 +93,7 @@ const editSubscription = async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({
-      message: error,
+      message: error.message,
     });
   }
 };
@@ -101,7 +108,7 @@ const viewPickupDetails = async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({
-      message: error,
+      message: error.message,
     });
   }
 };
@@ -135,7 +142,7 @@ const cancelSubscription = async (req, res) => {
     });
   } catch (error) {
     res.status(400).json({
-      message: error,
+      message: error.message,
     });
   }
 };
