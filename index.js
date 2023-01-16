@@ -5,7 +5,7 @@ const loginRouter = require("./routes/login");
 const subscriptionRouter = require("./routes/subscription");
 const laundryRouter = require("./routes/laundry");
 const userRouter = require("./routes/user");
-const orderRouter = require("./routes/order");
+const cartRouter = require("./routes/cart");
 const promoRouter = require("./routes/promo");
 // const laundryList = require("./models/laundryListSchema");
 require("dotenv").config();
@@ -14,6 +14,7 @@ app.use("/api/v1", loginRouter);
 app.use("/api/v1", subscriptionRouter);
 app.use("/api/v1", laundryRouter);
 app.use("/api/user", userRouter);
+app.use("/api/v1", cartRouter);
 app.use("/api/v1", promoRouter);
 
 app.get("/", (req, res) => {
