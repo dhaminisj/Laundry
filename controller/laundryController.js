@@ -13,7 +13,7 @@ const addLaundryList = async (req, res) => {
       category: req.body.category,
       cloth: req.body.cloth,
       price: req.body.price,
-      image:upload.url
+      image: upload.url,
     });
     res.status(200).send({ message: "laundry list added successfully" });
   } catch (error) {
@@ -45,7 +45,6 @@ const getLaundryList = async (req, res) => {
       {
         $project: {
           __v: 0,
-          _id: 0,
         },
       },
       {
@@ -61,14 +60,14 @@ const getLaundryList = async (req, res) => {
       },
       {
         $project: {
-          'docs._id': 0,
-         'docs.type': 0,
-          'docs.category': 0,
-          'docs.__v':0
+          // "docs._id": 0,
+          "docs.type": 0,
+          "docs.category": 0,
+          "docs.__v": 0,
         },
       },
     ]);
-   
+
     res.status(200).send({
       laundryList: list,
     });
