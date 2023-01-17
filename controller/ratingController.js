@@ -1,49 +1,57 @@
 const subscriptionList = require("../models/subscriptionList");
 const User = require("../models/UserSchema");
+const ratingsModel = require("../models/ratingsSchema");
 
 const addRating = async (req, res) => {
     const { userId } = req.users;
     const { star, subscriptionId } = req.body;
     try {
-        // const subscription = await subscriptionList.findById(subscriptionId);
-        let alreadyRated = await subscriptionList.findOne({
-            _id: subscriptionId,
+        //const subscription = await subscriptionList.findById(subscriptionId);
+        let alreadyRated = await ratingsModel.findOne({
+            subscriptionId,
             ratings: { $elemMatch: { postedby: userId } },
         });
-        //console.log(alreadyRated);
         if (alreadyRated) {
-            const updateRating = await subscriptionList.findOneAndUpdate(
+            const updateRating = await ratingsModel.findOneAndUpdate(
                 {
-                    _id: subscriptionId,
+                    subscriptionId,
                     ratings: { $elemMatch: { postedby: userId } },
                 },
                 {
                     $set: {
                         "ratings.$.star": star,
                     },
-                },
-                {
-                    new: true,
                 }
             );
             res.status(200).json({
                 message: "Rating Updated Successfully",
             });
         } else {
-            const rate = await subscriptionList.updateOne(
-                { _id: subscriptionId },
-                {
-                    $push: {
-                        ratings: {
-                            star: star,
-                            postedby: userId,
-                        },
-                    },
-                },
-                {
-                    new: true,
-                }
-            );
+            // const rate = await ratingsModel.findOneAndUpdate(
+            //     { subscriptionId },
+            //     {
+            //         $push: {
+            //             ratings: {
+            //                 star: star,
+            //                 postedby: userId,
+            //             },
+            //         },
+            //     },
+            //     {
+            //         new: true,
+            //     }
+            // );
+            const rate = new ratingsModel({
+                subscriptionId,
+
+                // ratings: [
+                //     {
+                star: star,
+                postedby: userId,
+                //     },
+                // ],
+            });
+            await rate.save();
             res.status(200).json({
                 message: "Rating Added Succesfully",
             });
