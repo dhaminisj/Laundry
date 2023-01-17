@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const subscriptionList = require("../models/subscriptionList");
 const subscription = require("../models/subscriptionSchema");
-
+const transaction = require("../models/transactionSchema");
+const users = require("../models/UserSchema");
 const addSubscriptionList = async (req, res) => {
   try {
     await subscriptionList.create({
@@ -119,7 +120,15 @@ const cancelSubscription = async (req, res) => {
       .find({
         $and: [{ userId: req.users.userId }, { orderId: req.body.orderId }],
       })
-      .select(["pickupDays", "subscription", "card", "-_id"]);
+      .select([
+        "pickupDays",
+        "subscription",
+        "card",
+        "-_id",
+        "orderId",
+        "isWallet",
+      ]);
+    const [user] = await users.find({ _id: req.users.userId });
     const day1 = sub.pickupDays.subscriptionEnd;
     const day2 = Date.now();
     const diffTime = Math.abs(day2 - day1);
@@ -133,12 +142,30 @@ const cancelSubscription = async (req, res) => {
     } else {
       refund = 6.633 * diffDays;
     }
+    if (!sub.isWallet) {
+      await transaction.insertMany({
+        userId: req.users.userId,
+        orderId: sub.orderId,
+        totalPrice: refund,
+        walletBalance: user.wallet + refund,
+        transactionType: "REFUND",
+      });
+    }
+    await users.findOneAndUpdate(
+      { _id: req.users.userId },
+       { wallet: user.wallet + refund } 
+    );
     await subscription.findOneAndDelete({
       $and: [{ userId: req.users.userId }, { orderId: req.body.orderId }],
     });
+    if (!sub.isWallet) {
+      account = "wallet";
+    } else {
+      account = sub.card.cardType + "with card number" + sub.card.number;
+    }
     res.status(200).send({
       message: "subscription canceled successfully",
-      refund: "refund of amount " + refund + "to your " + sub.card.cardType,
+      refund: "refund of amount " + refund + "to your " + account,
     });
   } catch (error) {
     res.status(400).json({

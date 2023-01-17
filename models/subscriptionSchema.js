@@ -76,6 +76,10 @@ const subscriptionSchema = mongoose.Schema({
       type: String,
     },
   },
+  isWallet:{
+    type:Boolean,
+    default:false
+  }
 });
 
 module.exports = mongoose.model("buySubscription", subscriptionSchema);
