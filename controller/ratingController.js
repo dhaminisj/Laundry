@@ -53,6 +53,7 @@ const addRating = async (req, res) => {
         res.status(400).json({ message: error.message });
     }
 };
+
 module.exports = {
     addRating,
 };
