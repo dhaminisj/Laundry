@@ -1,23 +1,19 @@
 const mongoose = require("mongoose");
 
 const ratingsSchema = mongoose.Schema({
-    userId: {
+    subscriptionId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-      },
-      ratings:[
-        {
-            star: Number,
-            postedby: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-            createdOn: {
-                type: Date,
-                default: Date.now(),
-            },
-        },
-    ],
-    totalrating: {
-        type: Number,
-        default: 0,
+        ref: "SubscriptionList",
     },
-})
-module.exports = mongoose.model("ratingsModel",ratingsSchema)
+    // ratings: [
+    //     {
+    star: Number,
+    postedby: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    createdOn: {
+        type: Date,
+        default: Date.now(),
+    },
+    //     },
+    // ],
+});
+module.exports = mongoose.model("ratingsModel", ratingsSchema);
