@@ -1,5 +1,6 @@
 const subscriptionList = require("../models/subscriptionList");
 const User = require("../models/UserSchema");
+const ratingsModel =require("../models/ratingsSchema")
 
 const addRating = async (req, res) => {
     const { userId } = req.users;
