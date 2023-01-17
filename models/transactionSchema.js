@@ -3,34 +3,25 @@ const mongoose = require("mongoose");
 const transactionSchema = mongoose.Schema(
   {
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        type: String,
       },
     orderId:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "cart",
+        type: String
     },
     totalPrice: {
         type: Number,
-        required: true
+        
     },
-    paymentMethod:{
+    walletBalance:{
+      type:Number
+    },
+    transactionType:{
         type: String,
-    enum: ["LM Wallet", "Debit Card", "Credit Card","Wallet-Paytm","UPI App"],
-    required: true,
-    },
-    transactionId:{
-        type: String
-    },
-    isPaid:{
-        type: Boolean,
     },
     paidAt: {
         type: Date,
+        default:Date.now()
     },
-  },
-  {
-    timestamps: true,
   }
 );
 module.exports = mongoose.model("transactionModel", transactionSchema);
