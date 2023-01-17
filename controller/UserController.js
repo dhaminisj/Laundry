@@ -1,4 +1,5 @@
 const { User } = require("../models/index");
+const transaction = require("../models/transactionSchema");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const { mongoose } = require("mongoose");
@@ -34,30 +35,54 @@ const register = async (req, res) => {
     else return uniqueString;
   });
   try {
-    const user = new User({
-      name,
-      phone,
-      email,
-      latitude,
-      longitude,
-      address,
-      code: usercode,
-    });
-    console.log("user", user);
+    let user;
     const codefound = await User.findOne(
-      { invitedCode },
-      { _id: 1, totalearned: 1 }
+      { code: invitedCode },
+      { _id: 1, wallet: 1 }
     );
-    console.log("codefound", codefound);
-    if (codefound != "") {
-      await User.findByIdAndUpdate(
-        codefound._id,
-        { totalearned: codefound.totalearned + 40 },
-        { new: true }
+    if (codefound) {
+      user = new User({
+        name,
+        phone,
+        email,
+        latitude,
+        longitude,
+        address,
+        code: usercode,
+        wallet: 40,
+      });
+      await User.findOneAndUpdate(
+        { code: invitedCode },
+        { wallet: codefound.wallet + 40 }
       );
+      [data] = await User.find({ code: invitedCode });
+      await transaction.create({
+        userId: data._id,
+        orderId: "#id" + Math.random().toString(10).slice(3),
+        totalPrice: 40,
+        walletBalance: data.wallet,
+        transactionType: "CASHBACK",
+      });
+    } else {
+      user = new User({
+        name,
+        phone,
+        email,
+        latitude,
+        longitude,
+        address,
+        code: usercode,
+      });
     }
-
     const result = await user.save();
+    [data] = await User.find({ phone: req.body.phone });
+    await transaction.create({
+      userId: data._id,
+      orderId: "#id" + Math.random().toString(10).slice(3),
+      totalPrice: 40,
+      walletBalance: data.wallet,
+      transactionType: "CASHBACK",
+    });
     if (result) {
       const accessToken = jwt.sign(
         { userId: result._id, phone: result.phone },
@@ -94,45 +119,42 @@ const register = async (req, res) => {
   }
 };
 const login = async (req, res) => {
-  try{
-  if (!req.body)
-    res
-      .status(400)
-      .json({ status: false, statusCode: 400, message: "body not found" });
-  const { phone } = req.body;
-  const userfound = await User.findOne({ phone });
-  if (userfound){
-  // const accessToken = jwt.sign(
-  //   { userId: userfound._id, phone: userfound.phone },
-  //   process.env.ACCESS_TOKEN_SECRET,
-  //   { expiresIn: "6h" }
-  // );
-  // const refreshToken = jwt.sign(
-  //   { userId: userfound._id, phone: userfound.phone },
-  //   process.env.REFRESH_TOKEN_SECRET,
-  //   { expiresIn: "1d" }
-  // );
-  // await User.updateOne({ _id: userfound._id }, { refreshToken });
-  // //res.header("Refreh-Token", refreshToken);
-  // res.header("Authorization", "Bearer " + accessToken);
-    return res.status(200).json({
-      status: true,
-      statusCode: 200,
-      message: "User Logged in Succesfully",
-    });
-  }
-    else
-    return res.status(403).json({
-      status: true,
-      statusCode: 403,
-      message: "Phone number does not exist.",
-    });
-
-
+  try {
+    if (!req.body)
+      res
+        .status(400)
+        .json({ status: false, statusCode: 400, message: "body not found" });
+    const { phone } = req.body;
+    const userfound = await User.findOne({ phone });
+    if (userfound) {
+      // const accessToken = jwt.sign(
+      //   { userId: userfound._id, phone: userfound.phone },
+      //   process.env.ACCESS_TOKEN_SECRET,
+      //   { expiresIn: "6h" }
+      // );
+      // const refreshToken = jwt.sign(
+      //   { userId: userfound._id, phone: userfound.phone },
+      //   process.env.REFRESH_TOKEN_SECRET,
+      //   { expiresIn: "1d" }
+      // );
+      // await User.updateOne({ _id: userfound._id }, { refreshToken });
+      // //res.header("Refreh-Token", refreshToken);
+      // res.header("Authorization", "Bearer " + accessToken);
+      return res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "User Logged in Succesfully",
+      });
+    } else
+      return res.status(403).json({
+        status: true,
+        statusCode: 403,
+        message: "Phone number does not exist.",
+      });
   } catch (error) {
     console.log("error from login", error);
   }
-}
+};
 const updateUserProfilePic = async (req, res) => {
   try {
     const { userId } = req.users;
