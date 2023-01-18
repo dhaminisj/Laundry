@@ -7,6 +7,13 @@ const laundryRouter = require("./routes/laundry");
 const userRouter = require("./routes/user");
 const cartRouter = require("./routes/cart");
 const promoRouter = require("./routes/promo");
+<<<<<<< HEAD
+
+
+
+
+=======
+>>>>>>> cf6b1436ceeeb010254a7621985e16a2fb3ef908
 const notificationRouter = require("./routes/notification");
 const walletRouter = require("./routes/wallet");
 // const laundryList = require("./models/laundryListSchema");
