@@ -1,5 +1,6 @@
 const nodemailer = require("nodemailer");
 const { totp } = require("otplib");
+const Nexmo = require("nexmo");
 
 const sendOtpMail = async (req, res) => {
   totp.options = { digits: 6, algorithm: "sha512", step: 16660 };
