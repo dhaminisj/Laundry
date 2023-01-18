@@ -39,7 +39,7 @@ const buySubscription = async (req, res) => {
     console.log("hi");
     const [sub] = await subscription.find({ userId: req.users.userId });
     const id = "#id" + Math.random().toString(10).slice(3);
-    console.log(sub);
+    const [user] = await users.find({ _id: req.users.userId });
     if (!sub) {
       await subscription.create({
         userId: req.users.userId,
@@ -49,7 +49,28 @@ const buySubscription = async (req, res) => {
         subscription: req.body.subscription,
         address: req.body.address,
         card: req.body.card,
+        isWallet: req.body.isWallet,
       });
+      if (req.body.isWallet) {
+        amount = user.wallet - req.body.subscription.amount;
+        if (req.body.subscription.amount < user.wallet) {
+          await transaction.create({
+            userId: req.users.userId,
+            orderId: id,
+            totalPrice: req.body.subscription.amount,
+            walletBalance: amount,
+            transactionType: "PURCHASE",
+          });
+        } else {
+          res.status(200).send({
+            message: "Maintain sufficient balance",
+          });
+        }
+        await users.findOneAndUpdate(
+          { _id: req.users.userId },
+          { wallet: amount }
+        );
+      }
       res.status(200).send({
         message: "subscription order completed",
         orderId: id,
@@ -85,8 +106,7 @@ const editSubscription = async (req, res) => {
       { $and: [{ userId: req.users.userId }, { _id: req.body._id }] },
       {
         pickupDays: req.body.pickupDays,
-        deliverySlot: req.body.deliverySlot,
-        deliveryType: req.body.deliveryType,
+    
       }
     );
     res.status(200).send({
@@ -153,7 +173,7 @@ const cancelSubscription = async (req, res) => {
     }
     await users.findOneAndUpdate(
       { _id: req.users.userId },
-       { wallet: user.wallet + refund } 
+      { wallet: user.wallet + refund }
     );
     await subscription.findOneAndDelete({
       $and: [{ userId: req.users.userId }, { orderId: req.body.orderId }],
