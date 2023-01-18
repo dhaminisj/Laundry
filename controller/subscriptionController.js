@@ -11,26 +11,18 @@ const addSubscriptionList = async (req, res) => {
       numberOfPickups: req.body.numberOfPickups,
       features: req.body.features,
     });
-    res.status(200).send({
-      message: "Added Successfully",
-    });
+    res.status(200).send({ statusCode: 200, message: "Added Successfully" });
   } catch (error) {
-    res.status(400).json({
-      message: error,
-    });
+    res.status(400).json({ statusCode: 400, message: error });
   }
 };
 
 const getSubscriptionList = async (req, res) => {
   try {
     const list = await subscriptionList.find({});
-    res.status(200).send({
-      list: list,
-    });
+    res.status(200).send({ statusCode: 200, list: list });
   } catch (error) {
-    res.status(400).json({
-      message: error,
-    });
+    res.status(400).json({ statusCode: 400, message: error });
   }
 };
 
@@ -62,9 +54,9 @@ const buySubscription = async (req, res) => {
             transactionType: "PURCHASE",
           });
         } else {
-          res.status(200).send({
-            message: "Maintain sufficient balance",
-          });
+          res
+            .status(200)
+            .send({ statusCode: 200, message: "Maintain sufficient balance" });
         }
         await users.findOneAndUpdate(
           { _id: req.users.userId },
@@ -72,18 +64,17 @@ const buySubscription = async (req, res) => {
         );
       }
       res.status(200).send({
+        statusCode: 200,
         message: "subscription order completed",
         orderId: id,
       });
     } else {
-      res.status(200).send({
-        message: "subscription already purchased",
-      });
+      res
+        .status(200)
+        .send({ statusCode: 200, message: "subscription already purchased" });
     }
   } catch (error) {
-    res.status(400).json({
-      message: error.message,
-    });
+    res.status(400).json({ statusCode: 400, message: error.message });
   }
 };
 
@@ -91,13 +82,9 @@ const viewSubscription = async (req, res) => {
   try {
     const viewPlans = await subscription.find({ userId: req.users.userId });
     console.log(viewPlans);
-    res.status(200).send({
-      viewPlans,
-    });
+    res.status(200).send({ statusCode: 200, viewPlans });
   } catch (error) {
-    res.status(400).json({
-      message: error.message,
-    });
+    res.status(400).json({ statusCode: 400, message: error.message });
   }
 };
 const editSubscription = async (req, res) => {
@@ -106,16 +93,11 @@ const editSubscription = async (req, res) => {
       { $and: [{ userId: req.users.userId }, { orderId: req.body.orderId }] },
       {
         pickupDays: req.body.pickupDays,
-    
       }
     );
-    res.status(200).send({
-      message: "subscription edited",
-    });
+    res.status(200).send({ statusCode: 200, message: "subscription edited" });
   } catch (error) {
-    res.status(400).json({
-      message: error.message,
-    });
+    res.status(400).json({ statusCode: 400, message: error.message });
   }
 };
 
@@ -124,13 +106,9 @@ const viewPickupDetails = async (req, res) => {
     const details = await subscription
       .find({ userId: req.users.userId })
       .select(["pickupDays"]);
-    res.status(200).send({
-      details: details,
-    });
+    res.status(200).send({ statusCode: 200, details: details });
   } catch (error) {
-    res.status(400).json({
-      message: error.message,
-    });
+    res.status(400).json({ statusCode: 400, message: error.message });
   }
 };
 
@@ -184,13 +162,12 @@ const cancelSubscription = async (req, res) => {
       account = sub.card.cardType + "with card number" + sub.card.number;
     }
     res.status(200).send({
+      statusCode: 200,
       message: "subscription canceled successfully",
       refund: "refund of amount " + refund + "to your " + account,
     });
   } catch (error) {
-    res.status(400).json({
-      message: error.message,
-    });
+    res.status(400).json({ statusCode: 400, message: error.message });
   }
 };
 

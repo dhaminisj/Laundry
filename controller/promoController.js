@@ -10,11 +10,11 @@ const addPromoCode = async (req, res) => {
       description,
     });
     const result = await data.save();
-    res.status(200).json({ message: "Coupon added successfully", result });
+    res
+      .status(200)
+      .json({ statusCode: 200, message: "Coupon added successfully", result });
   } catch (error) {
-    res.status(400).json({
-      message: error,
-    });
+    res.status(400).json({ statusCode: 400, message: error });
   }
 };
 
@@ -22,11 +22,13 @@ const getPromoCode = async (req, res) => {
   try {
     const { userId } = req.users;
     const result = await Promo.find();
-    res.status(200).json({ message: "Coupon fetched successfully", result });
-  } catch (error) {
-    res.status(400).json({
-      message: error,
+    res.status(200).json({
+      statusCode: 200,
+      message: "Coupon fetched successfully",
+      result,
     });
+  } catch (error) {
+    res.status(400).json({ statusCode: 400, message: error });
   }
 };
 

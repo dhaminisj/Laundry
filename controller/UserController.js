@@ -175,6 +175,7 @@ const updateUserProfilePic = async (req, res) => {
       //profilePic = cloudinaryResult.secure_url;
     } else {
       return res.status(404).json({
+        statusCode: 404,
         message: "Please send user profile pic to update",
       });
     }
@@ -191,7 +192,7 @@ const updateUserProfilePic = async (req, res) => {
         statusCode: 200,
         message: "profile updated successfully",
       });
-    res.status(404).json({
+    res.status(400).json({
       status: false,
       statusCode: 400,
       message: "profile cannot be updated",
@@ -214,7 +215,7 @@ const getProfile = async (req, res) => {
         message: "Profile fetched successfully",
         data: user,
       });
-    res.status(404).json({
+    res.status(400).json({
       status: false,
       statusCode: 400,
       message: "Couldn't fetch Profile",
@@ -297,9 +298,9 @@ const updateAddress = async (req, res) => {
         data: result,
       });
     } else
-      res.status(200).json({
-        status: true,
-        statusCode: 200,
+      res.status(400).json({
+        status: false,
+        statusCode: 400,
         message: "Cannot update address ",
       });
   } catch (error) {

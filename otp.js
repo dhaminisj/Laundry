@@ -23,13 +23,11 @@ const sendOtpMail = async (req, res) => {
   };
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
-      res.send({
-        message: error,
-      });
+      res.status(502).send({ statusCode: 502, message: "Couldn't send OTP" });
     } else {
-      res.json({
-        message: "OTP sent successfully",
-      });
+      res
+        .status(200)
+        .json({ statusCode: 200, message: "OTP sent successfully" });
     }
   });
 };
@@ -37,11 +35,9 @@ const sendOtpMail = async (req, res) => {
 const verifyOtpMail = async (req, res) => {
   try {
     const isValid = totp.check(req.body.otp, process.env.SECRET_OTP);
-    res.json({
-      message: isValid,
-    });
+    res.status(200).json({ statusCode: 200, message: isValid });
   } catch (error) {
-    res.send(error.message);
+    res.status(500).json({ statusCode: 500, errorMessage: error.message });
   }
 };
 
@@ -68,25 +64,25 @@ const sendOtpPhone = async (req, res) => {
       text,
       (err, response) => {
         if (err) {
-          console.log(err);
+          res
+            .status(502)
+            .json({ statusCode: 502, message: "Couldn't send OTP" });
         } else {
-          res.send(response);
+          res.status(200).json({ statusCode: 200, response });
         }
       }
     );
   } catch (error) {
-    console.log(error.message);
+    res.status(500).json({ statusCode: 500, errorMessage: error.message });
   }
 };
 
 const verifyOtpPhone = async (req, res) => {
   try {
     const isValid = totp.check(req.body.otp, process.env.SECRET_OTP);
-    res.json({
-      message: isValid,
-    });
+    res.status(200).json({ statusCode: 200, message: isValid });
   } catch (error) {
-    res.send(error.message);
+    res.status(500).json({ statusCode: 500, errorMessage: error.message });
   }
 };
 
