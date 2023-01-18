@@ -7,13 +7,11 @@ const viewBalance = async (req, res) => {
       .find({ _id: req.users.userId })
       .select(["-_id", "wallet"]);
 
-    res.status(200).send({
-      walletBalance: walletBalance.wallet,
-    });
+    res
+      .status(200)
+      .send({ statusCode: 200, walletBalance: walletBalance.wallet });
   } catch (error) {
-    res.status(400).json({
-      message: error,
-    });
+    res.status(400).json({ statusCode: 400, message: error });
   }
 };
 
@@ -34,13 +32,12 @@ const addMoneyToWallet = async (req, res) => {
       { wallet: user.wallet + req.body.amount }
     );
     res.status(200).send({
+      statusCode: 200,
       message: "Amount Added To Wallet",
-      walletBalance:user.wallet + req.body.amount
+      walletBalance: user.wallet + req.body.amount,
     });
   } catch (error) {
-    res.status(400).json({
-      message: error,
-    });
+    res.status(400).json({ statusCode: 400, message: error });
   }
 };
 

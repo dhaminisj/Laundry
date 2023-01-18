@@ -22,9 +22,9 @@ const addRating = async (req, res) => {
           },
         }
       );
-      res.status(200).json({
-        message: "Rating Updated Successfully",
-      });
+      res
+        .status(200)
+        .json({ statusCode: 200, message: "Rating Updated Successfully" });
     } else {
       const rate = new ratingsModel({
         subscriptionId,
@@ -32,12 +32,12 @@ const addRating = async (req, res) => {
         postedby: userId,
       });
       await rate.save();
-      res.status(200).json({
-        message: "Rating Added Succesfully",
-      });
+      res
+        .status(200)
+        .json({ statusCode: 200, message: "Rating Added Succesfully" });
     }
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ statusCode: 400, message: error.message });
   }
 };
 module.exports = {

@@ -15,11 +15,11 @@ const addLaundryList = async (req, res) => {
       price: req.body.price,
       image: upload.url,
     });
-    res.status(200).send({ message: "laundry list added successfully" });
+    res
+      .status(200)
+      .send({ statusCode: 200, message: "laundry list added successfully" });
   } catch (error) {
-    res.status(400).json({
-      message: error,
-    });
+    res.status(400).json({ statusCode: 400, message: error });
   }
 };
 
@@ -29,13 +29,9 @@ const getLaundry = async (req, res) => {
       $and: [{ type: req.body.type }, { category: req.body.category }],
     });
 
-    res.status(200).send({
-      laundryList: list,
-    });
+    res.status(200).send({ statusCode: 200, laundryList: list });
   } catch (error) {
-    res.status(400).json({
-      message: error,
-    });
+    res.status(400).json({ statusCode: 400, message: error });
   }
 };
 
@@ -68,13 +64,9 @@ const getLaundryList = async (req, res) => {
       },
     ]);
 
-    res.status(200).send({
-      laundryList: list,
-    });
+    res.status(200).send({ statusCode: 200, laundryList: list });
   } catch (error) {
-    res.status(400).json({
-      message: error,
-    });
+    res.status(400).json({ statusCode: 400, message: error });
   }
 };
 
