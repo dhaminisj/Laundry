@@ -7,8 +7,8 @@ const laundryRouter = require("./routes/laundry");
 const userRouter = require("./routes/user");
 const cartRouter = require("./routes/cart");
 const promoRouter = require("./routes/promo");
-
 const notificationRouter = require("./routes/notification");
+const walletRouter = require("./routes/wallet");
 // const laundryList = require("./models/laundryListSchema");
 require("dotenv").config();
 app.use(express.json());
@@ -18,6 +18,7 @@ app.use("/api/v1", laundryRouter);
 app.use("/api/user", userRouter);
 app.use("/api/v1", cartRouter);
 app.use("/api/v1", promoRouter);
+app.use("/api/v1", walletRouter);
 
 app.use("/api/v1", notificationRouter);
 
