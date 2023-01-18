@@ -106,8 +106,7 @@ const editSubscription = async (req, res) => {
       { $and: [{ userId: req.users.userId }, { _id: req.body._id }] },
       {
         pickupDays: req.body.pickupDays,
-        deliverySlot: req.body.deliverySlot,
-        deliveryType: req.body.deliveryType,
+    
       }
     );
     res.status(200).send({
