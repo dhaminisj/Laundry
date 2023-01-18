@@ -6,9 +6,9 @@ const viewBalance = async (req, res) => {
     const [walletBalance] = await users
       .find({ _id: req.users.userId })
       .select(["-_id", "wallet"]);
-    console.log(walletBalance);
+
     res.status(200).send({
-      message: "wallet balance is " + walletBalance.wallet,
+      walletBalance: walletBalance.wallet,
     });
   } catch (error) {
     res.status(400).json({
@@ -35,6 +35,7 @@ const addMoneyToWallet = async (req, res) => {
     );
     res.status(200).send({
       message: "Amount Added To Wallet",
+      walletBalance:user.wallet + req.body.amount
     });
   } catch (error) {
     res.status(400).json({
