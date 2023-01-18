@@ -7,6 +7,7 @@ const laundryRouter = require("./routes/laundry");
 const userRouter = require("./routes/user");
 const cartRouter = require("./routes/cart");
 const promoRouter = require("./routes/promo");
+const notificationRouter = require("./routes/notification");
 // const laundryList = require("./models/laundryListSchema");
 require("dotenv").config();
 app.use(express.json());
@@ -16,14 +17,15 @@ app.use("/api/v1", laundryRouter);
 app.use("/api/user", userRouter);
 app.use("/api/v1", cartRouter);
 app.use("/api/v1", promoRouter);
+app.use("/api/v1", notificationRouter);
 
 app.get("/", (req, res) => {
-  res.send("Welcome to laundry app.............");
+    res.send("Welcome to laundry app.............");
 });
 
 mongoose.set("strictQuery", true);
 mongoose.connect(process.env.MONGO_URI).then(() => {
-  console.log("connected to DB");
+    console.log("connected to DB");
 });
 
 // app.get("/update", async (req, res) => {
@@ -56,5 +58,5 @@ mongoose.connect(process.env.MONGO_URI).then(() => {
 // });
 
 app.listen(process.env.PORT || 5000, () => {
-  console.log(`running on port ${process.env.PORT}...`);
+    console.log(`running on port ${process.env.PORT}...`);
 });
