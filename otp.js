@@ -35,12 +35,11 @@ const sendOtpMail = async (req, res) => {
 const verifyOtpMail = async (req, res) => {
   try {
     const isValid = totp.check(req.body.otp, process.env.SECRET_OTP);
-    if(isValid){
-      res.status(200).json({ statusCode: 200, message: isValid })
+    if (isValid) {
+      res.status(200).json({ statusCode: 200, message: "otp valid" });
+    } else {
+      res.status(401).json({ statusCode: 401, message: "otp invalid" });
     }
-   else{
-    res.status(401).json({ statusCode: 401, message: isValid })
-   }
   } catch (error) {
     res.status(500).json({ statusCode: 500, errorMessage: error.message });
   }
@@ -85,12 +84,11 @@ const sendOtpPhone = async (req, res) => {
 const verifyOtpPhone = async (req, res) => {
   try {
     const isValid = totp.check(req.body.otp, process.env.SECRET_OTP);
-    if(isValid){
-      res.status(200).json({ statusCode: 200, message: isValid })
+    if (isValid) {
+      res.status(200).json({ statusCode: 200, message: "otp valid" });
+    } else {
+      res.status(401).json({ statusCode: 401, message: "otp invalid" });
     }
-   else{
-    res.status(401).json({ statusCode: 401, message: isValid })
-   }
   } catch (error) {
     res.status(500).json({ statusCode: 500, errorMessage: error.message });
   }
