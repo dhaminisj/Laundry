@@ -1,27 +1,38 @@
 const mongoose = require("mongoose");
 
-const transactionSchema = mongoose.Schema(
-  {
-    userId: {
-        type: String,
-      },
-    orderId:{
-        type: String
+const transactionSchema = mongoose.Schema({
+  userId: {
+    type: String,
+  },
+  orderId: {
+    type: String,
+  },
+  totalPrice: {
+    type: Number,
+  },
+  walletBalance: {
+    type: Number,
+  },
+  transactionType: {
+    type: String,
+  },
+  paidAt: {
+    type: Date,
+    default: Date.now(),
+  },
+  card: {
+    number: {
+      type: String,
     },
-    totalPrice: {
-        type: Number,
-        
+    name: {
+      type: String,
     },
-    walletBalance:{
-      type:Number
+    expDate: {
+      type: String,
     },
-    transactionType:{
-        type: String,
+    cardType: {
+      type: String,
     },
-    paidAt: {
-        type: Date,
-        default:Date.now()
-    },
-  }
-);
+  },
+});
 module.exports = mongoose.model("transactionModel", transactionSchema);
