@@ -6,6 +6,10 @@ const orderSchema = mongoose.Schema({
   orders: [
     {
       itemId: { type: String },
+      laundryListId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "laundryList",
+      },
       type: {
         type: String,
         enum: ["WASH+FOLD", "WASH+IRON", "STEAM IRON", "DRY CLEAN"],
@@ -33,6 +37,8 @@ const orderSchema = mongoose.Schema({
       comments: { type: String },
     },
   ],
+  basketTotal: { type: Number, default: 0 },
+  totalAmount: { type: Number, default: 0 },
   deliveryCharge: { type: Number, default: 50 },
   deliveryAddress: [
     {
