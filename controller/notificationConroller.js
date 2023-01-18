@@ -27,7 +27,7 @@ const getNotifications = async (req, res) => {
     const { userId } = req.users;
     const result = await notificationModel
       .find()
-      .select(["notification", "description", "dateTime", "-_id"]);
+      .select(["notification", "description", "dateTime", "_id"]);
     res.status(200).send({
       status: true,
       statusCode: 200,
