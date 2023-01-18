@@ -103,10 +103,9 @@ const viewSubscription = async (req, res) => {
 const editSubscription = async (req, res) => {
   try {
     await subscription.findOneAndUpdate(
-      { $and: [{ userId: req.users.userId }, { _id: req.body._id }] },
+      { $and: [{ orderId: req.users.orderId }, { _id: req.body._id }] },
       {
         pickupDays: req.body.pickupDays,
-    
       }
     );
     res.status(200).send({
