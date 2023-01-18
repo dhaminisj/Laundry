@@ -8,6 +8,9 @@ const userRouter = require("./routes/user");
 const cartRouter = require("./routes/cart");
 const promoRouter = require("./routes/promo");
 
+
+
+
 const notificationRouter = require("./routes/notification");
 // const laundryList = require("./models/laundryListSchema");
 require("dotenv").config();

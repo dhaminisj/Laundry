@@ -16,5 +16,18 @@ const addNotifications = async (req, res) => {
         });
     }
 };
+const getNotifications = async (req, res) => {
+    try {
+        const { userId } = req.users;
+        const result = await notificationModel.find();
+        res.status(200).send({
+            Notification: result,
+        });
+    } catch (error) {
+        res.status(400).json({
+            message: error,
+        });
+    }
+};
 
-module.exports = { addNotifications };
+module.exports = { addNotifications, getNotifications };
