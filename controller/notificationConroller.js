@@ -19,9 +19,9 @@ const addNotifications = async (req, res) => {
 const getNotifications = async (req, res) => {
     try {
         const { userId } = req.users;
-        const result = await notificationModel.find();
+        const result = await notificationModel.find().select(["notification", "description", "dateTime","-_id"]);
         res.status(200).send({
-            Notification: result,
+            data: result,
         });
     } catch (error) {
         res.status(400).json({
