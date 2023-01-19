@@ -41,13 +41,19 @@ const getPromoCode = async (req, res) => {
   try {
     const { userId } = req.users;
     const result = await Promo.find();
-    res.status(200).json({
-      statusCode: 200,
-      message: "Coupon fetched successfully",
-      result,
-    });
+    if (result)
+      res.status(200).json({
+        statusCode: 200,
+        message: "Coupon fetched successfully",
+        result,
+      });
+    else
+      res.status(400).json({
+        statusCode: 400,
+        message: "Unable to fetch Coupons",
+      });
   } catch (error) {
-    res.status(400).json({ statusCode: 400, message: error });
+    res.status(500).json({ statusCode: 500, message: error });
   }
 };
 
