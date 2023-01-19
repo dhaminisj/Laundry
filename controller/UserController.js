@@ -228,6 +228,8 @@ const getProfile = async (req, res) => {
 const addAddress = async (req, res) => {
   try {
     const { userId } = req.users;
+
+    console.log(userId);
     const { houseNo, flat, pinCode, city, types, primary } = req.body;
     const obj = {
       houseNo,
@@ -243,6 +245,7 @@ const addAddress = async (req, res) => {
       { $push: { address: obj } },
       { new: true }
     );
+    console.log(result);
     res.status(200).json({
       status: true,
       statusCode: 200,
@@ -250,7 +253,7 @@ const addAddress = async (req, res) => {
       data: result,
     });
   } catch (error) {
-    console.log("Error, couldn't add ground", error);
+    console.log("Error, couldn't add address", error);
   }
 };
 
@@ -338,6 +341,28 @@ const deleteAddress = async (req, res) => {
     console.log("Error from delete Address", error);
   }
 };
+const getAddress = async (req, res) => {
+  try {
+    const { userId } = req.users;
+    const user = await User.find({ _id: userId }).select("address");
+    //.select("address.houseNo address.flat address.pinCode address.types address.primary");
+    console.log(user);
+    if (user)
+      return res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "Address fetched successfully",
+        data: user,
+      });
+    res.status(400).json({
+      status: false,
+      statusCode: 400,
+      message: "Couldn't fetch Address",
+    });
+  } catch (error) {
+    console.log("error from get address", error);
+  }
+};
 
 module.exports = {
   register,
@@ -347,4 +372,5 @@ module.exports = {
   addAddress,
   updateAddress,
   deleteAddress,
+  getAddress,
 };
