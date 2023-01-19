@@ -98,7 +98,23 @@ const addPrivacyPolicy = async (req, res) => {
 };
 const getTermsAndCondition = async (req, res) => {
   try {
-  } catch {}
+    const tandc = await Terms.find({});
+
+    if (tandc)
+      return res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "Terms and condition fetched successfully",
+        data: tandc,
+      });
+    res.status(400).json({
+      status: false,
+      statusCode: 400,
+      message: "Couldn't fetch Terms and condition",
+    });
+  } catch (error) {
+    console.log("error from getTermsAndCondition", error);
+  }
 };
 
 module.exports = {

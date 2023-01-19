@@ -9,7 +9,7 @@ router
 
 router.route("/add-genericterms").post(termsController.addGenericTerms);
 router.route("/add-privacyPolicy").post(termsController.addPrivacyPolicy);
-router.route("/add-privacyPolicy").post(termsController.getTermsAndCondition);
+router.route("/get-terms-and-condition").post(termsController.getTermsAndCondition);
 
 
 
