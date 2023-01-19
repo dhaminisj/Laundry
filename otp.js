@@ -3,31 +3,18 @@ const { totp } = require("otplib");
 const Nexmo = require("nexmo");
 
 const sendOtpMail = async (req, res) => {
-  console.log("hiii");
   totp.options = { digits: 6, algorithm: "sha512", step: 16660 };
   const otp = totp.generate(process.env.SECRET_OTP);
-  console.log("otp", otp);
 
   const transporter = nodemailer.createTransport({
-    // service: "zohomail",
-    // auth: {
-    //   user: process.env.ZOHO_MAIL,
-    //   pass: process.env.ZOHO_PASS,
-    // },
-    // port: 465,
-    // host: "smtp.zoho.in",
-    // secure: true,
-    host: "imappro.zoho.in",
-    secure: true,
-    port: 465,
-    ignoreTLS: true,
-    logger: true,
-    debug: true,
-    send: true,
+    service: "zohomail",
     auth: {
       user: process.env.ZOHO_MAIL,
       pass: process.env.ZOHO_PASS,
     },
+    port: 465,
+    host: "smtp.zoho.in",
+    secure: true,
   });
   const mailOptions = {
     from: process.env.ZOHO_MAIL,
@@ -38,7 +25,7 @@ const sendOtpMail = async (req, res) => {
 
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
-      res.status(502).send({ statusCode: 502, message: error.message, error });
+      res.status(502).send({ statusCode: 502, message: "Couldn't Send OTP" });
     } else {
       res
         .status(200)
