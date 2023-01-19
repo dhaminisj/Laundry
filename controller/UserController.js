@@ -30,7 +30,7 @@ const register = async (req, res) => {
       statusCode: 403,
       message: "User with this phone number already present",
     });
-  let usercode = random(6, (err, uniqueString) => {
+  let usercode = random(10, (err, uniqueString) => {
     if (err) return err;
     else return uniqueString;
   });

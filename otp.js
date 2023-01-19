@@ -23,19 +23,15 @@ const sendOtpMail = async (req, res) => {
         text: `laundry Otp is ${otp}`,
     };
 
-    transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-            res.status(502).send({
-                statusCode: 502,
-                message: `Couldn't Send OTP ${error}`,
-            });
-        } else {
-            res.status(200).json({
-                statusCode: 200,
-                message: "OTP sent successfully",
-            });
-        }
-    });
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      res.status(502).send({ statusCode: 502, message: "Couldn't Send OTP" });
+    } else {
+      res
+        .status(200)
+        .json({ statusCode: 200, message: "OTP sent successfully" });
+    }
+  });
 };
 
 const verifyOtpMail = async (req, res) => {
