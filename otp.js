@@ -9,14 +9,25 @@ const sendOtpMail = async (req, res) => {
   console.log("otp", otp);
 
   const transporter = nodemailer.createTransport({
-    service: "zohomail",
+    // service: "zohomail",
+    // auth: {
+    //   user: process.env.ZOHO_MAIL,
+    //   pass: process.env.ZOHO_PASS,
+    // },
+    // port: 465,
+    // host: "smtp.zoho.in",
+    // secure: true,
+    host: "imappro.zoho.in",
+    secure: true,
+    port: 465,
+    ignoreTLS: true,
+    logger: true,
+    debug: true,
+    send: true,
     auth: {
       user: process.env.ZOHO_MAIL,
       pass: process.env.ZOHO_PASS,
     },
-    port: 465,
-    host: "smtp.zoho.in",
-    secure: true,
   });
   const mailOptions = {
     from: process.env.ZOHO_MAIL,
