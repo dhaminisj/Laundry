@@ -14,15 +14,15 @@ const transactionSchema = mongoose.Schema({
     walletBalance: {
         type: Number,
     },
-    // orderTitle: {
-    //     type: String,
-    // },
+    orderTitle: {
+        type: String,
+    },
     transactionType: {
         type: String,
     },
-    // transactionStatus:{
-    //   type:String
-    // },
+    transactionStatus:{
+      type:String
+    },
     paidAt: {
         type: Date,
         default: Date.now(),
