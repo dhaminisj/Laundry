@@ -82,10 +82,10 @@ const buySubscription = async (req, res) => {
 const endDate = async (req, res) => {
   try {
     stopDate = new Date();
-    stopDate= stopDate.setDate(stopDate.getDate(Date.now()) + req.body.days);
+    stopDate = stopDate.setDate(stopDate.getDate(Date.now()) + req.body.days);
     res.send({
       status: 200,
-      subscriptionEnd:new Date(stopDate),
+      subscriptionEnd: new Date(stopDate),
     });
   } catch (error) {
     res.status(400).json({ statusCode: 400, message: error.message });
@@ -94,7 +94,17 @@ const endDate = async (req, res) => {
 
 const viewSubscription = async (req, res) => {
   try {
-    const viewPlans = await subscription.find({ userId: req.users.userId });
+    const [viewPlans] = await subscription.find({ userId: req.users.userId });
+    if (
+      new Date(Date.now()).toDateString() ==
+      new Date(viewPlans.pickupDays.subscriptionEnd).toDateString()
+    ) {
+      await subscription.findOneAndDelete({ userId: req.users.userId });
+      res.status(200).send({
+        status: 200,
+        message: "Subscription Expired",
+      });
+    }
     res.status(200).send({ statusCode: 200, viewPlans });
   } catch (error) {
     res.status(400).json({ statusCode: 400, message: error.message });
@@ -239,34 +249,44 @@ const resumeSubscription = async (req, res) => {
         "isWallet",
         "ifPaused",
       ]);
-    console.log(sub.ifPaused[0].to);
+
     const day1 = Date.now();
     const day2 = new Date(sub.ifPaused[0].to);
     const diffTime = Math.abs(day1 - day2);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    await subscription.findOneAndUpdate(
-      {
-        $and: [
-          { userId: req.users.userId },
-          { orderId: req.body.orderId },
-          { isPaused: true },
-        ],
-      },
-      {
-        isPaused: false,
-        $pull: {
-          ifPaused: [{ from: sub.ifPaused.from }, { to: sub.ifPaused.to }],
+    if (day1 > sub.ifPaused[0].from) {
+      await subscription.findOneAndUpdate(
+        {
+          $and: [{ userId: req.users.userId }, { orderId: req.body.orderId }],
         },
-        "pickupDays.subscriptionEnd": sub.pickupDays.subscriptionEnd.setDate(
-          sub.pickupDays.subscriptionEnd.getDate() - diffDays
-        ),
-      }
-    );
-    res.status(200).send({
-      status: 200,
-      message: "subscription resumed successfully",
-    });
+        {
+          isPaused: false,
+          $pull: {
+            ifPaused: { from: sub.ifPaused.from, to: sub.ifPaused.to },
+          },
+          "pickupDays.subscriptionEnd": sub.pickupDays.subscriptionEnd.setDate(
+            sub.pickupDays.subscriptionEnd.getDate() - diffDays
+          ),
+        }
+      );
+      res.status(200).send({
+        status: 200,
+        message: "subscription resumed successfully",
+      });
+    } else {
+      await subscription.findOneAndUpdate(
+        {
+          $and: [{ userId: req.users.userId }, { orderId: req.body.orderId }],
+        },
+        {
+          isPaused: false,
+          $pull: {
+            ifPaused: { from: sub.ifPaused.from, to: sub.ifPaused.to },
+          },
+        }
+      );
+    }
+    res.send("hi");
   } catch (error) {
     res.status(400).json({ statusCode: 400, message: error.message });
   }
