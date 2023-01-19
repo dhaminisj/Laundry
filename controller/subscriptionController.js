@@ -95,19 +95,25 @@ const endDate = async (req, res) => {
 const viewSubscription = async (req, res) => {
   try {
     const [viewPlans] = await subscription.find({ userId: req.users.userId });
-    if (
-      new Date(Date.now()).toDateString() ==
-      new Date(viewPlans.pickupDays.subscriptionEnd).toDateString()
-    ) {
-      await subscription.findOneAndDelete({ userId: req.users.userId });
-      res.status(200).send({
-        status: 200,
-        message: "Subscription Expired",
+    if (viewPlans) {
+      if (
+        new Date(Date.now()).toDateString() !==
+        new Date(viewPlans.pickupDays.subscriptionEnd).toDateString()
+      ) {
+        res.status(200).send({ statusCode: 200, viewPlans });
+      } else {
+        await subscription.findOneAndDelete({ userId: req.users.userId });
+        res.status(200).send({
+          status: 200,
+          message: "Subscription Expired",
+        });
+      }
+    } else {
+      res.status(404).send({
+        status: 404,
+        message: "No subscription",
       });
-    }else{
-      res.status(200).send({ statusCode: 200, viewPlans });
     }
-   
   } catch (error) {
     res.status(400).json({ statusCode: 400, message: error.message });
   }
