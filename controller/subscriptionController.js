@@ -82,7 +82,7 @@ const buySubscription = async (req, res) => {
 const endDate = async (req, res) => {
   try {
     stopDate = new Date();
-    stopDate = stopDate.setDate(stopDate.getDate(Date.now()) + req.body.days);
+    stopDate = stopDate.setDate(stopDate.getDate(Date.now()) + req.body.plan * 31);
     res.send({
       status: 200,
       subscriptionEnd: new Date(stopDate),
