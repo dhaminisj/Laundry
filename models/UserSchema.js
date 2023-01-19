@@ -13,9 +13,9 @@ const UserSchema = new mongoose.Schema({
   address: [
     {
       houseNo: { type: String },
-      flat: { type: String },
+      area: { type: String },
       pinCode: { type: String },
-      city: { type: String },
+      state: { type: String },
       types: { type: String, enum: ["home", "work", "other"] },
       primary: { type: Boolean },
     },

@@ -230,12 +230,12 @@ const addAddress = async (req, res) => {
     const { userId } = req.users;
 
     console.log(userId);
-    const { houseNo, flat, pinCode, city, types, primary } = req.body;
+    const { houseNo, area, pinCode, state, types, primary } = req.body;
     const obj = {
       houseNo,
-      flat,
+      area,
       pinCode,
-      city,
+      state,
       types,
       primary,
     };
@@ -260,7 +260,7 @@ const addAddress = async (req, res) => {
 const updateAddress = async (req, res) => {
   try {
     const { userId } = req.users;
-    const { addressId, houseNo, flat, pinCode, city, types, primary } =
+    const { addressId, houseNo, area, pinCode, state, types, primary } =
       req.body;
 
     const addressFound = await User.find({
@@ -269,9 +269,9 @@ const updateAddress = async (req, res) => {
     if (addressFound.length != 0) {
       const obj = {
         houseNo,
-        flat,
+        area,
         pinCode,
-        city,
+        state,
         types,
         primary,
       };
@@ -284,9 +284,9 @@ const updateAddress = async (req, res) => {
         {
           $set: {
             "address.$.houseNo": req.body.houseNo,
-            "address.$.flat": req.body.flat,
+            "address.$.area": req.body.area,
             "address.$.pinCode": req.body.pinCode,
-            "address.$.city": req.body.city,
+            "address.$.state": req.body.state,
             "address.$.types": req.body.types,
             "address.$.primary": req.body.primary,
           },
