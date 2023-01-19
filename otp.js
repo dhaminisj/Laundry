@@ -3,8 +3,11 @@ const { totp } = require("otplib");
 const Nexmo = require("nexmo");
 
 const sendOtpMail = async (req, res) => {
+  console.log("Hiiiiiiiii");
   totp.options = { digits: 6, algorithm: "sha512", step: 16660 };
   const otp = totp.generate(process.env.SECRET_OTP);
+  console.log("otp", otp);
+
   const transporter = nodemailer.createTransport({
     service: "zohomail",
     auth: {
@@ -15,12 +18,15 @@ const sendOtpMail = async (req, res) => {
     host: "smtp.zoho.in",
     secure: true,
   });
+  console.log("transporter", transporter);
   const mailOptions = {
     from: process.env.ZOHO_MAIL,
     to: req.body.email,
     subject: "laundry OTP",
     text: `laundry Otp is ${otp}`,
   };
+  console.log("mailOptions", mailOptions);
+
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       res.status(502).send({ statusCode: 502, message: "Couldn't send OTP" });

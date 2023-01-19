@@ -3,11 +3,11 @@ const User = require("../models/UserSchema");
 const Laundry = require("../models/laundryListSchema");
 const mongoose = require("mongoose");
 
-const placeOrder = async (req, res) => {
+const checkoutOrder = async (req, res) => {
   try {
     const { userId } = req.users;
     const list = req.body;
-    console.log("list", list);
+
     neededList = list.map(function (docs) {
       return {
         laundryListId: docs.laundryListId,
@@ -15,23 +15,12 @@ const placeOrder = async (req, res) => {
         packagingType: docs.packagingType,
       };
     });
-    console.log("neededList", neededList);
 
     listOfLaundryListId = neededList
       .map((docs) => docs.laundryListId)
       .map(function (data) {
         return mongoose.Types.ObjectId(data);
       });
-    console.log("listOfLaundryListId", listOfLaundryListId);
-
-    // extras
-    // packagingType
-
-    // singlePack
-    // hanger
-    // multiplePack
-    // starch
-    // noStrach
 
     let laundryDetails = await Laundry.aggregate([
       { $match: { _id: { $in: listOfLaundryListId } } },
@@ -47,7 +36,6 @@ const placeOrder = async (req, res) => {
         },
       },
     ]);
-    console.log("agg", laundryDetails);
 
     let basketTotal = 0;
     for (let index1 in neededList) {
@@ -65,69 +53,30 @@ const placeOrder = async (req, res) => {
       }
     }
 
-    // const result = {
-    //   userId,
-    // orderId: "#id" + Math.random().toString(10).slice(3),
-    //   orders: [
-    //     {
-    //       itemId,
-    //       laundryListId,
-    //       type,
-    //       category,
-    //       cloth,
-    //       packagingType,
-    //       extras,
-    //       comments,
-    //       price: laundryDetails.price,
-    //     },
-    //   ],
-    // };
-    // order = new Order(result);
-    // data = await order.save();
-    // console.log(data.orders.length);
+    const result = {
+      userId,
+      orderId: "#id" + Math.random().toString(10).slice(3),
+      orders: list,
+      basketTotal,
+    };
 
-    res.send({ basketTotal: basketTotal });
+    order = new Order(result);
+    checkout = await order.save();
+
+    if (checkout) {
+      res.status(200).json({
+        statusCode: 200,
+        message: "Checkout Completed",
+        data: checkout,
+      });
+    } else {
+      res.status(400).json({
+        statusCode: 400,
+        message: "Unable to Checkout",
+      });
+    }
   } catch (error) {
-    res.status(400).json({ statusCode: 400, message: error.message });
+    res.status(500).json({ statusCode: 500, message: error.message });
   }
-
-  // try {
-  //   const { userId } = req.users;
-  //   const {
-  //     itemId,
-  //     type,
-  //     category,
-  //     cloth,
-  //     packagingType,
-  //     extras,
-  //     comments,
-  //     laundryListId,
-  //   } = req.body;
-  //   const laundryDetails = await Laundry.findById({ _id: laundryListId });
-
-  //   const result = {
-  //     userId,
-  //     orders: [
-  //       {
-  //         itemId,
-  //         laundryListId,
-  //         type,
-  //         category,
-  //         cloth,
-  //         packagingType,
-  //         extras,
-  //         comments,
-  //         price: laundryDetails.price,
-  //       },
-  //     ],
-  //   };
-  //   order = new Order(result);
-  //   data = await order.save();
-  //   console.log(data.orders.length);
-
-  //   res.send(data);
-  // } catch (error) {
-  //   res.status(400).json({ statusCode: 400, message: error.message });
-  // }
 };
-module.exports = { placeOrder };
+module.exports = { checkoutOrder };
