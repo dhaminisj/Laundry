@@ -25,7 +25,9 @@ const sendOtpMail = async (req, res) => {
 
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
-      res.status(502).send({ statusCode: 502, message: "Couldn't Send OTP" });
+      res
+        .status(502)
+        .send({ statusCode: 502, message: `Couldn't Send OTP ${error}` });
     } else {
       res
         .status(200)
