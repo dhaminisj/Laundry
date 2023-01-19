@@ -51,7 +51,9 @@ const buySubscription = async (req, res) => {
             orderId: id,
             totalPrice: req.body.subscription.amount,
             walletBalance: amount,
-            transactionType: "PURCHASE",
+            transactionType: "SUBSCRIPTION PURCHASED",
+            transactionStatus: "DEBIT",
+            orderTitle: "New subscription purchased",
           });
         } else {
           res
@@ -143,10 +145,12 @@ const cancelSubscription = async (req, res) => {
     if (!sub.isWallet) {
       await transaction.insertMany({
         userId: req.users.userId,
-        orderId: sub.orderId,
+        orderId: id,
+        transactionType: "REFUND",
+        transactionStatus: "CREDIT",
+        orderTitle: "Subscription canceled refund",
         totalPrice: refund,
         walletBalance: user.wallet + refund,
-        transactionType: "REFUND",
       });
     }
     await users.findOneAndUpdate(
