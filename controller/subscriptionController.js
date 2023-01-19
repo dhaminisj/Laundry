@@ -104,8 +104,10 @@ const viewSubscription = async (req, res) => {
         status: 200,
         message: "Subscription Expired",
       });
+    }else{
+      res.status(200).send({ statusCode: 200, viewPlans });
     }
-    res.status(200).send({ statusCode: 200, viewPlans });
+   
   } catch (error) {
     res.status(400).json({ statusCode: 400, message: error.message });
   }
