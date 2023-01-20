@@ -81,9 +81,9 @@ const buySubscription = async (req, res) => {
 
 const endDate = async (req, res) => {
   try {
-    stopDate = new Date()
-    plan = req.body.plan * 31
-    stopDate = stopDate.setDate(stopDate.getDate(Date.now()) + plan  ); 
+    stopDate = new Date();
+    plan = req.body.plan * 31;
+    stopDate = stopDate.setDate(stopDate.getDate(Date.now()) + plan);
     res.send({
       status: 200,
       subscriptionEnd: new Date(stopDate),
@@ -294,11 +294,11 @@ const resumeSubscription = async (req, res) => {
           },
         }
       );
+      res.status(200).send({
+        status: 200,
+        message: "subscription resumed successfully",
+      });
     }
-    res.status(200).send({
-      status:200,
-      message:"subscription resumed successfully"
-    });
   } catch (error) {
     res.status(400).json({ statusCode: 400, message: error.message });
   }
