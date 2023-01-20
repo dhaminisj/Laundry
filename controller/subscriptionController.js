@@ -295,7 +295,10 @@ const resumeSubscription = async (req, res) => {
         }
       );
     }
-    res.send("hi");
+    res.status(200).send({
+      status:200,
+      message:"subscription resumed successfully"
+    });
   } catch (error) {
     res.status(400).json({ statusCode: 400, message: error.message });
   }
