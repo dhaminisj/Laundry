@@ -191,14 +191,17 @@ const cancelSubscription = async (req, res) => {
       $and: [{ userId: req.users.userId }, { orderId: req.body.orderId }],
     });
     if (sub.isWallet) {
-      account = "wallet";
+      card = "wallet";
     } else {
-      account = sub.card.cardType + "with card number" + sub.card.number;
+      card = sub.card.cardType;
+      cardNumber = sub.card.number;
     }
     res.status(200).send({
       statusCode: 200,
       message: "subscription canceled successfully",
-      refund: "refund of amount " + refund + "to your " + account,
+      amount: refund,
+      card: cardNumber,
+      type: card,
     });
   } catch (error) {
     res.status(400).json({ statusCode: 400, message: error.message });
