@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const termsController = require("../controller/termsController");
+const faqController = require("../controller/faqController");
 const verifyJWT = require("../middleware/verifyJWT");
 require("dotenv").config();
 router
@@ -9,8 +10,11 @@ router
 
 router.route("/add-genericterms").post(termsController.addGenericTerms);
 router.route("/add-privacyPolicy").post(termsController.addPrivacyPolicy);
-router.route("/get-terms-and-condition").post(termsController.getTermsAndCondition);
+router
+  .route("/get-terms-and-condition")
+  .post(termsController.getTermsAndCondition);
 
-
+router.route("/create-Faq").post(faqController.createFaq);
+router.route("/get-Faq").post(faqController.getFaq);
 
 module.exports = router;
