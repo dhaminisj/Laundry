@@ -83,7 +83,7 @@ const endDate = async (req, res) => {
   try {
     stopDate = new Date()
     plan = req.body.plan * 31
-    stopDate = stopDate.setDate(stopDate.getDate(Date.now()) + plan  );
+    stopDate = stopDate.setDate(stopDate.getDate(Date.now()) + plan  ); 
     res.send({
       status: 200,
       subscriptionEnd: new Date(stopDate),
