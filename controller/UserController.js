@@ -206,7 +206,7 @@ const getProfile = async (req, res) => {
   try {
     const { userId } = req.users;
     const user = await User.find({ _id: userId }).select(
-      " name profilePic plan phone email "
+      "name profilePic plan phone email"
     );
     if (user)
       return res.status(200).json({
@@ -363,6 +363,12 @@ const getAddress = async (req, res) => {
     console.log("error from get address", error);
   }
 };
+const editProfile = async (req, res) => {
+  try {
+  } catch (error) {
+    console.log("error from get address", error);
+  }
+};
 
 module.exports = {
   register,
@@ -373,4 +379,5 @@ module.exports = {
   updateAddress,
   deleteAddress,
   getAddress,
+  editProfile,
 };
