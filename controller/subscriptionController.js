@@ -101,7 +101,20 @@ const viewSubscription = async (req, res) => {
         new Date(Date.now()).toDateString() !==
         new Date(viewPlans.pickupDays.subscriptionEnd).toDateString()
       ) {
-        res.status(200).send({ statusCode: 200, viewPlans });
+        if(viewPlans.isPaused == true && new Date(viewPlans.ifPaused[0].to).toDateString() ==new Date(Date.now()).toDateString()){
+          await subscription.findByIdAndUpdate({userId:req.users.userId},{
+             isPaused :false,
+             ifPaused:{$pull:{from:viewPlans.ifPaused[0].from,to:viewPlans.ifPaused[0].to}}
+          })
+          const [view] = await subscription.find({userId:req.users.userId})
+          res.status(200).send({
+            status:200,
+            view
+          })
+        }else{
+          res.status(200).send({ statusCode: 200, viewPlans });
+        }
+        
       } else {
         await subscription.findOneAndDelete({ userId: req.users.userId });
         res.status(200).send({
