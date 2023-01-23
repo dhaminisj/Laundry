@@ -1,5 +1,6 @@
 const { mongoose } = require("mongoose");
 const Promo = require("../models/promoSchema");
+const BurgerPromo = require("../models/burgerPromoSchema");
 const cloudinary = require("../utils/cloudinaryConfig");
 
 const addPromoCode = async (req, res) => {
@@ -57,4 +58,28 @@ const getPromoCode = async (req, res) => {
   }
 };
 
-module.exports = { addPromoCode, getPromoCode };
+const burgerPromoCode = async (req, res) => {
+  try {
+    const { promoTitle, promoDescription, offerTitle, expireDate, promoCode } =
+      req.body;
+    const data = new BurgerPromo({
+      promoTitle,
+      promoDescription,
+      offers: [
+        {
+          offerTitle: offerTitle,
+          expireDate: expireDate,
+          promoCode: promoCode,
+        },
+      ],
+    });
+    const result = await data.save();
+    res
+      .status(200)
+      .json({ statusCode: 200, message: "Coupon added successfully", result });
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, message: error });
+  }
+};
+
+module.exports = { addPromoCode, getPromoCode, burgerPromoCode };

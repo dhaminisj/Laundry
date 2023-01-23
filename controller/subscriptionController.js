@@ -204,13 +204,13 @@ const cancelSubscription = async (req, res) => {
         transactionType: "REFUND",
         transactionStatus: "CREDIT",
         orderTitle: "Subscription canceled refund",
-        totalPrice: refund,
-        walletBalance: user.wallet + refund,
+        totalPrice: refund.toFixed(),
+        walletBalance: user.wallet + refund.toFixed(),
       });
     }
     await users.findOneAndUpdate(
       { _id: req.users.userId },
-      { wallet: user.wallet + refund }
+      { wallet: user.wallet + refund.toFixed() }
     );
     await subscription.findOneAndDelete({
       $and: [{ userId: req.users.userId }, { orderId: req.body.orderId }],
@@ -230,7 +230,7 @@ const cancelSubscription = async (req, res) => {
     res.status(200).send({
       statusCode: 200,
       message: "subscription canceled successfully",
-      amount: refund,
+      amount: refund.toFixed(),
       card: cardNumber,
       type: card,
     });
