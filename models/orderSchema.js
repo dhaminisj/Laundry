@@ -37,6 +37,7 @@ const orderSchema = mongoose.Schema(
     basketTotal: { type: Number, default: 0 },
     totalAmount: { type: Number, default: 0 },
     deliveryCharge: { type: Number, default: 50 },
+    tax: { type: Number },
     deliveryAddress: [
       {
         houseNo: { type: String },
