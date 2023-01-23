@@ -16,5 +16,6 @@ router
 
 router.route("/create-Faq").post(faqController.createFaq);
 router.route("/get-Faq").post(faqController.getFaq);
-
+router.route("/addCancelReason").post(termsController.addCancelReason)
+router.route("/getCancelReason").get(termsController.getCancelReason)
 module.exports = router;

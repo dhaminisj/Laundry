@@ -1,4 +1,5 @@
 const { User, Terms } = require("../models/index");
+const cancelReason = require("../models/cancelReasonSchema");
 const { mongoose } = require("mongoose");
 require("dotenv").config();
 
@@ -113,13 +114,42 @@ const getTermsAndCondition = async (req, res) => {
       message: "Couldn't fetch Terms and condition",
     });
   } catch (error) {
-    console.log("error from getTermsAndCondition", error);
+    res.status(400).send("error from getTermsAndCondition", error);
   }
 };
 
+const addCancelReason = async (req, res) => {
+  try {
+    await cancelReason.create({
+      reason: req.body.reason,
+    });
+    res.status(200).send({
+      message: "added successfully",
+    });
+  } catch (error) {
+    res.status(400).send({
+      message: error.message,
+    });
+  }
+};
+
+const getCancelReason = async (req, res) => {
+  try {
+    const reason = await cancelReason.find({}).select(["-_id","-__v"]);
+    res.status(200).send({
+      reason,
+    });
+  } catch (error) {
+    res.status(400).send({
+      message: error.message,
+    });
+  }
+};
 module.exports = {
   createTermsAndCondition,
   addGenericTerms,
   addPrivacyPolicy,
   getTermsAndCondition,
+  addCancelReason,
+  getCancelReason
 };
