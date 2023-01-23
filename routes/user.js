@@ -14,6 +14,7 @@ router
   .route("/updateProfilePic")
   .post(upload.single("image"), verifyJWT, userController.updateUserProfilePic)
   .get(verifyJWT, userController.getProfile);
+router.route("/edit-profile").post(verifyJWT, userController.editProfile);
 
 router.route("/add-address").post(verifyJWT, userController.addAddress);
 router

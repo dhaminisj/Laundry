@@ -206,7 +206,7 @@ const getProfile = async (req, res) => {
   try {
     const { userId } = req.users;
     const user = await User.find({ _id: userId }).select(
-      "name profilePic plan phone email"
+      "-totalearned -__v -refreshToken -wallet"
     );
     if (user)
       return res.status(200).json({
@@ -365,6 +365,54 @@ const getAddress = async (req, res) => {
 };
 const editProfile = async (req, res) => {
   try {
+    if (!req.body)
+      return res
+        .status(400)
+        .json({ status: false, statusCode: 400, message: "body is not found" });
+    if (!req.users)
+      return res
+        .status(400)
+        .json({ status: false, statusCode: 400, message: "user is not found" });
+    const { userId } = req.users;
+    const { name, phone, email } = req.body;
+    const user = await User.findOne({ _id: userId });
+    if (phone) {
+      if (user.phone != phone) {
+        const accessToken = jwt.sign(
+          { userId: user._id, phone: user.phone },
+          process.env.ACCESS_TOKEN_SECRET,
+          { expiresIn: "60d" }
+        );
+        const refreshToken = jwt.sign(
+          { userId: user._id, phone: user.phone },
+          process.env.REFRESH_TOKEN_SECRET,
+          { expiresIn: "100d" }
+        );
+        const obj = {
+          name,
+          phone: phone,
+          email,
+          refreshToken: refreshToken,
+        };
+        await User.findOneAndUpdate({ _id:user}, obj);
+        res.header("Authorization", "Bearer " + accessToken);
+        return res.status(200).json({
+          status: true,
+          statusCode: 200,
+          message: " Profile succesfully updated",
+        });
+      }
+    }
+    const obj = {
+      name,
+      email,
+    };
+    await User.findOneAndUpdate({ _id:userId }, obj);
+    return res.status(200).json({
+      status: true,
+      statusCode: 200,
+      message: " Profile succesfully updated",
+    });
   } catch (error) {
     console.log("error from get address", error);
   }
