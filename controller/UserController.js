@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const { mongoose } = require("mongoose");
 const cloudinary = require("../utils/cloudinaryConfig");
 const random = require("unique-random-string");
+const { totp } = require("otplib");
 require("dotenv").config();
 
 const register = async (req, res) => {
@@ -120,31 +121,38 @@ const register = async (req, res) => {
 };
 const login = async (req, res) => {
   try {
+    const isValid = totp.check(req.body.otp, process.env.SECRET_OTP);
     if (!req.body)
       res
         .status(400)
         .json({ status: false, statusCode: 400, message: "body not found" });
-    const { phone } = req.body;
+    console.log(req.body);
+    const { phone, otp } = req.body;
     const userfound = await User.findOne({ phone });
     if (userfound) {
-      const accessToken = jwt.sign(
-        { userId: userfound._id, phone: userfound.phone },
-        process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "6h" }
-      );
-      const refreshToken = jwt.sign(
-        { userId: userfound._id, phone: userfound.phone },
-        process.env.REFRESH_TOKEN_SECRET,
-        { expiresIn: "1d" }
-      );
-      await User.updateOne({ _id: userfound._id }, { refreshToken });
-      res.header("Refreh-Token", refreshToken);
-      res.header("Authorization", "Bearer " + accessToken);
-      return res.status(200).json({
-        status: true,
-        statusCode: 200,
-        message: "User Logged in Succesfully",
-      });
+      console.log(userfound);
+      if (isValid) {
+        const accessToken = jwt.sign(
+          { userId: userfound._id, phone: userfound.phone },
+          process.env.ACCESS_TOKEN_SECRET,
+          { expiresIn: "60d" }
+        );
+        const refreshToken = jwt.sign(
+          { userId: userfound._id, phone: userfound.phone },
+          process.env.REFRESH_TOKEN_SECRET,
+          { expiresIn: "100d" }
+        );
+        await User.updateOne({ _id: userfound._id }, { refreshToken });
+        res.header("Refreh-Token", refreshToken);
+        res.header("Authorization", "Bearer " + accessToken);
+        return res.status(200).json({
+          status: true,
+          statusCode: 200,
+          message: "User Logged in Succesfully",
+        });
+      } else {
+        res.status(401).json({ statusCode: 401, message: "otp invalid" });
+      }
     } else
       return res.status(403).json({
         status: true,
