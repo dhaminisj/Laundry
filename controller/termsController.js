@@ -135,10 +135,8 @@ const addCancelReason = async (req, res) => {
 
 const getCancelReason = async (req, res) => {
   try {
-    const reason = await cancelReason.find({}).select(["-_id","-__v"]);
-    res.status(200).send({
-      reason,
-    });
+    const reason = await cancelReason.find({}).select(["-_id", "-__v"]);
+    res.status(200).send(reason);
   } catch (error) {
     res.status(400).send({
       message: error.message,
@@ -151,5 +149,5 @@ module.exports = {
   addPrivacyPolicy,
   getTermsAndCondition,
   addCancelReason,
-  getCancelReason
+  getCancelReason,
 };
