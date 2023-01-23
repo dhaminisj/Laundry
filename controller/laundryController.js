@@ -57,6 +57,11 @@ const getLaundryList = async (req, res) => {
       {
         $project: {
           // "docs._id": 0,
+          "docs.hangerUrl": 0,
+          "docs.multiPackUrl": 0,
+          "docs.noStarchUrl": 0,
+          "docs.singlePackUrl": 0,
+          "docs.starchUrl": 0,
           "docs.type": 0,
           "docs.category": 0,
           "docs.__v": 0,
@@ -66,8 +71,21 @@ const getLaundryList = async (req, res) => {
 
     res.status(200).send({ statusCode: 200, laundryList: list });
   } catch (error) {
-    res.status(400).json({ statusCode: 400, message: error });
+    res.status(500).json({ statusCode: 500, message: error });
   }
 };
 
-module.exports = { addLaundryList, getLaundryList };
+const getAddOnsUrl = async (req, res) => {
+  try {
+    const result = await laundryList
+      .findOne()
+      .select(
+        "hangerUrl multiPackUrl noStarchUrl singlePackUrl starchUrl -_id"
+      );
+    res.status(200).send({ statusCode: 200, result });
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, message: error });
+  }
+};
+
+module.exports = { addLaundryList, getLaundryList, getAddOnsUrl };
