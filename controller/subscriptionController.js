@@ -3,6 +3,7 @@ const subscriptionList = require("../models/subscriptionList");
 const subscription = require("../models/subscriptionSchema");
 const transaction = require("../models/transactionSchema");
 const users = require("../models/UserSchema");
+const cancel = require("../models/cancelSchema");
 const addSubscriptionList = async (req, res) => {
   try {
     await subscriptionList.create({
@@ -101,20 +102,31 @@ const viewSubscription = async (req, res) => {
         new Date(Date.now()).toDateString() !==
         new Date(viewPlans.pickupDays.subscriptionEnd).toDateString()
       ) {
-        if(viewPlans.isPaused == true && new Date(viewPlans.ifPaused[0].to).toDateString() ==new Date(Date.now()).toDateString()){
-          await subscription.findByIdAndUpdate({userId:req.users.userId},{
-             isPaused :false,
-             ifPaused:{$pull:{from:viewPlans.ifPaused[0].from,to:viewPlans.ifPaused[0].to}}
-          })
-          const [view] = await subscription.find({userId:req.users.userId})
+        if (
+          viewPlans.isPaused == true &&
+          new Date(viewPlans.ifPaused[0].to).toDateString() ==
+            new Date(Date.now()).toDateString()
+        ) {
+          await subscription.findByIdAndUpdate(
+            { userId: req.users.userId },
+            {
+              isPaused: false,
+              ifPaused: {
+                $pull: {
+                  from: viewPlans.ifPaused[0].from,
+                  to: viewPlans.ifPaused[0].to,
+                },
+              },
+            }
+          );
+          const [view] = await subscription.find({ userId: req.users.userId });
           res.status(200).send({
-            status:200,
-            view
-          })
-        }else{
+            status: 200,
+            view,
+          });
+        } else {
           res.status(200).send({ statusCode: 200, viewPlans });
         }
-        
       } else {
         await subscription.findOneAndDelete({ userId: req.users.userId });
         res.status(200).send({
@@ -209,6 +221,12 @@ const cancelSubscription = async (req, res) => {
       card = sub.card.cardType;
       cardNumber = sub.card.number;
     }
+    await cancel.create({
+      userId: req.users.userId,
+      orderId: req.body.orderId,
+      reason: req.body.reason,
+      comments: req.body.comments,
+    });
     res.status(200).send({
       statusCode: 200,
       message: "subscription canceled successfully",
