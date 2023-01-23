@@ -7,11 +7,11 @@ const createTermsAndCondition = async (req, res) => {
   try {
     const { gTitle, gBody, pTitle, pBody } = req.body;
     const obj = new Terms({
-      genericTerms: [{ genericTermsTitle: gTitle, genericTermsBody: gBody }],
+      genericTerms: [{ Title: gTitle, Body: gBody }],
       privacyPolicy: [
         {
-          privacyPolicyTitle: pTitle,
-          privacyPolicyBody: pBody,
+          Title: pTitle,
+          Body: pBody,
         },
       ],
     });
