@@ -2,14 +2,14 @@ const mongoose = require("mongoose");
 const termsSchema = mongoose.Schema({
   genericTerms: [
     {
-      genericTermsTitle: { type: String },
-      genericTermsBody: { type: String },
+      Title: { type: String },
+      Body: { type: String },
     },
   ],
   privacyPolicy: [
     {
-      privacyPolicyTitle: { type: String },
-      privacyPolicyBody: { type: String },
+      Title: { type: String },
+      Body: { type: String },
     },
   ],
   // gTitle: { type: String },
