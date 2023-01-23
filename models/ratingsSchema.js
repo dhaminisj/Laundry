@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const ratingsSchema = mongoose.Schema({
-    subscriptionId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "SubscriptionList",
+    orderId: {
+        type: String,
+        ref: "orderModel",
     },
     star: Number,
     postedby: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
