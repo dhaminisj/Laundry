@@ -58,6 +58,7 @@ const checkoutOrder = async (req, res) => {
       orderId: "#id" + Math.random().toString(10).slice(3),
       orders: list,
       basketTotal,
+      tax: basketTotal * 0.3 ,
     };
 
     order = new Order(result);
