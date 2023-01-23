@@ -8,5 +8,5 @@ router
   .route("/add-promo-code")
   .post(upload.single("image"), promoController.addPromoCode);
 router.route("/get-promo-code").post(verifyJWT, promoController.getPromoCode);
-
+router.route("/add-burger-promo").post(promoController.burgerPromoCode);
 module.exports = router;
