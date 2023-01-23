@@ -100,7 +100,7 @@ const register = async (req, res) => {
         { refreshToken: refreshToken }
       );
 
-      //   res.header("Refresh-Token", refreshToken);
+      res.header("Refresh-Token", refreshToken);
       res.header("Authorization", "Bearer " + accessToken);
       res.status(200).json({
         status: true,
@@ -127,19 +127,19 @@ const login = async (req, res) => {
     const { phone } = req.body;
     const userfound = await User.findOne({ phone });
     if (userfound) {
-      // const accessToken = jwt.sign(
-      //   { userId: userfound._id, phone: userfound.phone },
-      //   process.env.ACCESS_TOKEN_SECRET,
-      //   { expiresIn: "6h" }
-      // );
-      // const refreshToken = jwt.sign(
-      //   { userId: userfound._id, phone: userfound.phone },
-      //   process.env.REFRESH_TOKEN_SECRET,
-      //   { expiresIn: "1d" }
-      // );
-      // await User.updateOne({ _id: userfound._id }, { refreshToken });
-      // //res.header("Refreh-Token", refreshToken);
-      // res.header("Authorization", "Bearer " + accessToken);
+      const accessToken = jwt.sign(
+        { userId: userfound._id, phone: userfound.phone },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: "6h" }
+      );
+      const refreshToken = jwt.sign(
+        { userId: userfound._id, phone: userfound.phone },
+        process.env.REFRESH_TOKEN_SECRET,
+        { expiresIn: "1d" }
+      );
+      await User.updateOne({ _id: userfound._id }, { refreshToken });
+      res.header("Refreh-Token", refreshToken);
+      res.header("Authorization", "Bearer " + accessToken);
       return res.status(200).json({
         status: true,
         statusCode: 200,
@@ -363,6 +363,61 @@ const getAddress = async (req, res) => {
     console.log("error from get address", error);
   }
 };
+// const editProfile = async (req, res) => {
+//   try {
+//     if (!req.body)
+//       return res
+//         .status(400)
+//         .json({ status: false, statusCode: 400, message: "body is not found" });
+//     if (!req.users)
+//       return res
+//         .status(400)
+//         .json({ status: false, statusCode: 400, message: "user is not found" });
+//     const { userId } = req.users;
+//     const { name, phone, email } = req.body;
+//     const user = await User.findOne({ _id: userId });
+//     if (phone) {
+//       if (user.phone != phone) {
+//         const accessToken = jwt.sign(
+//           { userId: user._id, phone: user.phone },
+//           process.env.ACCESS_TOKEN_SECRET,
+//           { expiresIn: "60d" }
+//         );
+//         const refreshToken = jwt.sign(
+//           { userId: user._id, phone: user.phone },
+//           process.env.REFRESH_TOKEN_SECRET,
+//           { expiresIn: "100d" }
+//         );
+//         const obj = {
+//           name,
+//           phone: phone,
+//           email,
+//           refreshToken: refreshToken,
+//         };
+//         await User.findOneAndUpdate({ _id:user}, obj);
+//         res.header("Authorization", "Bearer " + accessToken);
+//         return res.status(200).json({
+//           status: true,
+//           statusCode: 200,
+//           message: " Profile succesfully updated",
+//         });
+//       }
+//     }
+//     const obj = {
+//       name,
+//       email,
+//     };
+//     await User.findOneAndUpdate({ _id:userId }, obj);
+//     return res.status(200).json({
+//       status: true,
+//       statusCode: 200,
+//       message: " Profile succesfully updated",
+//     });
+//   } catch (error) {
+//     console.log("error from get address", error);
+//   }
+// };
+
 const editProfile = async (req, res) => {
   try {
     if (!req.body)
@@ -376,45 +431,54 @@ const editProfile = async (req, res) => {
     const { userId } = req.users;
     const { name, phone, email } = req.body;
     const user = await User.findOne({ _id: userId });
-    if (phone) {
-      if (user.phone != phone) {
-        const accessToken = jwt.sign(
-          { userId: user._id, phone: user.phone },
-          process.env.ACCESS_TOKEN_SECRET,
-          { expiresIn: "60d" }
-        );
-        const refreshToken = jwt.sign(
-          { userId: user._id, phone: user.phone },
-          process.env.REFRESH_TOKEN_SECRET,
-          { expiresIn: "100d" }
-        );
-        const obj = {
-          name,
-          phone: phone,
-          email,
-          refreshToken: refreshToken,
-        };
-        await User.findOneAndUpdate({ _id:user}, obj);
-        res.header("Authorization", "Bearer " + accessToken);
-        return res.status(200).json({
-          status: true,
-          statusCode: 200,
-          message: " Profile succesfully updated",
-        });
-      }
-    }
+
     const obj = {
       name,
+      phone,
       email,
     };
-    await User.findOneAndUpdate({ _id:userId }, obj);
+    await User.findOneAndUpdate({ _id: user }, obj);
     return res.status(200).json({
       status: true,
       statusCode: 200,
       message: " Profile succesfully updated",
     });
   } catch (error) {
-    console.log("error from get address", error);
+    console.log("error from edit profile", error);
+  }
+};
+
+const logout = async (req, res) => {
+  try {
+    const refreshHeader = req.headers["refresh-token"];
+    if (!refreshHeader)
+      return res.status(204).json({
+        status: false,
+        statusCode: 204,
+        message: "No refresh token found",
+      });
+    User.findOneAndUpdate(
+      { refreshToken: refreshHeader },
+      { refreshToken: "" },
+      (err, docs) => {
+        if (!docs)
+          return res.status(404).json({
+            status: false,
+            statusCode: 404,
+            message: "No refresh token matched",
+          });
+        delete req.headers["refresh-token"];
+        delete req.headers["authorization"];
+
+        res.json({
+          status: true,
+          statusCode: 200,
+          message: "User logged out successfully",
+        });
+      }
+    );
+  } catch (error) {
+    console.log("error from logout", error);
   }
 };
 
@@ -428,4 +492,5 @@ module.exports = {
   deleteAddress,
   getAddress,
   editProfile,
+  logout,
 };
