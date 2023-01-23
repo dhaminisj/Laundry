@@ -47,7 +47,7 @@ const createFaq = async (req, res) => {
 };
 const getFaq = async (req, res) => {
   try {
-    const faq = await FAQ.find({});
+    const faq = await FAQ.find({}, { _id: 0, __v: 0 }).lean();
 
     if (faq)
       return res.status(200).json({
