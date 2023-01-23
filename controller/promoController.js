@@ -60,20 +60,14 @@ const getPromoCode = async (req, res) => {
 
 const burgerPromoCode = async (req, res) => {
   try {
-    const { promoTitle, promoDescription, offerTitle, expireDate, promoCode } =
-      req.body;
+    const { promoTitle, promoDescription, offers } = req.body;
     const data = new BurgerPromo({
       promoTitle,
       promoDescription,
-      offers: [
-        {
-          offerTitle: offerTitle,
-          expireDate: expireDate,
-          promoCode: promoCode,
-        },
-      ],
+      offers,
     });
     const result = await data.save();
+
     res
       .status(200)
       .json({ statusCode: 200, message: "Coupon added successfully", result });
@@ -81,5 +75,53 @@ const burgerPromoCode = async (req, res) => {
     res.status(500).json({ statusCode: 500, message: error });
   }
 };
+const addOffers = async (req, res) => {
+  try {
+    const { offerTitle, expireDate, promoCode } = req.body;
+    const obj = {
+      offerTitle,
+      expireDate,
+      promoCode,
+    };
+    const data = await BurgerPromo.findByIdAndUpdate(
+      { _id: "63ce34bf84e80c98af906d79" },
+      { $push: { offers: obj } },
+      { new: true }
+    );
+    if (data)
+      res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "Added offers successfully",
+        data: data,
+      });
+    res.status(200).json({
+      status: true,
+      statusCode: 200,
+      message: "could not add offers",
+    });
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, message: error });
+  }
+};
 
-module.exports = { addPromoCode, getPromoCode, burgerPromoCode };
+const getBurgerPromo = async (req, res) => {
+  try {
+    const result = await BurgerPromo.find();
+    res.status(200).json({
+      status: true,
+      statusCode: 200,
+      message: "Promos fetched successfully",
+      result,
+    });
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, message: error });
+  }
+};
+module.exports = {
+  addPromoCode,
+  getPromoCode,
+  burgerPromoCode,
+  addOffers,
+  getBurgerPromo,
+};
