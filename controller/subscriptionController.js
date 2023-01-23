@@ -227,12 +227,16 @@ const cancelSubscription = async (req, res) => {
       reason: req.body.reason,
       comments: req.body.comments,
     });
+    refundBy = new Date();
+    refundBy = stopDate.setDate(stopDate.getDate(Date.now()) + 7);
+    refundBy = new Date(refundBy).toDateString;
     res.status(200).send({
       statusCode: 200,
       message: "subscription canceled successfully",
       amount: refund.toFixed(),
       card: cardNumber,
       type: card,
+      refundBy: refundBy,
     });
   } catch (error) {
     res.status(400).json({ statusCode: 400, message: error.message });
