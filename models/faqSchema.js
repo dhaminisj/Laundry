@@ -1,54 +1,54 @@
 const mongoose = require("mongoose");
 const faqSchema = mongoose.Schema({
-  ordersAndPayment: [
+  "Orders and Payments": [
     {
       title: { type: String },
       body: { type: String },
     },
   ],
-  offersAndDiscount: [
+  "Offers and Discounts": [
     {
       title: { type: String },
       body: { type: String },
     },
   ],
-  cashbacks: [
+  "Cashbacks": [
     {
       title: { type: String },
       body: { type: String },
     },
   ],
-  availableServices: [
+  "Available Services": [
     {
       title: { type: String },
       body: { type: String },
     },
   ],
-  pickUpandDelivery: [
+  "Pick-Up & Delivery": [
     {
       title: { type: String },
       body: { type: String },
     },
   ],
-  covidProtocols: [
+  "Covid-19 Protocols": [
     {
       title: { type: String },
       body: { type: String },
     },
   ],
-  subscription: [
+  "Subscription": [
     {
       title: { type: String },
       body: { type: String },
     },
   ],
-  returnAndReprocessing: [
+  "Returns and Reprocessing": [
     {
       title: { type: String },
       body: { type: String },
     },
   ],
-  addressManagement: [
+  "Address Management": [
     {
       title: { type: String },
       body: { type: String },
