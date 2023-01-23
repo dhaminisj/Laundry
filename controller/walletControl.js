@@ -101,4 +101,5 @@ module.exports = {
     viewBalance,
     addMoneyToWallet,
     getWalletHistory,
+    
 };

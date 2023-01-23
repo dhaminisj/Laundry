@@ -8,18 +8,19 @@ const helpAndSupportSchema = new mongoose.Schema({
     },
     typeOfHelp: {
         type: String,
-        enum: [
-            "I need refund for the order",
-            "I need to reprocess few items in the order",
-            "I need to give feedback for the order",
-            "I need to use promo code/discount for the order",
-            "I need to make payment for the order",
-        ],
         required: true,
     },
-    concernText: {
-        type: String,
-    },
     attachImages: [],
+    ticketNumber: {
+        type: Number,
+    },
+    ticketStatus: {
+        type: String,
+        default: "Raised",
+    },
+    createdOn: {
+        type: Date,
+        default: Date.now(),
+    },
 });
 module.exports = mongoose.model("helpAndSupportModel", helpAndSupportSchema);
