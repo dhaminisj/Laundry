@@ -167,7 +167,7 @@ const updateUserProfilePic = async (req, res) => {
   try {
     const { userId } = req.users;
     console.log(req.users);
-
+    let user;
     if (req.file) {
       profilePic = req.file.path;
       cloudinaryResult = await cloudinary.uploader.upload(profilePic, {
@@ -179,6 +179,19 @@ const updateUserProfilePic = async (req, res) => {
         { profilePic: cloudinaryResult.url }
       );
       console.log(cloudinaryResult.url);
+
+      if (user)
+        return res.status(200).json({
+          status: true,
+          statusCode: 200,
+          message: "profile updated successfully",
+          data: cloudinaryResult.url,
+        });
+      res.status(400).json({
+        status: false,
+        statusCode: 400,
+        message: "profile cannot be updated",
+      });
 
       //profilePic = cloudinaryResult.secure_url;
     } else {
@@ -194,17 +207,6 @@ const updateUserProfilePic = async (req, res) => {
     // const user = await User.findOneAndUpdate({ _id: userId }, updatedData, {
     //   new: true,
     // }).select("profilePic name email phone");
-    if (user)
-      return res.status(200).json({
-        status: true,
-        statusCode: 200,
-        message: "profile updated successfully",
-      });
-    res.status(400).json({
-      status: false,
-      statusCode: 400,
-      message: "profile cannot be updated",
-    });
   } catch (error) {
     console.log("error from update userProfilePic", error);
   }
