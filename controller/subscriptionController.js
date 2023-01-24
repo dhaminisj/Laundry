@@ -71,11 +71,65 @@ const buySubscription = async (req, res) => {
         orderId: id,
       });
     } else {
-      res
-        .status(200)
-        .send({ statusCode: 200, message: "subscription already purchased" });
+      const [user] = await users.find({ _id: req.users.userId });
+      const day1 = sub.pickupDays.subscriptionEnd;
+      const day2 = Date.now();
+      const diffTime = Math.abs(day1 - day2);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      if (sub.subscription.months === 12) {
+        refund = 1.367 * diffDays;
+      } else if (sub.subscription.months === 6) {
+        refund = 2.2166 * diffDays;
+      } else if (sub.subscription.months === 3) {
+        refund = 3.32 * diffDays;
+      } else {
+        refund = 6.633 * diffDays;
+      }
+      if (sub.isWallet) {
+        await transaction.insertMany({
+          userId: req.users.userId,
+          orderId: req.body.orderId,
+          transactionType: "REFUND",
+          transactionStatus: "CREDIT",
+          orderTitle: "Subscription canceled refund",
+          totalPrice: refund.toFixed(),
+          walletBalance: user.wallet + refund.toFixed(),
+        });
+      }
+      await users.findOneAndUpdate(
+        { _id: req.users.userId },
+        { wallet: user.wallet + refund.toFixed() }
+      );
+      await subscription.findOneAndDelete({userId: req.users.userId });
+      await subscription.create({
+        userId: req.users.userId,
+        orderId: id,
+        pickupDays: req.body.pickupDays,
+        numberOfPickups: req.body.numberOfPickups,
+        subscription: req.body.subscription,
+        address: req.body.address,
+        card: req.body.card,
+        isWallet: req.body.isWallet,
+      });
+      if (req.body.isWallet) {
+        amount = user.wallet - req.body.subscription.amount;
+        if (req.body.subscription.amount < user.wallet) {
+          await transaction.create({
+            userId: req.users.userId,
+            orderId: id,
+            totalPrice: req.body.subscription.amount,
+            walletBalance: amount,
+            transactionType: "SUBSCRIPTION PURCHASED",
+            transactionStatus: "DEBIT",
+            orderTitle: "New subscription purchased",
+          });
     }
-  } catch (error) {
+  }
+  res.status(200).send({
+    message:"Plan modified successfully"
+  })
+ } 
+}catch (error) {
     res.status(400).json({ statusCode: 400, message: error.message });
   }
 };
