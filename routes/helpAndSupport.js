@@ -5,9 +5,13 @@ const upload = require("../utils/multer");
 const helpAndSupportController = require("../controller/helpAndSupportController");
 
 router
-    .route("/customerSupport")
-    .post(verifyJWT, helpAndSupportController.customerSupport);
+  .route("/customerSupport")
+  .post(verifyJWT, helpAndSupportController.customerSupport);
 router
-    .route("/addImages")
-    .post(verifyJWT, upload.array("image"), helpAndSupportController.addImages);
+  .route("/addImages")
+  .post(verifyJWT, upload.array("image"), helpAndSupportController.addImages);
+
+router
+  .route("/open-tickets")
+  .post(verifyJWT, helpAndSupportController.openTickets);
 module.exports = router;
