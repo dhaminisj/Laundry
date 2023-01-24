@@ -3,16 +3,21 @@ const mongoose = require("mongoose");
 const helpAndSupportSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     orderId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: "orderModel",
     },
-    typeOfHelp: {
+    describeText: {
         type: String,
         required: true,
     },
-    attachImages: [],
+    images: [
+        {
+            type: String,
+        },
+    ],
     ticketNumber: {
-        type: Number,
+        type: String,
+         default: "#001",
     },
     ticketStatus: {
         type: String,
