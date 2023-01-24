@@ -445,7 +445,7 @@ const editProfile = async (req, res) => {
       phone,
       email,
     };
-    await User.findOneAndUpdate({ _id: user }, obj);
+    await User.findOneAndUpdate({ _id: user._id }, obj);
     return res.status(200).json({
       status: true,
       statusCode: 200,
