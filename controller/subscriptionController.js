@@ -85,6 +85,7 @@ const buySubscription = async (req, res) => {
       } else {
         refund = 6.633 * diffDays;
       }
+      amount = parseInt(user.wallet) + refund.toFixed();
       if (sub.isWallet) {
         await transaction.insertMany({
           userId: req.users.userId,
@@ -93,12 +94,12 @@ const buySubscription = async (req, res) => {
           transactionStatus: "CREDIT",
           orderTitle: "Subscription canceled refund",
           totalPrice: refund,
-          walletBalance: parseInt(user.wallet) + refund.toFixed(),
+          walletBalance: amount,
         });
       }
       await users.findOneAndUpdate(
         { _id: req.users.userId },
-        { wallet: parseInt(user.wallet) + refund.toFixed()}
+        { wallet: amount }
       );
       await subscription.findOneAndDelete({ userId: req.users.userId });
       await subscription.create({
@@ -252,6 +253,7 @@ const cancelSubscription = async (req, res) => {
     } else {
       refund = 6.633 * diffDays;
     }
+    amount = parseInt(user.wallet) + refund.toFixed();
     if (sub.isWallet) {
       await transaction.insertMany({
         userId: req.users.userId,
@@ -260,13 +262,10 @@ const cancelSubscription = async (req, res) => {
         transactionStatus: "CREDIT",
         orderTitle: "Subscription canceled refund",
         totalPrice: refund,
-        walletBalance: parseInt(user.wallet) + refund.toFixed(),
+        walletBalance: amount,
       });
     }
-    await users.findOneAndUpdate(
-      { _id: req.users.userId },
-      { wallet: parseInt(user.wallet) + refund.toFixed() }
-    );
+    await users.findOneAndUpdate({ _id: req.users.userId }, { wallet: amount });
     await subscription.findOneAndDelete({
       $and: [{ userId: req.users.userId }, { orderId: req.body.orderId }],
     });
