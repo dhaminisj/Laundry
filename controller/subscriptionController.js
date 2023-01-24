@@ -85,7 +85,8 @@ const buySubscription = async (req, res) => {
       } else {
         refund = 6.633 * diffDays;
       }
-      amount = parseInt(user.wallet) + refund.toFixed();
+      amount = parseInt(user.wallet);
+      amount += refund
       if (sub.isWallet) {
         await transaction.insertMany({
           userId: req.users.userId,
@@ -250,10 +251,12 @@ const cancelSubscription = async (req, res) => {
       refund = 2.2166 * diffDays;
     } else if (sub.subscription.months === 3) {
       refund = 3.32 * diffDays;
-    } else {
+    } else if(sub.subscription.months === 1) {
       refund = 6.633 * diffDays;
     }
-    amount = parseInt(user.wallet) + refund.toFixed();
+    amount = parseInt(user.wallet);
+    amount += refund
+   
     if (sub.isWallet) {
       await transaction.insertMany({
         userId: req.users.userId,
