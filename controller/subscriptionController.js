@@ -100,7 +100,7 @@ const buySubscription = async (req, res) => {
         { _id: req.users.userId },
         { wallet: user.wallet + refund.toFixed() }
       );
-      await subscription.findOneAndDelete({userId: req.users.userId });
+      await subscription.findOneAndDelete({ userId: req.users.userId });
       await subscription.create({
         userId: req.users.userId,
         orderId: id,
@@ -123,14 +123,14 @@ const buySubscription = async (req, res) => {
             transactionStatus: "DEBIT",
             orderTitle: "New subscription purchased",
           });
+        }
+      }
+      res.status(200).send({
+        message: "Plan modified successfully",
+        orderId: id,
+      });
     }
-  }
-  res.status(200).send({
-    message:"Plan modified successfully",
-    orderId:id
-  })
- } 
-}catch (error) {
+  } catch (error) {
     res.status(400).json({ statusCode: 400, message: error.message });
   }
 };
@@ -272,6 +272,7 @@ const cancelSubscription = async (req, res) => {
     });
     if (sub.isWallet) {
       card = "wallet";
+      cardNumber = " ";
     } else {
       card = sub.card.cardType;
       cardNumber = sub.card.number;
