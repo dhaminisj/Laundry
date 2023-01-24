@@ -92,8 +92,8 @@ const buySubscription = async (req, res) => {
           transactionType: "REFUND",
           transactionStatus: "CREDIT",
           orderTitle: "Subscription canceled refund",
-          totalPrice: refund.toFixed(),
-          walletBalance: user.wallet + refund.toFixed(),
+          totalPrice: refund,
+          walletBalance: user.wallet + refund,
         });
       }
       await users.findOneAndUpdate(
@@ -259,8 +259,8 @@ const cancelSubscription = async (req, res) => {
         transactionType: "REFUND",
         transactionStatus: "CREDIT",
         orderTitle: "Subscription canceled refund",
-        totalPrice: refund.toFixed(),
-        walletBalance: user.wallet + refund.toFixed(),
+        totalPrice: refund,
+        walletBalance: user.wallet + refund,
       });
     }
     await users.findOneAndUpdate(
@@ -289,7 +289,7 @@ const cancelSubscription = async (req, res) => {
     res.status(200).send({
       statusCode: 200,
       message: "subscription canceled successfully",
-      amount: refund.toFixed(),
+      amount: refund,
       card: cardNumber,
       type: card,
       refundBy: refundBy,
