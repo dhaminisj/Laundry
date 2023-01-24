@@ -24,7 +24,9 @@ const addConcernText = async (req, res) => {
 const getConcernText = async (req, res) => {
     try {
         const { userId } = req.users;
-        const orders = await orderModel.find({ userId }).select("orderId -_id");
+        const orders = await orderModel
+            .find({ userId })
+            .select("orderId -_id noOfItems");
         const result = await concernTextList.find().select(" -_id -__v");
         res.status(200).send({
             status: true,
