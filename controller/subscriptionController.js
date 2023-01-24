@@ -44,7 +44,7 @@ const buySubscription = async (req, res) => {
         isWallet: req.body.isWallet,
       });
       if (req.body.isWallet) {
-        amount = user.wallet - req.body.subscription.amount;
+        amount = parseInt(user.wallet) - req.body.subscription.amount;
         if (req.body.subscription.amount < user.wallet) {
           await transaction.create({
             userId: req.users.userId,
@@ -93,12 +93,12 @@ const buySubscription = async (req, res) => {
           transactionStatus: "CREDIT",
           orderTitle: "Subscription canceled refund",
           totalPrice: refund,
-          walletBalance: user.wallet + refund,
+          walletBalance: parseInt(user.wallet) + refund.toFixed(),
         });
       }
       await users.findOneAndUpdate(
         { _id: req.users.userId },
-        { wallet: user.wallet + refund.toFixed() }
+        { wallet: parseInt(user.wallet) + refund.toFixed()}
       );
       await subscription.findOneAndDelete({ userId: req.users.userId });
       await subscription.create({
@@ -112,7 +112,7 @@ const buySubscription = async (req, res) => {
         isWallet: req.body.isWallet,
       });
       if (req.body.isWallet) {
-        amount = user.wallet - req.body.subscription.amount;
+        amount = parseInt(user.wallet) - req.body.subscription.amount;
         if (req.body.subscription.amount < user.wallet) {
           await transaction.create({
             userId: req.users.userId,
@@ -260,12 +260,12 @@ const cancelSubscription = async (req, res) => {
         transactionStatus: "CREDIT",
         orderTitle: "Subscription canceled refund",
         totalPrice: refund,
-        walletBalance: user.wallet + refund,
+        walletBalance: parseInt(user.wallet) + refund.toFixed(),
       });
     }
     await users.findOneAndUpdate(
       { _id: req.users.userId },
-      { wallet: user.wallet + refund.toFixed() }
+      { wallet: parseInt(user.wallet) + refund.toFixed() }
     );
     await subscription.findOneAndDelete({
       $and: [{ userId: req.users.userId }, { orderId: req.body.orderId }],
