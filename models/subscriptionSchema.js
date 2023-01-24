@@ -49,16 +49,28 @@ const subscriptionSchema = mongoose.Schema({
   ],
 
   address: {
-    title: {
+    houseNo: {
       type: String,
     },
-    address: {
+    road: {
       type: String,
     },
-    district: {
+    cityAndState: {
       type: String,
     },
     pincode: {
+      type: String,
+    },
+    latitude: {
+      type: Number,
+    },
+    longitude: {
+      type: Number,
+    },
+    addressType: {
+      type: String,
+    },
+    fullAddress: {
       type: String,
     },
   },
