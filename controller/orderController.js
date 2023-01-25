@@ -180,7 +180,7 @@ const applyPromo = async (req, res) => {
 
 const payment = async (req, res) => {
   try {
-    const [order] = await Order.find({ _id: checkoutId });
+    const [order] = await Order.find({ _id: req.body.checkoutId });
     const [user] = await User.find({ _id: req.users.userId });
     let amount;
     if (req.body.isWallet) {
@@ -193,8 +193,8 @@ const payment = async (req, res) => {
         await transcation.create({
           userId: req.users.userId,
           orderId: order.orderId,
-          totalAmount: order.totalAmount,
-          wallet: amount,
+          totalPrice: order.totalAmount,
+          walletBalance: amount,
           orderTitle: "ORDER",
           transactionType: "WASH ORDER",
           transactionStatus: "DEBIT",
@@ -209,7 +209,7 @@ const payment = async (req, res) => {
       }
     } else if (req.body.card) {
       await Order.findByIdAndUpdate(
-        { _id: checkoutId },
+        { _id: req.body.checkoutId },
         {
           "card.number": req.body.card.number,
           "card.name": req.body.card.name,
@@ -229,4 +229,4 @@ const payment = async (req, res) => {
     res.status(500).json({ statusCode: 500, message: error.message });
   }
 };
-module.exports = { checkoutOrder, addressAndSlot, applyPromo };
+module.exports = { checkoutOrder, addressAndSlot, applyPromo, payment };
