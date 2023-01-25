@@ -233,7 +233,7 @@ const invoice = async (req, res) => {
   try {
     const { userId } = req.users;
     const { checkoutId } = req.body;
-    const result = await Order.find({ _id: checkoutId });
+    const result = await Order.find({ _id: checkoutId }).select("basketTotal tax deliveryCharge discount totalAmount isWallet -_id");
     if (result)
       res.status(200).json({
         statusCode: 200,
