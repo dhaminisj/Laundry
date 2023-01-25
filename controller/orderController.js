@@ -229,4 +229,30 @@ const payment = async (req, res) => {
     res.status(500).json({ statusCode: 500, message: error.message });
   }
 };
-module.exports = { checkoutOrder, addressAndSlot, applyPromo, payment };
+const invoice = async (req, res) => {
+  try {
+    const { userId } = req.users;
+    const { checkoutId } = req.body;
+    const result = await Order.find({ _id: checkoutId }).select("basketTotal tax deliveryCharge discount totalAmount isWallet -_id");
+    if (result)
+      res.status(200).json({
+        statusCode: 200,
+        message: "Invoice fetched ",
+        result,
+      });
+    else
+      res.status(400).json({
+        statusCode: 400,
+        message: "Could not get invoice ",
+      });
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, message: error.message });
+  }
+};
+module.exports = {
+  checkoutOrder,
+  addressAndSlot,
+  applyPromo,
+  payment,
+  invoice,
+};
