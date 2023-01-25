@@ -3,6 +3,7 @@ const User = require("../models/UserSchema");
 const Laundry = require("../models/laundryListSchema");
 const mongoose = require("mongoose");
 const Promo = require("../models/promoSchema");
+const transcation = require("../models/transactionSchema");
 
 const checkoutOrder = async (req, res) => {
   try {
@@ -177,4 +178,55 @@ const applyPromo = async (req, res) => {
   }
 };
 
+const payment = async (req, res) => {
+  try {
+    const [order] = await Order.find({ _id: checkoutId });
+    const [user] = await User.find({ _id: req.users.userId });
+    let amount;
+    if (req.body.isWallet) {
+      if (user.wallet > order.totalAmount) {
+        amount = user.wallet - order.totalAmount;
+        await User.findByIdAndUpdate(
+          { _id: req.users.userId },
+          { wallet: amount }
+        );
+        await transcation.create({
+          userId: req.users.userId,
+          orderId: order.orderId,
+          totalAmount: order.totalAmount,
+          wallet: amount,
+          orderTitle: "ORDER",
+          transactionType: "WASH ORDER",
+          transactionStatus: "DEBIT",
+        });
+        res.status(200).send({
+          message: "Order placed money debited from wallet",
+        });
+      } else {
+        res.status(400).send({
+          message: "maintain balance",
+        });
+      }
+    } else if (req.body.card) {
+      await Order.findByIdAndUpdate(
+        { _id: checkoutId },
+        {
+          "card.number": req.body.card.number,
+          "card.name": req.body.card.name,
+          "card.expDate": req.body.card.expDate,
+          "card.cardType": req.body.card.cardType,
+        }
+      );
+      res.status(200).send({
+        message: "Order placed money debited from " + req.body.card.cardType,
+      });
+    } else {
+      res.status(200).send({
+        message: "Order placed COD opted",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, message: error.message });
+  }
+};
 module.exports = { checkoutOrder, addressAndSlot, applyPromo };
