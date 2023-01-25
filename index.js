@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+var bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const loginRouter = require("./routes/login");
 const subscriptionRouter = require("./routes/subscription");
@@ -16,6 +17,11 @@ const helpAndSupportRouter = require("./routes/helpAndSupport");
 // const laundryList = require("./models/laundryListSchema");
 require("dotenv").config();
 app.use(express.json());
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// parse application/json
+app.use(bodyParser.json());
 app.use("/api/v1", loginRouter);
 app.use("/api/v1", subscriptionRouter);
 app.use("/api/v1", laundryRouter);
@@ -30,12 +36,12 @@ app.use("/api/v1", concernTextRouter);
 app.use("/api/v1", helpAndSupportRouter);
 
 app.get("/", (req, res) => {
-    res.send("Welcome to laundry app.............");
+  res.send("Welcome to laundry app.............");
 });
 
 mongoose.set("strictQuery", true);
 mongoose.connect(process.env.MONGO_URI).then(() => {
-    console.log("connected to DB");
+  console.log("connected to DB");
 });
 
 // app.get("/update", async (req, res) => {
@@ -68,5 +74,5 @@ mongoose.connect(process.env.MONGO_URI).then(() => {
 // });
 
 app.listen(process.env.PORT || 5000, () => {
-    console.log(`running on port ${process.env.PORT}...`);
+  console.log(`running on port ${process.env.PORT}...`);
 });
