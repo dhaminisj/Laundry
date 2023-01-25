@@ -240,7 +240,16 @@ const addAddress = async (req, res) => {
     const { userId } = req.users;
 
     console.log(userId);
-    const { houseNo, area, pinCode, state, types, primary } = req.body;
+    const {
+      houseNo,
+      area,
+      pinCode,
+      state,
+      types,
+      primary,
+      latitude,
+      longitude,
+    } = req.body;
     const obj = {
       houseNo,
       area,
@@ -248,6 +257,8 @@ const addAddress = async (req, res) => {
       state,
       types,
       primary,
+      latitude,
+      longitude,
     };
     console.log(obj);
     const result = await User.findByIdAndUpdate(
@@ -270,8 +281,17 @@ const addAddress = async (req, res) => {
 const updateAddress = async (req, res) => {
   try {
     const { userId } = req.users;
-    const { addressId, houseNo, area, pinCode, state, types, primary } =
-      req.body;
+    const {
+      addressId,
+      houseNo,
+      area,
+      pinCode,
+      state,
+      types,
+      primary,
+      latitude,
+      longitude,
+    } = req.body;
 
     const addressFound = await User.find({
       $and: [{ _id: userId }, { "address._id": addressId }],
@@ -284,6 +304,8 @@ const updateAddress = async (req, res) => {
         state,
         types,
         primary,
+        latitude,
+        longitude,
       };
 
       const result = await User.findOneAndUpdate(
@@ -298,7 +320,8 @@ const updateAddress = async (req, res) => {
             "address.$.pinCode": req.body.pinCode,
             "address.$.state": req.body.state,
             "address.$.types": req.body.types,
-            "address.$.primary": req.body.primary,
+            "address.$.latitude": req.body.latitude,
+            "address.$.longitude": req.body.longitude,
           },
         },
         { new: true }
