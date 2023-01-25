@@ -8,16 +8,21 @@ const helpAndSupportSchema = new mongoose.Schema({
     },
     describeText: {
         type: String,
-        required: true,
     },
     images: [
-        {
-            type: String,
-        },
+        
+          String,
+        
     ],
     ticketNumber: {
         type: String,
-         default: "#001",
+        default: "#001",
+    },
+    order: {
+        type: String,
+    },
+    concernText: {
+        type: String,
     },
     ticketStatus: {
         type: String,
