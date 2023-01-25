@@ -430,10 +430,11 @@ const getAddress = async (req, res) => {
 
 const editProfile = async (req, res) => {
   try {
-    if (!req.body)
+    if (JSON.stringify(req.body) == "{}")
       return res
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
+    // console.log(req.body);
     if (!req.users)
       return res
         .status(400)
