@@ -6,10 +6,10 @@ const helpAndSupportController = require("../controller/helpAndSupportController
 
 router
   .route("/customerSupport")
-  .post(verifyJWT, helpAndSupportController.customerSupport);
+  .post(verifyJWT, upload.array("image",10),helpAndSupportController.customerSupport);
 router
   .route("/addImages")
-  .post(verifyJWT, upload.array("image"), helpAndSupportController.addImages);
+  .post(verifyJWT, upload.array("image",10), helpAndSupportController.addImages);
 
 router
   .route("/open-tickets")

@@ -1,5 +1,5 @@
 const helpAndSupportModel = require("../models/helpAndSupport");
-//const orderModel = require("../models/orderSchema");
+const orderModel = require("../models/orderSchema");
 const cloudinary = require("../utils/cloudinaryConfig");
 const UserModel = require("../models/UserSchema");
 const customerSupport = async (req, res) => {
@@ -20,15 +20,48 @@ const customerSupport = async (req, res) => {
       ticketNumber = parseInt(previousTicketNumber.slice(1)) + 1;
       ticketNumber = "#" + ticketNumber.toString().padStart(3, "0");
     }
-    const assistance = new helpAndSupportModel({
-      describeText,
-      userId,
-      ticketNumber,
-      images,
-    });
-    await assistance.save();
+    if (req.files) {
+            uploadFiles = [];
+            for (i = 0; i < req.files.length; i++) {
+                uploadFiles.push(req.files[i].path);
+            }
+            uploadfile = [];
+            for (i = 0; i < uploadFiles.length; i++) {
+                const upload = await cloudinary.uploader.upload(
+                    uploadFiles[i],
+                    {
+                        folder: "images",
+                        use_filename: true,
+                    }
+                );
+                uploadUrl = upload.url;
+                uploadfile.push(uploadUrl);
+            }
+
+           x= await helpAndSupportModel.create({
+          describeText: req.body.describeText,
+          userId: req.users.userId,
+        //   ticketNumber: req.body.ticketNumber,
+        ticketNumber,
+          images:   uploadfile ,
+                order: req.body.order,
+                concernText: req.body.concernText,
+            });
+        } else {
+           x= await helpAndSupportModel.create({
+                describeText: req.body.describeText,
+                userId: req.users.userId,
+                ticketNumber,
+                // ticketNumber: req.body.ticketNumber,
+                order: req.body.order,
+                concernText: req.body.concernText,
+        });
+    }
+
     res.status(200).json({
+            statusCode: 200,
       message: "Customer support Added",
+          x
     });
   } catch (error) {
     res.status(400).json({ statusCode: 400, message: error.message });
