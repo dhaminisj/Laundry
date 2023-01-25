@@ -65,10 +65,24 @@ const orderSchema = mongoose.Schema(
         },
       },
     ],
-    paymentMethod: {
-      type: String,
-      enum: ["LM Wallet", "Debit Card", "Credit Card", "COD"],
+    isWallet:{
+      type:Boolean,
+      default:false
     },
+    card: {
+      number: {
+          type: String,
+      },
+      name: {
+          type: String,
+      },
+      expDate: {
+          type: String,
+      },
+      cardType: {
+          type: String,
+      },
+  },
     discount: { type: Number, default: 0 },
   },
   { timestamps: true }
