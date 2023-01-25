@@ -55,7 +55,7 @@ const checkoutOrder = async (req, res) => {
 
     const result = {
       userId,
-      orderId: "#id" + Math.random().toString(10).slice(3),
+      orderId: "#LM" + Math.random().toString(10).slice(3),
       orders: list,
       basketTotal,
       tax: basketTotal * 0.3,
@@ -81,4 +81,51 @@ const checkoutOrder = async (req, res) => {
     res.status(500).json({ statusCode: 500, message: error.message });
   }
 };
-module.exports = { checkoutOrder };
+
+const addressAndSlot = async (req, res) => {
+  try {
+    const { userId } = req.users;
+    const { address, checkoutId, pickupDays } = req.body;
+    const [orderData] = await Order.find({ _id: checkoutId }).select(
+      "basketTotal tax deliveryCharge -_id"
+    );
+    const totalAmount = parseFloat(
+      orderData.basketTotal + orderData.tax + orderData.deliveryCharge
+    );
+
+    const result = await Order.findByIdAndUpdate(
+      { _id: checkoutId },
+      {
+        $set: {
+          deliveryAddress: {
+            latitude: address.latitude,
+            longitude: address.longitude,
+            houseNo: address.houseNo,
+            flat: address.flat,
+            pinCode: address.pinCode,
+            city: address.city,
+            types: address.types,
+            primary: address.primary,
+          },
+          pickupDays: {
+            pickupDays: pickupDays.pickupDays,
+            deliveryDays: pickupDays.deliveryDays,
+            deliveryType: pickupDays.deliveryType,
+            deliverySlot: pickupDays.deliverySlot,
+          },
+          totalAmount,
+        },
+      },
+      { new: true }
+    );
+
+    res.status(200).json({
+      statusCode: 200,
+      message: "Address, pickup and delivery slot added successfully",
+      result,
+    });
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, message: error.message });
+  }
+};
+module.exports = { checkoutOrder, addressAndSlot };
