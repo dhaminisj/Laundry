@@ -27,5 +27,6 @@ router
 
 router
   .route("/add-play-video")
-  .post(upload.single("image"), PlayVideoController.addPlayVideo);
+  .post(upload.single("image"), PlayVideoController.addPlayVideo)
+  .get(PlayVideoController.getPlayVideo);
 module.exports = router;
