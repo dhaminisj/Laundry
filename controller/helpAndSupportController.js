@@ -41,7 +41,8 @@ const customerSupport = async (req, res) => {
            x= await helpAndSupportModel.create({
           describeText: req.body.describeText,
           userId: req.users.userId,
-          ticketNumber: req.body.ticketNumber,
+        //   ticketNumber: req.body.ticketNumber,
+        ticketNumber,
           images:   uploadfile ,
                 order: req.body.order,
                 concernText: req.body.concernText,
@@ -50,7 +51,8 @@ const customerSupport = async (req, res) => {
            x= await helpAndSupportModel.create({
                 describeText: req.body.describeText,
                 userId: req.users.userId,
-                ticketNumber: req.body.ticketNumber,
+                ticketNumber,
+                // ticketNumber: req.body.ticketNumber,
                 order: req.body.order,
                 concernText: req.body.concernText,
         });
