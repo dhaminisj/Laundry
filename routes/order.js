@@ -6,5 +6,6 @@ const orderController = require("../controller/orderController");
 const { Router } = require("express");
 
 router.route("/checkout").post(verifyJWT, orderController.checkoutOrder);
+router.route("/place-order").post(verifyJWT, orderController.addressAndSlot);
 
 module.exports = router;
