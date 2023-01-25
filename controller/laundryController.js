@@ -46,7 +46,7 @@ const getLaundryList = async (req, res) => {
       {
         $group: {
           _id: { category: "$category", type: "$type" },
-          docs: { $: "$$ROOT" },
+          docs: { $push: "$$ROOT" },
 
           //   ,cloth: {$push: "$cloth"}
           // ,price: {$push: "$price"}
