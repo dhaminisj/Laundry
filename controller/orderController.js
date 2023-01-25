@@ -2,6 +2,7 @@ const Order = require("../models/orderSchema");
 const User = require("../models/UserSchema");
 const Laundry = require("../models/laundryListSchema");
 const mongoose = require("mongoose");
+const Promo = require("../models/promoSchema");
 
 const checkoutOrder = async (req, res) => {
   try {
@@ -118,14 +119,62 @@ const addressAndSlot = async (req, res) => {
       },
       { new: true }
     );
-
-    res.status(200).json({
-      statusCode: 200,
-      message: "Address, pickup and delivery slot added successfully",
-      result,
-    });
+    if (result)
+      res.status(200).json({
+        statusCode: 200,
+        message: "Address, pickup and delivery slot added successfully",
+        result,
+      });
+    else
+      res.status(400).json({
+        statusCode: 400,
+        message: "Could not add address, pickup and delivery slot ",
+      });
   } catch (error) {
     res.status(500).json({ statusCode: 500, message: error.message });
   }
 };
-module.exports = { checkoutOrder, addressAndSlot };
+
+const applyPromo = async (req, res) => {
+  try {
+    const { userId } = req.users;
+    const { checkoutId, bankCode } = req.body;
+    const [order] = await Order.find({ _id: checkoutId });
+    const [promoCode] = await Promo.find({ bankCode });
+
+    let totalAmount, discount;
+    if (promoCode) {
+      if (order.totalAmount > promoCode.onOrderAbove) {
+        discount = order.totalAmount * [promoCode.discountPercentage / 100];
+        if (discount < parseInt(promoCode.discountUpto)) {
+          totalAmount = order.totalAmount - discount;
+          discount = discount;
+        } else {
+          totalAmount = order.totalAmount - promoCode.discountUpto;
+          discount = promoCode.discountUpto;
+        }
+        await Order.findByIdAndUpdate(
+          { _id: checkoutId },
+          { totalAmount: totalAmount, discount: discount }
+        );
+        res.status(200).send({
+          message: "Promo code applied successfully",
+          totalAmount: totalAmount,
+          discount: discount,
+        });
+      } else {
+        res.status(400).send({
+          message: "Promo code is not applicable",
+        });
+      }
+    } else {
+      res.status(404).send({
+        message: "No promo code found",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, message: error.message });
+  }
+};
+
+module.exports = { checkoutOrder, addressAndSlot, applyPromo };

@@ -69,6 +69,7 @@ const orderSchema = mongoose.Schema(
       type: String,
       enum: ["LM Wallet", "Debit Card", "Credit Card", "COD"],
     },
+    discount: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
