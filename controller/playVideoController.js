@@ -72,4 +72,24 @@ const addPlayVideo = async (req, res) => {
     console.log("error from createPlayVideo", error);
   }
 };
-module.exports = { createPlayVideo, addPlayVideo };
+const getPlayVideo = async (req, res) => {
+  try {
+    const pv = await PlayVideo.find({});
+
+    if (pv)
+      return res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "Tutorials fetched successfully",
+        data: pv,
+      });
+    res.status(400).json({
+      status: false,
+      statusCode: 400,
+      message: "Couldn't fetch Tutorials",
+    });
+  } catch (error) {
+    console.log("error from getPlayVideo", error);
+  }
+};
+module.exports = { createPlayVideo, addPlayVideo, getPlayVideo };
