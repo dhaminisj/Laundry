@@ -130,11 +130,11 @@ const login = async (req, res) => {
       res
         .status(400)
         .json({ status: false, statusCode: 400, message: "body not found" });
-    console.log(req.body);
+ 
     const { phone, otp } = req.body;
     const userfound = await User.findOne({ phone });
     if (userfound) {
-      console.log(userfound);
+      
       if (isValid) {
         const accessToken = jwt.sign(
           { userId: userfound._id, phone: userfound.phone },
@@ -174,7 +174,7 @@ const login = async (req, res) => {
 const updateUserProfilePic = async (req, res) => {
   try {
     const { userId } = req.users;
-    console.log(req.users);
+   
     let user;
     if (req.file) {
       profilePic = req.file.path;
@@ -186,7 +186,7 @@ const updateUserProfilePic = async (req, res) => {
         { _id: userId },
         { profilePic: cloudinaryResult.url }
       );
-      console.log(cloudinaryResult.url);
+      
 
       if (user)
         return res.status(200).json({
@@ -255,7 +255,7 @@ const addAddress = async (req, res) => {
   try {
     const { userId } = req.users;
 
-    console.log(userId);
+   
     const {
       houseNo,
       area,
@@ -276,13 +276,13 @@ const addAddress = async (req, res) => {
       latitude,
       longitude,
     };
-    console.log(obj);
+    
     const result = await User.findByIdAndUpdate(
       { _id: userId },
       { $push: { address: obj } },
       { new: true }
     );
-    console.log(result);
+   
     res.status(200).json({
       status: true,
       statusCode: 200,
@@ -346,7 +346,7 @@ const updateAddress = async (req, res) => {
         },
         { new: true }
       );
-      console.log("result", result);
+    
       res.status(200).json({
         status: true,
         statusCode: 200,
@@ -407,7 +407,7 @@ const getAddress = async (req, res) => {
     const { userId } = req.users;
     const user = await User.find({ _id: userId }).select("address");
     //.select("address.houseNo address.flat address.pinCode address.types address.primary");
-    console.log(user);
+
     if (user)
       return res.status(200).json({
         status: true,
@@ -479,7 +479,7 @@ const getAddress = async (req, res) => {
 //       message: " Profile succesfully updated",
 //     });
 //   } catch (error) {
-//     console.log("error from get address", error);
+// 
 //   }
 // };
 
@@ -489,7 +489,7 @@ const editProfile = async (req, res) => {
       return res
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
-    // console.log(req.body);
+   
     if (!req.users)
       return res
         .status(400)

@@ -24,7 +24,7 @@ const handleRefreshToken = async (req, res) => {
           message: "An error occured",
           // errors: errors.array(),
         });
-      //console.log(err);
+      
 
       if (docs) {
         jwt.verify(
