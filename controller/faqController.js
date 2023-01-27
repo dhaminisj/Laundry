@@ -42,7 +42,11 @@ const createFaq = async (req, res) => {
       message: "Could not add FAQ",
     });
   } catch (error) {
-    console.log("error from addFAQ", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 const getFaq = async (req, res) => {
@@ -61,6 +65,12 @@ const getFaq = async (req, res) => {
       statusCode: 400,
       message: "Couldn't fetch FAQ",
     });
-  } catch (error) {}
+  } catch (error) {
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
+  }
 };
 module.exports = { createFaq, getFaq };

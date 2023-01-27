@@ -62,7 +62,11 @@ const handleRefreshToken = async (req, res) => {
         });
     });
   } catch (error) {
-    console.log("Error", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
     // internalServerError(res, error);
     // res.json({ ok: false, msg: "Error" });
   }
