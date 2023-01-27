@@ -35,7 +35,11 @@ const createPlayVideo = async (req, res) => {
       message: "Could not add PlayVideo",
     });
   } catch (error) {
-    console.log("error from createPlayVideo", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 const addPlayVideo = async (req, res) => {
@@ -69,7 +73,11 @@ const addPlayVideo = async (req, res) => {
       message: "Could not add PlayVideo",
     });
   } catch (error) {
-    console.log("error from createPlayVideo", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 const getPlayVideo = async (req, res) => {
@@ -89,7 +97,11 @@ const getPlayVideo = async (req, res) => {
       message: "Couldn't fetch Tutorials",
     });
   } catch (error) {
-    console.log("error from getPlayVideo", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 module.exports = { createPlayVideo, addPlayVideo, getPlayVideo };

@@ -116,7 +116,11 @@ const register = async (req, res) => {
         data: {},
       });
   } catch (error) {
-    console.log("error from register", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 const login = async (req, res) => {
@@ -160,7 +164,11 @@ const login = async (req, res) => {
         message: "Phone number does not exist.",
       });
   } catch (error) {
-    console.log("error from login", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 const updateUserProfilePic = async (req, res) => {
@@ -208,7 +216,11 @@ const updateUserProfilePic = async (req, res) => {
     //   new: true,
     // }).select("profilePic name email phone");
   } catch (error) {
-    console.log("error from update userProfilePic", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 
@@ -231,7 +243,11 @@ const getProfile = async (req, res) => {
       message: "Couldn't fetch Profile",
     });
   } catch (error) {
-    console.log("error from getProfile", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 
@@ -274,7 +290,11 @@ const addAddress = async (req, res) => {
       data: result,
     });
   } catch (error) {
-    console.log("Error, couldn't add address", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 
@@ -340,7 +360,11 @@ const updateAddress = async (req, res) => {
         message: "Cannot update address ",
       });
   } catch (error) {
-    console.log("Error from updateAddress", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 const deleteAddress = async (req, res) => {
@@ -371,7 +395,11 @@ const deleteAddress = async (req, res) => {
       }
     );
   } catch (error) {
-    console.log("Error from delete Address", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 const getAddress = async (req, res) => {
@@ -393,7 +421,11 @@ const getAddress = async (req, res) => {
       message: "Couldn't fetch Address",
     });
   } catch (error) {
-    console.log("error from get address", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 // const editProfile = async (req, res) => {
@@ -478,7 +510,11 @@ const editProfile = async (req, res) => {
       message: " Profile succesfully updated",
     });
   } catch (error) {
-    console.log("error from edit profile", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 
@@ -512,7 +548,11 @@ const logout = async (req, res) => {
       }
     );
   } catch (error) {
-    console.log("error from logout", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 
