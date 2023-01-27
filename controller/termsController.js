@@ -46,7 +46,7 @@ const addGenericTerms = async (req, res) => {
     //   genericTermsTitle: gTitle,
     //   genericTermsBody: gBody,
     // };
-    // console.log(obj);
+   
     const generic = await Terms.updateOne(
       {},
       { $push: { genericTerms: { $each: allData } } },
