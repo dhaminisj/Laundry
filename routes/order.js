@@ -6,5 +6,5 @@ const orderController = require("../controller/orderController");
 const { Router } = require("express");
 
 router.route("/checkout").post(verifyJWT, orderController.checkoutOrder);
-
+router.route("/getOrderHistory").get(verifyJWT,orderController.getOrderHistory)
 module.exports = router;
