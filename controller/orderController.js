@@ -120,6 +120,7 @@ const addressAndSlot = async (req, res) => {
       },
       { new: true }
     );
+
     if (result)
       res.status(200).json({
         statusCode: 200,
@@ -182,6 +183,9 @@ const payment = async (req, res) => {
   try {
     const [order] = await Order.find({ _id: req.body.checkoutId });
     const [user] = await User.find({ _id: req.users.userId });
+    const savedWater = parseInt(order.noOfItems * 2);
+    const totalSavedWater = parseInt(user.totalSavedWater + savedWater);
+
     let amount;
     if (req.body.isWallet) {
       if (user.wallet > order.totalAmount) {
@@ -199,6 +203,10 @@ const payment = async (req, res) => {
           transactionType: "WASH ORDER",
           transactionStatus: "DEBIT",
         });
+        await User.findOneAndUpdate(
+          { _id: req.users.userId },
+          { totalSavedWater: totalSavedWater }
+        );
         res.status(200).send({
           message: "Order placed money debited from wallet",
         });
@@ -217,10 +225,18 @@ const payment = async (req, res) => {
           "card.cardType": req.body.card.cardType,
         }
       );
+      await User.findOneAndUpdate(
+        { _id: req.users.userId },
+        { totalSavedWater: totalSavedWater }
+      );
       res.status(200).send({
         message: "Order placed money debited from " + req.body.card.cardType,
       });
     } else {
+      await User.findOneAndUpdate(
+        { _id: req.users.userId },
+        { totalSavedWater: totalSavedWater }
+      );
       res.status(200).send({
         message: "Order placed COD opted",
       });
@@ -233,7 +249,9 @@ const invoice = async (req, res) => {
   try {
     const { userId } = req.users;
     const { checkoutId } = req.body;
-    const result = await Order.find({ _id: checkoutId }).select("basketTotal tax deliveryCharge discount totalAmount isWallet -_id");
+    const result = await Order.find({ _id: checkoutId }).select(
+      "basketTotal tax deliveryCharge discount totalAmount isWallet -_id"
+    );
     if (result)
       res.status(200).json({
         statusCode: 200,
