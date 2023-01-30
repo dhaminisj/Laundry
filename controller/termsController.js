@@ -46,7 +46,7 @@ const addGenericTerms = async (req, res) => {
     //   genericTermsTitle: gTitle,
     //   genericTermsBody: gBody,
     // };
-   
+
     const generic = await Terms.updateOne(
       {},
       { $push: { genericTerms: { $each: allData } } },
@@ -151,10 +151,10 @@ const addCancelReason = async (req, res) => {
 
 const getCancelReason = async (req, res) => {
   try {
-    const reason = await cancelReason.find({}).select(["-_id", "-__v"]);
-    res.status(200).send({
-      message:"success",
-      reason});
+
+    const reason = await cancelReason.findOne({}).select(["-_id", "-__v"]);
+    res.status(200).send(reason);
+
   } catch (error) {
     res.status(400).send({
       message: error.message,
