@@ -143,21 +143,23 @@ const addCancelReason = async (req, res) => {
       message: "added successfully",
     });
   } catch (error) {
-    res.status(400).send({
-      message: error.message,
+    res.status(500).send({
+      statusCode: 500,
+      message: error,
     });
   }
 };
 
 const getCancelReason = async (req, res) => {
   try {
-
     const reason = await cancelReason.findOne({}).select(["-_id", "-__v"]);
-    res.status(200).send(reason);
-
+    res
+      .status(200)
+      .send({ statusCode: 200, message: "Cancel reasons fetched", reason });
   } catch (error) {
-    res.status(400).send({
-      message: error.message,
+    res.status(500).send({
+      statusCode: 500,
+      message: error,
     });
   }
 };
