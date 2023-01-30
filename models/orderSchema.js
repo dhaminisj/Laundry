@@ -65,24 +65,24 @@ const orderSchema = mongoose.Schema(
         },
       },
     ],
-    isWallet:{
-      type:Boolean,
-      default:false
+    isWallet: {
+      type: Boolean,
+      default: false,
     },
     card: {
       number: {
-          type: String,
+        type: String,
       },
       name: {
-          type: String,
+        type: String,
       },
       expDate: {
-          type: String,
+        type: String,
       },
       cardType: {
-          type: String,
+        type: String,
       },
-  },
+    },
     discount: { type: Number, default: 0 },
   },
   { timestamps: true }
