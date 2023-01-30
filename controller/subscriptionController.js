@@ -21,9 +21,9 @@ const addSubscriptionList = async (req, res) => {
 const getSubscriptionList = async (req, res) => {
   try {
     const list = await subscriptionList.find({});
-    res.status(200).send({ statusCode: 200, list: list });
+    res.status(200).send({ statusCode: 200, message:"successfull",list: list });
   } catch (error) {
-    res.status(400).json({ statusCode: 400, message: error });
+    res.status(400).json({ statusCode: 400, message: error.message });
   }
 };
 
@@ -58,7 +58,8 @@ const buySubscription = async (req, res) => {
         } else {
           res
             .status(200)
-            .send({ statusCode: 200, message: "Maintain sufficient balance" });
+            .send({ statusCode: 200,
+               message: "Maintain sufficient balance" });
         }
         await users.findOneAndUpdate(
           { _id: req.users.userId },
@@ -182,7 +183,7 @@ const viewSubscription = async (req, res) => {
             view,
           });
         } else {
-          res.status(200).send({ statusCode: 200, viewPlans });
+          res.status(200).send({ statusCode: 200, message:"successfull",viewPlans });
         }
       } else {
         await subscription.findOneAndDelete({ userId: req.users.userId });
@@ -220,7 +221,7 @@ const viewPickupDetails = async (req, res) => {
     const details = await subscription
       .find({ userId: req.users.userId })
       .select(["pickupDays"]);
-    res.status(200).send({ statusCode: 200, details: details });
+    res.status(200).send({ statusCode: 200, message:"successfull",details: details });
   } catch (error) {
     res.status(400).json({ statusCode: 400, message: error.message });
   }

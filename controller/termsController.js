@@ -152,7 +152,9 @@ const addCancelReason = async (req, res) => {
 const getCancelReason = async (req, res) => {
   try {
     const reason = await cancelReason.find({}).select(["-_id", "-__v"]);
-    res.status(200).send(reason);
+    res.status(200).send({
+      message:"success",
+      reason});
   } catch (error) {
     res.status(400).send({
       message: error.message,
