@@ -2,9 +2,9 @@ const jwt = require("jsonwebtoken");
 
 const checkUserIsLoggedIn = (req, res, next) => {
   const authHeader = req.headers["authorization"];
-  console.log(authHeader);
+
   if (!authHeader) return next(); // he is not logged in
-  //   console.log(authHeader);
+ 
 
   const token = authHeader.split(" ")[1];
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {

@@ -30,7 +30,11 @@ const createTermsAndCondition = async (req, res) => {
       message: "Could not add T&C",
     });
   } catch (error) {
-    console.log("error from register", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 const addGenericTerms = async (req, res) => {
@@ -42,7 +46,7 @@ const addGenericTerms = async (req, res) => {
     //   genericTermsTitle: gTitle,
     //   genericTermsBody: gBody,
     // };
-    // console.log(obj);
+   
     const generic = await Terms.updateOne(
       {},
       { $push: { genericTerms: { $each: allData } } },
@@ -62,7 +66,11 @@ const addGenericTerms = async (req, res) => {
       message: "could not add generic terms",
     });
   } catch (error) {
-    console.log("error from addGenericTerms", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 const addPrivacyPolicy = async (req, res) => {
@@ -94,7 +102,11 @@ const addPrivacyPolicy = async (req, res) => {
       });
     }
   } catch (error) {
-    console.log("error from addprivacyPolicy", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 const getTermsAndCondition = async (req, res) => {
@@ -114,7 +126,11 @@ const getTermsAndCondition = async (req, res) => {
       message: "Couldn't fetch Terms and condition",
     });
   } catch (error) {
-    res.status(400).send("error from getTermsAndCondition", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 

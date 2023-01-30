@@ -116,7 +116,11 @@ const register = async (req, res) => {
         data: {},
       });
   } catch (error) {
-    console.log("error from register", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 const login = async (req, res) => {
@@ -126,11 +130,11 @@ const login = async (req, res) => {
       res
         .status(400)
         .json({ status: false, statusCode: 400, message: "body not found" });
-    console.log(req.body);
+ 
     const { phone, otp } = req.body;
     const userfound = await User.findOne({ phone });
     if (userfound) {
-      console.log(userfound);
+      
       if (isValid) {
         const accessToken = jwt.sign(
           { userId: userfound._id, phone: userfound.phone },
@@ -160,13 +164,17 @@ const login = async (req, res) => {
         message: "Phone number does not exist.",
       });
   } catch (error) {
-    console.log("error from login", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 const updateUserProfilePic = async (req, res) => {
   try {
     const { userId } = req.users;
-    console.log(req.users);
+   
     let user;
     if (req.file) {
       profilePic = req.file.path;
@@ -178,7 +186,7 @@ const updateUserProfilePic = async (req, res) => {
         { _id: userId },
         { profilePic: cloudinaryResult.url }
       );
-      console.log(cloudinaryResult.url);
+      
 
       if (user)
         return res.status(200).json({
@@ -208,7 +216,11 @@ const updateUserProfilePic = async (req, res) => {
     //   new: true,
     // }).select("profilePic name email phone");
   } catch (error) {
-    console.log("error from update userProfilePic", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 
@@ -231,7 +243,11 @@ const getProfile = async (req, res) => {
       message: "Couldn't fetch Profile",
     });
   } catch (error) {
-    console.log("error from getProfile", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 
@@ -239,8 +255,17 @@ const addAddress = async (req, res) => {
   try {
     const { userId } = req.users;
 
-    console.log(userId);
-    const { houseNo, area, pinCode, state, types, primary } = req.body;
+   
+    const {
+      houseNo,
+      area,
+      pinCode,
+      state,
+      types,
+      primary,
+      latitude,
+      longitude,
+    } = req.body;
     const obj = {
       houseNo,
       area,
@@ -248,14 +273,16 @@ const addAddress = async (req, res) => {
       state,
       types,
       primary,
+      latitude,
+      longitude,
     };
-    console.log(obj);
+    
     const result = await User.findByIdAndUpdate(
       { _id: userId },
       { $push: { address: obj } },
       { new: true }
     );
-    console.log(result);
+   
     res.status(200).json({
       status: true,
       statusCode: 200,
@@ -263,15 +290,28 @@ const addAddress = async (req, res) => {
       data: result,
     });
   } catch (error) {
-    console.log("Error, couldn't add address", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 
 const updateAddress = async (req, res) => {
   try {
     const { userId } = req.users;
-    const { addressId, houseNo, area, pinCode, state, types, primary } =
-      req.body;
+    const {
+      addressId,
+      houseNo,
+      area,
+      pinCode,
+      state,
+      types,
+      primary,
+      latitude,
+      longitude,
+    } = req.body;
 
     const addressFound = await User.find({
       $and: [{ _id: userId }, { "address._id": addressId }],
@@ -284,6 +324,8 @@ const updateAddress = async (req, res) => {
         state,
         types,
         primary,
+        latitude,
+        longitude,
       };
 
       const result = await User.findOneAndUpdate(
@@ -298,12 +340,13 @@ const updateAddress = async (req, res) => {
             "address.$.pinCode": req.body.pinCode,
             "address.$.state": req.body.state,
             "address.$.types": req.body.types,
-            "address.$.primary": req.body.primary,
+            "address.$.latitude": req.body.latitude,
+            "address.$.longitude": req.body.longitude,
           },
         },
         { new: true }
       );
-      console.log("result", result);
+    
       res.status(200).json({
         status: true,
         statusCode: 200,
@@ -317,7 +360,11 @@ const updateAddress = async (req, res) => {
         message: "Cannot update address ",
       });
   } catch (error) {
-    console.log("Error from updateAddress", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 const deleteAddress = async (req, res) => {
@@ -348,7 +395,11 @@ const deleteAddress = async (req, res) => {
       }
     );
   } catch (error) {
-    console.log("Error from delete Address", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 const getAddress = async (req, res) => {
@@ -356,7 +407,7 @@ const getAddress = async (req, res) => {
     const { userId } = req.users;
     const user = await User.find({ _id: userId }).select("address");
     //.select("address.houseNo address.flat address.pinCode address.types address.primary");
-    console.log(user);
+
     if (user)
       return res.status(200).json({
         status: true,
@@ -370,7 +421,11 @@ const getAddress = async (req, res) => {
       message: "Couldn't fetch Address",
     });
   } catch (error) {
-    console.log("error from get address", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 // const editProfile = async (req, res) => {
@@ -424,16 +479,17 @@ const getAddress = async (req, res) => {
 //       message: " Profile succesfully updated",
 //     });
 //   } catch (error) {
-//     console.log("error from get address", error);
+// 
 //   }
 // };
 
 const editProfile = async (req, res) => {
   try {
-    if (!req.body)
+    if (JSON.stringify(req.body) == "{}")
       return res
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
+   
     if (!req.users)
       return res
         .status(400)
@@ -454,7 +510,11 @@ const editProfile = async (req, res) => {
       message: " Profile succesfully updated",
     });
   } catch (error) {
-    console.log("error from edit profile", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 
@@ -488,7 +548,11 @@ const logout = async (req, res) => {
       }
     );
   } catch (error) {
-    console.log("error from logout", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
   }
 };
 

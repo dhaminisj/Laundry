@@ -41,6 +41,8 @@ const orderSchema = mongoose.Schema(
     noOfItems: { type: Number },
     deliveryAddress: [
       {
+        latitude: { type: String },
+        longitude: { type: String },
         houseNo: { type: String },
         flat: { type: String },
         pinCode: { type: String },
@@ -51,20 +53,37 @@ const orderSchema = mongoose.Schema(
     ],
     savedWater: { type: Number },
     orderStatus: { type: String, enum: ["Pending", "Completed"] },
-    pickupDays: {
-      pickupDays: [],
-      deliveryDays: [],
-      deliveryType: {
-        type: String,
+    pickupDays: [
+      {
+        pickupDays: { type: String },
+        deliveryDays: { type: String },
+        deliveryType: {
+          type: String,
+        },
+        deliverySlot: {
+          type: String,
+        },
       },
-      deliverySlot: {
-        type: String,
+    ],
+    isWallet:{
+      type:Boolean,
+      default:false
+    },
+    card: {
+      number: {
+          type: String,
       },
-    },
-    paymentMethod: {
-      type: String,
-      enum: ["LM Wallet", "Debit Card", "Credit Card", "COD"],
-    },
+      name: {
+          type: String,
+      },
+      expDate: {
+          type: String,
+      },
+      cardType: {
+          type: String,
+      },
+  },
+    discount: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

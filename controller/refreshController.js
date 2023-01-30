@@ -24,7 +24,7 @@ const handleRefreshToken = async (req, res) => {
           message: "An error occured",
           // errors: errors.array(),
         });
-      //console.log(err);
+      
 
       if (docs) {
         jwt.verify(
@@ -62,7 +62,11 @@ const handleRefreshToken = async (req, res) => {
         });
     });
   } catch (error) {
-    console.log("Error", error);
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
     // internalServerError(res, error);
     // res.json({ ok: false, msg: "Error" });
   }
