@@ -130,11 +130,10 @@ const login = async (req, res) => {
       res
         .status(400)
         .json({ status: false, statusCode: 400, message: "body not found" });
- 
+
     const { phone, otp } = req.body;
     const userfound = await User.findOne({ phone });
     if (userfound) {
-      
       if (isValid) {
         const accessToken = jwt.sign(
           { userId: userfound._id, phone: userfound.phone },
@@ -174,7 +173,7 @@ const login = async (req, res) => {
 const updateUserProfilePic = async (req, res) => {
   try {
     const { userId } = req.users;
-   
+
     let user;
     if (req.file) {
       profilePic = req.file.path;
@@ -186,7 +185,6 @@ const updateUserProfilePic = async (req, res) => {
         { _id: userId },
         { profilePic: cloudinaryResult.url }
       );
-      
 
       if (user)
         return res.status(200).json({
@@ -255,7 +253,6 @@ const addAddress = async (req, res) => {
   try {
     const { userId } = req.users;
 
-   
     const {
       houseNo,
       area,
@@ -276,13 +273,13 @@ const addAddress = async (req, res) => {
       latitude,
       longitude,
     };
-    
+
     const result = await User.findByIdAndUpdate(
       { _id: userId },
       { $push: { address: obj } },
       { new: true }
     );
-   
+
     res.status(200).json({
       status: true,
       statusCode: 200,
@@ -346,7 +343,7 @@ const updateAddress = async (req, res) => {
         },
         { new: true }
       );
-    
+
       res.status(200).json({
         status: true,
         statusCode: 200,
@@ -479,7 +476,7 @@ const getAddress = async (req, res) => {
 //       message: " Profile succesfully updated",
 //     });
 //   } catch (error) {
-// 
+//
 //   }
 // };
 
@@ -489,7 +486,7 @@ const editProfile = async (req, res) => {
       return res
         .status(400)
         .json({ status: false, statusCode: 400, message: "body is not found" });
-   
+
     if (!req.users)
       return res
         .status(400)
@@ -556,6 +553,26 @@ const logout = async (req, res) => {
   }
 };
 
+const getDetailsByPhone = async (req, res) => {
+  try {
+    const { destination } = req.body;
+    const result = await User.findOne({ phone: destination }).select(
+      "name -_id"
+    );
+    if (result) {
+      res.status(200).json({ statusCode: 200, message: "User found", result });
+    } else {
+      res.status(400).json({ statusCode: 400, message: "User not found" });
+    }
+  } catch (error) {
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -567,4 +584,5 @@ module.exports = {
   getAddress,
   editProfile,
   logout,
+  getDetailsByPhone,
 };

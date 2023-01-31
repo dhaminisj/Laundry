@@ -30,4 +30,6 @@ router
   .delete(verifyJWT, userController.deleteAddress);
 
 router.route("/addRating").put(verifyJWT, ratingController.addRating);
+router.route("/details-by-phone").post(userController.getDetailsByPhone);
+
 module.exports = router;
