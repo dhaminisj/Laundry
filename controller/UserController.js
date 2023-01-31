@@ -150,7 +150,7 @@ const login = async (req, res) => {
           { expiresIn: "100d" }
         );
         await User.updateOne({ _id: userfound._id }, { refreshToken });
-        res.header("Refreh-Token", refreshToken);
+        res.header("Refresh-Token", refreshToken);
         res.header("Authorization", "Bearer " + accessToken);
         return res.status(200).json({
           status: true,
