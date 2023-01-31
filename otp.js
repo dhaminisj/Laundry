@@ -3,7 +3,7 @@ const { totp } = require("otplib");
 const Nexmo = require("nexmo");
 
 const sendOtpMail = async (req, res) => {
-  totp.options = { digits: 6, algorithm: "sha512", step: 16660 };
+  totp.options = { digits: 6 , algorithm: "sha512", step: 16660 };
   const otp = totp.generate(process.env.SECRET_OTP);
 
   const transporter = nodemailer.createTransport({
