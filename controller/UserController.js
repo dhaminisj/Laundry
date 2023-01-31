@@ -39,9 +39,9 @@ const register = async (req, res) => {
     let user;
     const codefound = await User.findOne(
       { code: invitedCode },
-      { _id: 1, wallet: 1,totalearned:1 }
+      { _id: 1, wallet: 1, totalearned: 1 }
     );
-    totalearned= 40
+    totalearned = 40;
     if (codefound) {
       user = new User({
         name,
@@ -54,11 +54,11 @@ const register = async (req, res) => {
         code: usercode,
         wallet: 40,
       });
-      amount =codefound.wallet + 40
-      total = codefound.totalearned +40
+      amount = codefound.wallet + 40;
+      total = codefound.totalearned + 40;
       await User.findOneAndUpdate(
         { code: invitedCode },
-        { wallet:amount ,totalearned:total }
+        { wallet: amount, totalearned: total }
       );
       [data] = await User.find({ code: invitedCode });
       await transaction.create({
@@ -229,9 +229,7 @@ const updateUserProfilePic = async (req, res) => {
 const getProfile = async (req, res) => {
   try {
     const { userId } = req.users;
-    const user = await User.find({ _id: userId }).select(
-      " -__v -refreshToken -wallet "
-    );
+    const user = await User.find({ _id: userId });
     if (user)
       return res.status(200).json({
         status: true,
