@@ -53,6 +53,7 @@ const orderSchema = mongoose.Schema(
     ],
     savedWater: { type: Number },
     orderStatus: { type: String, enum: ["Pending", "Completed"] },
+    isCompleted: { type: Boolean, default: false },
     pickupDays: [
       {
         pickupDays: { type: String },
