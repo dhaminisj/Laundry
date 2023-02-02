@@ -3,7 +3,7 @@ const { totp } = require("otplib");
 const Nexmo = require("nexmo");
 
 const sendOtpMail = async (req, res) => {
-  totp.options = { digits: 6 , algorithm: "sha512", step: 16660 };
+  totp.options = { digits: 6, algorithm: "sha512", step: 16660 };
   const otp = totp.generate(process.env.SECRET_OTP);
 
   const transporter = nodemailer.createTransport({
@@ -47,8 +47,10 @@ const verifyOtpMail = async (req, res) => {
   }
 };
 
-const sendOtpPhone = async (req, res) => {
+const sendOtpPhoneRegister = async (req, res) => {
   try {
+    const userfound = await User.findOne({ phone: req.body.destination });
+
     totp.options = { digits: 4, algorithm: "sha512", step: 16660 };
 
     const otp = totp.generate(process.env.SECRET_OTP);
@@ -63,22 +65,67 @@ const sendOtpPhone = async (req, res) => {
     const from = "laundry Otp verification";
     const to = `91${dest}`;
     const text = `HEllo from laundry, this is your otp for verification is 123456 `;
-
-    const x = await nexmo.message.sendSms(
-      "+919481676348",
-      Number(dest),
-      text,
-      (err, response) => {
-        if (err) {
-          res.status(502).json({
-            statusCode: 502,
-            message: "Couldn't send OTP",
-          });
-        } else {
-          res.status(200).json({ statusCode: 200, response });
+    if (!userfound) {
+      const x = await nexmo.message.sendSms(
+        "+919481676348",
+        Number(dest),
+        text,
+        (err, response) => {
+          if (err) {
+            res.status(502).json({
+              statusCode: 502,
+              message: "Couldn't send OTP",
+            });
+          } else {
+            res.status(200).json({ statusCode: 200, response });
+          }
         }
-      }
-    );
+      );
+    } else {
+      res.status(200).send({ message: "user already registered" });
+    }
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, errorMessage: error.message });
+  }
+};
+
+const sendOtpPhoneLogin = async (req, res) => {
+  try {
+    const userfound = await User.findOne({ phone: req.body.destination });
+
+    totp.options = { digits: 4, algorithm: "sha512", step: 16660 };
+
+    const otp = totp.generate(process.env.SECRET_OTP);
+
+    const dest = req.body.destination;
+
+    const nexmo = new Nexmo({
+      apiKey: process.env.VONAGE_API_KEY,
+      apiSecret: process.env.VONAGE_API_SECRET,
+    });
+
+    const from = "laundry Otp verification";
+    const to = `91${dest}`;
+    const text = `HEllo from laundry, this is your otp for verification is 123456 `;
+    if (userfound) {
+      const x = await nexmo.message.sendSms(
+        "+919481676348",
+        Number(dest),
+        text,
+        (err, response) => {
+          if (err) {
+            res.status(502).json({
+              statusCode: 502,
+              message: "Couldn't send OTP",
+            });
+          } else {
+            res.status(200).json({ statusCode: 200, response });
+          }
+        }
+      );
+    } else {
+      res.status(200).send({ message: "user not  registered" });
+    }
   } catch (error) {
     res.status(500).json({ statusCode: 500, errorMessage: error.message });
   }
@@ -86,7 +133,6 @@ const sendOtpPhone = async (req, res) => {
 
 const verifyOtpPhone = async (req, res) => {
   try {
-    
     // const isValid = totp.check(req.body.otp, process.env.SECRET_OTP);
     if (req.body.otp === "123456") {
       res.status(200).json({ statusCode: 200, message: "otp valid" });
@@ -98,4 +144,10 @@ const verifyOtpPhone = async (req, res) => {
   }
 };
 
-module.exports = { sendOtpMail, verifyOtpMail, verifyOtpPhone, sendOtpPhone };
+module.exports = {
+  sendOtpMail,
+  verifyOtpMail,
+  verifyOtpPhone,
+  sendOtpPhoneRegister,
+  sendOtpPhoneLogin,
+};

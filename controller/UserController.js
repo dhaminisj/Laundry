@@ -138,6 +138,7 @@ const login = async (req, res) => {
     const { phone, otp } = req.body;
     const userfound = await User.findOne({ phone });
     if (userfound) {
+      
       if (req.body.otp === "123456") {
         const accessToken = jwt.sign(
           { userId: userfound._id, phone: userfound.phone },

@@ -6,58 +6,54 @@ const Promo = require("../models/promoSchema");
 const transcation = require("../models/transactionSchema");
 
 const checkoutOrder = async (req, res) => {
-    try {
-        const { userId } = req.users;
-        const list = req.body;
+  try {
+    const { userId } = req.users;
+    const list = req.body;
 
-        neededList = list.map(function (docs) {
-            return {
-                laundryListId: docs.laundryListId,
-                extras: docs.extras,
-                packagingType: docs.packagingType,
-            };
-        });
+    neededList = list.map(function (docs) {
+      return {
+        laundryListId: docs.laundryListId,
+        extras: docs.extras,
+        packagingType: docs.packagingType,
+      };
+    });
 
-        listOfLaundryListId = neededList
-            .map((docs) => docs.laundryListId)
-            .map(function (data) {
-                return mongoose.Types.ObjectId(data);
-            });
+    listOfLaundryListId = neededList
+      .map((docs) => docs.laundryListId)
+      .map(function (data) {
+        return mongoose.Types.ObjectId(data);
+      });
 
-        let laundryDetails = await Laundry.aggregate([
-            { $match: { _id: { $in: listOfLaundryListId } } },
-            {
-                $project: {
-                    price: 1,
-                    _id: 1,
-                    "Single Pack": 1,
-                    Hanger: 1,
-                    Multipack: 1,
-                    Starch: 1,
-                    "No Starch": 1,
-                },
-            },
-        ]);
+    let laundryDetails = await Laundry.aggregate([
+      { $match: { _id: { $in: listOfLaundryListId } } },
+      {
+        $project: {
+          price: 1,
+          _id: 1,
+          "Single Pack": 1,
+          Hanger: 1,
+          Multipack: 1,
+          Starch: 1,
+          "No Starch": 1,
+        },
+      },
+    ]);
 
-        let basketTotal = 0;
-        for (let index1 in neededList) {
-            for (let index2 in laundryDetails) {
-                if (
-                    laundryDetails[index2]._id ==
-                    neededList[index1]["laundryListId"]
-                ) {
-                    let extrasData = neededList[index1]["extras"];
-                    let priceOfExtras = laundryDetails[index2][extrasData];
-                    let packagingTypeData = neededList[index1]["packagingType"];
-                    let priceOfPackagingType =
-                        laundryDetails[index2][packagingTypeData];
-                    basketTotal +=
-                        laundryDetails[index2]["price"] +
-                        priceOfExtras +
-                        priceOfPackagingType;
-                }
-            }
+    let basketTotal = 0;
+    for (let index1 in neededList) {
+      for (let index2 in laundryDetails) {
+        if (laundryDetails[index2]._id == neededList[index1]["laundryListId"]) {
+          let extrasData = neededList[index1]["extras"];
+          let priceOfExtras = laundryDetails[index2][extrasData];
+          let packagingTypeData = neededList[index1]["packagingType"];
+          let priceOfPackagingType = laundryDetails[index2][packagingTypeData];
+          basketTotal +=
+            laundryDetails[index2]["price"] +
+            priceOfExtras +
+            priceOfPackagingType;
         }
+      }
+    }
     const result = {
       userId,
       orderId: "#LM" + Math.random().toString(10).slice(3),
@@ -67,43 +63,52 @@ const checkoutOrder = async (req, res) => {
       noOfItems: list.length,
     };
 
-        if (checkout) {
-            res.status(200).json({
-                statusCode: 200,
-                message: "Checkout Completed",
-                data: checkout,
-            });
-        } else {
-            res.status(400).json({
-                statusCode: 400,
-                message: "Unable to Checkout",
-            });
-        }
-    } catch (error) {
-        res.status(500).json({ statusCode: 500, message: error.message });
+    order = new Order(result);
+    checkout = await order.save();
+
+    if (checkout) {
+      res.status(200).json({
+        statusCode: 200,
+        message: "Checkout Completed",
+        data: checkout,
+      });
+    } else {
+      res.status(400).json({
+        statusCode: 400,
+        message: "Unable to Checkout",
+      });
     }
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, message: error.message });
+  }
 };
 
 const getOrderHistory = async (req, res) => {
-    try {
-        const { userId } = req.users;
-        const orderHistory = await Order
-            .find({})
-            .select(["noOfItems" ,"basketTotal", "pickupDays.pickupDays" ,"pickupDays.deliveryDays","pickupDays.deliverySlot" ,"createdAt", "-_id"]);
-        res.status(200).send({
-            status: true,
-            statusCode: 200,
-            data: orderHistory,
-        });
-    } catch (error) {
-        res.status(500).json({ statusCode: 500, message: error.message });
-    }
+  try {
+    const { userId } = req.users;
+    const orderHistory = await Order.find({}).select([
+      "noOfItems",
+      "basketTotal",
+      "pickupDays.pickupDays",
+      "pickupDays.deliveryDays",
+      "pickupDays.deliverySlot",
+      "createdAt",
+      "-_id",
+    ]);
+    res.status(200).send({
+      status: true,
+      statusCode: 200,
+      data: orderHistory,
+    });
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, message: error.message });
+  }
 };
 
 const addressAndSlot = async (req, res) => {
   try {
     const { userId } = req.users;
-    const { address, checkoutId, pickupDays } = req.body;
+    const { address, checkoutId, pickupAndDelivery } = req.body;
     const [orderData] = await Order.find({ _id: checkoutId }).select(
       "basketTotal tax deliveryCharge -_id"
     );
@@ -125,11 +130,10 @@ const addressAndSlot = async (req, res) => {
             types: address.types,
             primary: address.primary,
           },
-          pickupDays: {
-            pickupDays: pickupDays.pickupDays,
-            deliveryDays: pickupDays.deliveryDays,
-            deliveryType: pickupDays.deliveryType,
-            deliverySlot: pickupDays.deliverySlot,
+          pickupAndDelivery: {
+            pickupDate: pickupAndDelivery.pickupDate,
+            deliveryDate: pickupAndDelivery.deliveryDate,
+            slot: pickupAndDelivery.slot,
           },
           totalAmount,
         },
@@ -289,5 +293,5 @@ module.exports = {
   applyPromo,
   payment,
   invoice,
-  getOrderHistory
+  getOrderHistory,
 };
