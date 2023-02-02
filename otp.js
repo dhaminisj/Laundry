@@ -65,7 +65,7 @@ const sendOtpPhoneRegister = async (req, res) => {
 
     const from = "laundry Otp verification";
     const to = `91${dest}`;
-    const text = `HEllo from laundry, this is your otp for verification is 123456 `;
+    const text = `Hello from laundry, this is your otp for verification is 123456 `;
     if (!userfound) {
       const x = await nexmo.message.sendSms(
         "+919448745406",
@@ -107,7 +107,7 @@ const sendOtpPhoneLogin = async (req, res) => {
 
     const from = "laundry Otp verification";
     const to = `91${dest}`;
-    const text = `HEllo from laundry, this is your otp for verification is 123456 `;
+    const text = `Hello from laundry, this is your otp for verification is 123456 `;
     if (userfound) {
       const x = await nexmo.message.sendSms(
         "+919481676348",
