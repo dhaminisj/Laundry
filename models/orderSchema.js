@@ -52,15 +52,12 @@ const orderSchema = mongoose.Schema(
       },
     ],
     savedWater: { type: Number },
-    orderStatus: { type: String, enum: ["Pending", "Completed"] },
-    pickupDays: [
+    isCompleted: { type: Boolean, default: false },
+    pickupAndDelivery: [
       {
-        pickupDays: { type: String },
-        deliveryDays: { type: String },
-        deliveryType: {
-          type: String,
-        },
-        deliverySlot: {
+        pickupDate: { type: Date },
+        deliveryDate: { type: Date },
+        slot: {
           type: String,
         },
       },
@@ -84,6 +81,8 @@ const orderSchema = mongoose.Schema(
       },
     },
     discount: { type: Number, default: 0 },
+    isPickedup: { type: Boolean, default: false },
+    isdelivered: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

@@ -2,13 +2,15 @@ const express = require("express");
 const router = express.Router();
 const {
   sendOtpMail,
-  sendOtpPhone,
+  sendOtpPhoneLogin,
   verifyOtpMail,
   verifyOtpPhone,
+  sendOtpPhoneRegister,
 } = require("../otp");
 
 router.route("/sendOtpMail").post(sendOtpMail);
-router.route("/sendOtpPhone").post(sendOtpPhone);
+router.route("/sendOtpPhoneRegister").post(sendOtpPhoneRegister);
+router.route("/sendOtpPhoneLogin").post(sendOtpPhoneLogin);
 router.route("/verifyOtpPhone").post(verifyOtpPhone);
 router.route("/verifyOtpMail").post(verifyOtpMail);
 
