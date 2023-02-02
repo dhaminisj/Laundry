@@ -82,7 +82,7 @@ const sendOtpPhoneRegister = async (req, res) => {
         }
       );
     } else {
-      res.status(200).send({ message: "user already registered" });
+      res.status(223).send({ message: "user already registered" });
     }
   } catch (error) {
     res.status(500).json({ statusCode: 500, errorMessage: error.message });
@@ -124,7 +124,7 @@ const sendOtpPhoneLogin = async (req, res) => {
         }
       );
     } else {
-      res.status(200).send({ message: "user not  registered" });
+      res.status(404).send({ message: "user not  registered" });
     }
   } catch (error) {
     res.status(500).json({ statusCode: 500, errorMessage: error.message });
