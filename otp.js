@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
 const { totp } = require("otplib");
 const Nexmo = require("nexmo");
+const User = require("./models/UserSchema");
 
 const sendOtpMail = async (req, res) => {
   totp.options = { digits: 6, algorithm: "sha512", step: 16660 };
@@ -67,8 +68,8 @@ const sendOtpPhoneRegister = async (req, res) => {
     const text = `HEllo from laundry, this is your otp for verification is 123456 `;
     if (!userfound) {
       const x = await nexmo.message.sendSms(
-        "+919481676348",
-        Number(dest),
+        "+919448745406",
+        Number(to),
         text,
         (err, response) => {
           if (err) {
@@ -82,7 +83,7 @@ const sendOtpPhoneRegister = async (req, res) => {
         }
       );
     } else {
-      res.status(200).send({ message: "user already registered" });
+      res.status(223).send({ message: "user already registered" });
     }
   } catch (error) {
     res.status(500).json({ statusCode: 500, errorMessage: error.message });
@@ -110,7 +111,7 @@ const sendOtpPhoneLogin = async (req, res) => {
     if (userfound) {
       const x = await nexmo.message.sendSms(
         "+919481676348",
-        Number(dest),
+        Number(to),
         text,
         (err, response) => {
           if (err) {
@@ -124,7 +125,7 @@ const sendOtpPhoneLogin = async (req, res) => {
         }
       );
     } else {
-      res.status(200).send({ message: "user not  registered" });
+      res.status(404).send({ message: "user not  registered" });
     }
   } catch (error) {
     res.status(500).json({ statusCode: 500, errorMessage: error.message });
