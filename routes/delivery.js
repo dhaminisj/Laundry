@@ -7,6 +7,11 @@ const { Router } = require("express");
 
 router
   .route("/delivery")
-  .post(deliveryController.delivery);
+  .post(deliveryController.delivery)
+  .get(deliveryController.getDeliveryLists);
+  
+  router
+  .route("/delivery-order")
+  .post(deliveryController.getParticularOrder)
 
 module.exports = router;
