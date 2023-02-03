@@ -26,13 +26,13 @@ const createPlayVideo = async (req, res) => {
       return res.status(200).json({
         status: true,
         statusCode: 200,
-        message: "Created PlayVideo successfully",
+        message: "Created PlayVideo successfully.",
         data: result,
       });
     return res.status(200).json({
       status: true,
       statusCode: 200,
-      message: "Could not add PlayVideo",
+      message: "Could not add PlayVideo.",
     });
   } catch (error) {
     res.status(500).send({
@@ -64,13 +64,13 @@ const addPlayVideo = async (req, res) => {
       return res.status(200).json({
         status: true,
         statusCode: 200,
-        message: "Created PlayVideo successfully",
+        message: "Added PlayVideo successfully.",
         data: play,
       });
     return res.status(200).json({
       status: true,
       statusCode: 200,
-      message: "Could not add PlayVideo",
+      message: "Could not add PlayVideo.",
     });
   } catch (error) {
     res.status(500).send({
@@ -88,13 +88,13 @@ const getPlayVideo = async (req, res) => {
       return res.status(200).json({
         status: true,
         statusCode: 200,
-        message: "Tutorials fetched successfully",
+        message: "Tutorials fetched successfully.",
         data: pv,
       });
     res.status(400).json({
       status: false,
       statusCode: 400,
-      message: "Couldn't fetch Tutorials",
+      message: "Couldn't fetch Tutorials.",
     });
   } catch (error) {
     res.status(500).send({

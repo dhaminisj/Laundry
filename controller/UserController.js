@@ -12,7 +12,7 @@ const register = async (req, res) => {
   if (!req.body)
     res
       .status(400)
-      .json({ status: false, statusCode: 400, message: "body not found" });
+      .json({ status: false, statusCode: 400, message: "Body not found." });
   const { name, phone, email, latitude, longitude, address, invitedCode } =
     req.body;
   const validationErrors = validationResult(req);
@@ -29,7 +29,7 @@ const register = async (req, res) => {
     return res.status(403).json({
       status: false,
       statusCode: 403,
-      message: "User with this phone number already present",
+      message: "User with this phone number already present.",
     });
   let usercode = random(10, (err, uniqueString) => {
     if (err) return err;
@@ -110,17 +110,17 @@ const register = async (req, res) => {
       res.status(200).json({
         status: true,
         statusCode: 200,
-        message: " User succesfully registered",
+        message: " User succesfully registered.",
       });
     } else
       res.status(500).json({
         status: false,
         statusCode: 200,
-        message: "couldnt register user",
+        message: "Couldn't register user.",
         data: {},
       });
   } catch (error) {
-    res.status(500).send({
+    res.status(500).json({
       status: false,
       statusCode: 500,
       message: error,
@@ -133,7 +133,7 @@ const login = async (req, res) => {
     if (!req.body)
       res
         .status(400)
-        .json({ status: false, statusCode: 400, message: "body not found" });
+        .json({ status: false, statusCode: 400, message: "Body not found." });
 
     const { phone, otp } = req.body;
     const userfound = await User.findOne({ phone });
@@ -156,11 +156,11 @@ const login = async (req, res) => {
         return res.status(200).json({
           status: true,
           statusCode: 200,
-          message: "User Logged in Succesfully",
+          message: "User Logged in Succesfully.",
           user:userfound
         });
       } else {
-        res.status(401).json({ statusCode: 401, message: "otp invalid" });
+        res.status(401).json({ statusCode: 401, message: "OTP invalid." });
       }
     } else
       return res.status(403).json({
@@ -196,20 +196,20 @@ const updateUserProfilePic = async (req, res) => {
         return res.status(200).json({
           status: true,
           statusCode: 200,
-          message: "profile updated successfully",
+          message: "Profile updated successfully.",
           data: cloudinaryResult.url,
         });
       res.status(400).json({
         status: false,
         statusCode: 400,
-        message: "profile cannot be updated",
+        message: "Profile cannot be updated.",
       });
 
       //profilePic = cloudinaryResult.secure_url;
     } else {
       return res.status(404).json({
         statusCode: 404,
-        message: "Please send user profile pic to update",
+        message: "Please send user profile pic to update.",
       });
     }
     // updatedData = {
@@ -236,13 +236,13 @@ const getProfile = async (req, res) => {
       return res.status(200).json({
         status: true,
         statusCode: 200,
-        message: "Profile fetched successfully",
+        message: "Profile fetched successfully.",
         data: user,
       });
     res.status(400).json({
       status: false,
       statusCode: 400,
-      message: "Couldn't fetch Profile",
+      message: "Couldn't fetch Profile.",
     });
   } catch (error) {
     res.status(500).send({
@@ -287,7 +287,7 @@ const addAddress = async (req, res) => {
     res.status(200).json({
       status: true,
       statusCode: 200,
-      message: "Added address successfully",
+      message: "Added address successfully.",
       data: result,
     });
   } catch (error) {
@@ -351,14 +351,14 @@ const updateAddress = async (req, res) => {
       res.status(200).json({
         status: true,
         statusCode: 200,
-        message: "updated address successfully",
+        message: "Updated address successfully.",
         data: result,
       });
     } else
       res.status(400).json({
         status: false,
         statusCode: 400,
-        message: "Cannot update address ",
+        message: "Cannot update address.",
       });
   } catch (error) {
     res.status(500).send({
@@ -391,7 +391,7 @@ const deleteAddress = async (req, res) => {
           return res.status(200).json({
             status: true,
             statusCode: 200,
-            message: "address deleted ",
+            message: "Address deleted.",
           });
       }
     );
@@ -413,13 +413,13 @@ const getAddress = async (req, res) => {
       return res.status(200).json({
         status: true,
         statusCode: 200,
-        message: "Address fetched successfully",
+        message: "Address fetched successfully.",
         data: user,
       });
     res.status(400).json({
       status: false,
       statusCode: 400,
-      message: "Couldn't fetch Address",
+      message: "Couldn't fetch Address.",
     });
   } catch (error) {
     res.status(500).send({
@@ -489,12 +489,12 @@ const editProfile = async (req, res) => {
     if (JSON.stringify(req.body) == "{}")
       return res
         .status(400)
-        .json({ status: false, statusCode: 400, message: "body is not found" });
+        .json({ status: false, statusCode: 400, message: "Body not found." });
 
     if (!req.users)
       return res
         .status(400)
-        .json({ status: false, statusCode: 400, message: "user is not found" });
+        .json({ status: false, statusCode: 400, message: "User not found." });
     const { userId } = req.users;
     const { name, phone, email } = req.body;
     const user = await User.findOne({ _id: userId });
@@ -508,7 +508,7 @@ const editProfile = async (req, res) => {
     return res.status(200).json({
       status: true,
       statusCode: 200,
-      message: " Profile succesfully updated",
+      message: "Profile succesfully updated.",
     });
   } catch (error) {
     res.status(500).send({
@@ -526,7 +526,7 @@ const logout = async (req, res) => {
       return res.status(204).json({
         status: false,
         statusCode: 204,
-        message: "No refresh token found",
+        message: "No refresh token found.",
       });
     User.findOneAndUpdate(
       { refreshToken: refreshHeader },
@@ -536,7 +536,7 @@ const logout = async (req, res) => {
           return res.status(404).json({
             status: false,
             statusCode: 404,
-            message: "No refresh token matched",
+            message: "No refresh token matched.",
           });
         delete req.headers["refresh-token"];
         delete req.headers["authorization"];
@@ -544,7 +544,7 @@ const logout = async (req, res) => {
         res.json({
           status: true,
           statusCode: 200,
-          message: "User logged out successfully",
+          message: "User logged out successfully.",
         });
       }
     );
@@ -564,9 +564,9 @@ const getDetailsByPhone = async (req, res) => {
       "name -_id"
     );
     if (result) {
-      res.status(200).json({ statusCode: 200, message: "User found", result });
+      res.status(200).json({ statusCode: 200, message: "User found.", result });
     } else {
-      res.status(400).json({ statusCode: 400, message: "User not found" });
+      res.status(400).json({ statusCode: 400, message: "User not found." });
     }
   } catch (error) {
     res.status(500).send({

@@ -21,13 +21,13 @@ const createTermsAndCondition = async (req, res) => {
       res.status(200).json({
         status: true,
         statusCode: 200,
-        message: "Added T&C successfully",
+        message: "Added T&C successfully.",
         data: result,
       });
     res.status(200).json({
       status: true,
       statusCode: 200,
-      message: "Could not add T&C",
+      message: "Could not add T&C.",
     });
   } catch (error) {
     res.status(500).send({
@@ -57,13 +57,13 @@ const addGenericTerms = async (req, res) => {
       res.status(200).json({
         status: true,
         statusCode: 200,
-        message: "Added generic terms successfully",
+        message: "Added generic terms successfully.",
         data: generic,
       });
     res.status(200).json({
       status: true,
       statusCode: 200,
-      message: "could not add generic terms",
+      message: "Could not add generic terms.",
     });
   } catch (error) {
     res.status(500).send({
@@ -91,14 +91,14 @@ const addPrivacyPolicy = async (req, res) => {
       return res.status(200).json({
         status: true,
         statusCode: 200,
-        message: "Added privacy terms successfully",
+        message: "Added privacy terms successfully.",
         data: privacy,
       });
     } else {
       return res.status(200).json({
         status: false,
         statusCode: 400,
-        message: "could not add privacy terms",
+        message: "Could not add privacy terms.",
       });
     }
   } catch (error) {
@@ -117,13 +117,13 @@ const getTermsAndCondition = async (req, res) => {
       return res.status(200).json({
         status: true,
         statusCode: 200,
-        message: "Terms and condition fetched successfully",
+        message: "Terms and condition fetched successfully.",
         data: tandc,
       });
     res.status(400).json({
       status: false,
       statusCode: 400,
-      message: "Couldn't fetch Terms and condition",
+      message: "Couldn't fetch Terms and condition.",
     });
   } catch (error) {
     res.status(500).send({
@@ -140,7 +140,7 @@ const addCancelReason = async (req, res) => {
       reason: req.body.reason,
     });
     res.status(200).send({
-      message: "added successfully",
+      message: "Added successfully.",
     });
   } catch (error) {
     res.status(500).send({
@@ -155,7 +155,7 @@ const getCancelReason = async (req, res) => {
     const reason = await cancelReason.findOne({}).select(["-_id", "-__v"]);
     res
       .status(200)
-      .send({ statusCode: 200, message: "Cancel reasons fetched", reason });
+      .send({ statusCode: 200, message: "Cancel reasons fetched.", reason });
   } catch (error) {
     res.status(500).send({
       statusCode: 500,

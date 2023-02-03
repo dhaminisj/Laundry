@@ -60,12 +60,12 @@ const customerSupport = async (req, res) => {
         if (data) {
             res.status(200).json({
                 statusCode: 200,
-                message: "Ticket raised successfully,",
+                message: "Ticket raised successfully.",
             });
         } else {
             res.status(400).json({
                 statusCode: 400,
-                message: "Could not raise ticket",
+                message: "Could not raise ticket.",
             });
         }
     } catch (error) {
@@ -89,7 +89,7 @@ const addImages = async (req, res) => {
             uploadfile.push(uploadUrl);
         }
     } catch (error) {
-        res.status(400).json({ statusCode: 400, message: error });
+        res.status(400).json({ statusCode: 400, message: error.message});
     }
 };
 
@@ -102,16 +102,16 @@ const openTickets = async (req, res) => {
         if (result)
             res.status(200).json({
                 statusCode: 200,
-                message: "Open tickets fetched",
+                message: "Open tickets fetched.",
                 result,
             });
         else
             res.status(400).json({
                 statusCode: 400,
-                message: "Unable to fetch open tickets",
+                message: "Unable to fetch open tickets.",
             });
     } catch (error) {
-        res.status(400).json({ statusCode: 400, message: error });
+        res.status(400).json({ statusCode: 400, message: error.message });
     }
 };
 
