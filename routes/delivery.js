@@ -9,9 +9,12 @@ router
   .route("/delivery")
   .post(deliveryController.delivery)
   .get(deliveryController.getDeliveryLists);
-  
-  router
-  .route("/delivery-order")
-  .post(deliveryController.getParticularOrder)
+
+router.route("/delivery-order").post(deliveryController.getParticularOrder);
+
+router
+  .route("/summary")
+  .post(deliveryController.addSummaryDetails)
+  .get(deliveryController.getSummary);
 
 module.exports = router;
