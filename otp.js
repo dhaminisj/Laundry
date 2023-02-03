@@ -26,11 +26,11 @@ const sendOtpMail = async (req, res) => {
 
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
-      res.status(502).send({ statusCode: 502, message: "Couldn't Send OTP" });
+      res.status(502).send({ statusCode: 502, message: "Couldn't Send OTP." });
     } else {
       res
         .status(200)
-        .json({ statusCode: 200, message: "OTP sent successfully" });
+        .json({ statusCode: 200, message: "OTP sent successfully." });
     }
   });
 };
@@ -39,9 +39,9 @@ const verifyOtpMail = async (req, res) => {
   try {
     const isValid = totp.check(req.body.otp, process.env.SECRET_OTP);
     if (isValid) {
-      res.status(200).json({ statusCode: 200, message: "otp valid" });
+      res.status(200).json({ statusCode: 200, message: "OTP valid." });
     } else {
-      res.status(401).json({ statusCode: 401, message: "otp invalid" });
+      res.status(401).json({ statusCode: 401, message: "OTP invalid." });
     }
   } catch (error) {
     res.status(500).json({ statusCode: 500, errorMessage: error.message });
@@ -84,11 +84,11 @@ const sendOtpPhoneRegister = async (req, res) => {
       // );
       res
         .status(200)
-        .json({ statusCode: 200, message: "otp sent successfully" });
+        .json({ statusCode: 200, message: "OTP sent successfully." });
     } else {
       res
         .status(223)
-        .send({ statuscode: 223, message: "user already registered" });
+        .send({ statusCode: 223, message: "User already registered." });
     }
   } catch (error) {
     res.status(500).json({ statusCode: 500, errorMessage: error.message });
@@ -131,13 +131,13 @@ const sendOtpPhoneLogin = async (req, res) => {
       // );
       res.status(200).json({
         statusCode: 200,
-        message: "otp sent successfully",
+        message: "OTP sent successfully.",
         userName: userfound.name,
       });
     } else {
       res
         .status(404)
-        .send({ statuscode: 404, message: "user not  registered" });
+        .send({ statusCode: 404, message: "User not registered." });
     }
   } catch (error) {
     res.status(500).json({ statusCode: 500, errorMessage: error.message });
@@ -148,9 +148,9 @@ const verifyOtpPhone = async (req, res) => {
   try {
     // const isValid = totp.check(req.body.otp, process.env.SECRET_OTP);
     if (req.body.otp === "123456") {
-      res.status(200).json({ statusCode: 200, message: "otp valid" });
+      res.status(200).json({ statusCode: 200, message: "OTP valid." });
     } else {
-      res.status(401).json({ statusCode: 401, message: "otp invalid" });
+      res.status(401).json({ statusCode: 401, message: "OTP invalid." });
     }
   } catch (error) {
     res.status(500).json({ statusCode: 500, errorMessage: error.message });

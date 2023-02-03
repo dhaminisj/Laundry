@@ -25,7 +25,7 @@ const addRating = async (req, res) => {
             );
             res.status(200).json({
                 statusCode: 200,
-                message: "Rating Updated Successfully",
+                message: "Rating Updated Successfully.",
             });
         } else {
             const rate = new ratingsModel({
@@ -36,7 +36,7 @@ const addRating = async (req, res) => {
             await rate.save();
             res.status(200).json({
                 statusCode: 200,
-                message: "Rating Added Succesfully",
+                message: "Rating Added Succesfully.",
             });
         }
     } catch (error) {

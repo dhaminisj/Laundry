@@ -33,13 +33,13 @@ const delivery = async (req, res) => {
     if (result)
       res.status(200).json({
         statusCode: 200,
-        message: "Delivery lists added",
+        message: "Delivery lists added.",
         // result,
       });
     else
       res.status(400).json({
         statusCode: 400,
-        message: "Could not add delivery ",
+        message: "Could not add delivery.",
       });
   } catch (error) {
     res.status(500).json({ statusCode: 500, message: error.message });
@@ -62,13 +62,13 @@ const getDeliveryLists = async (req, res) => {
     if (result)
       res.status(200).json({
         statusCode: 200,
-        message: "Delivery lists fetched",
+        message: "Delivery lists fetched.",
         result,
       });
     else
       res.status(400).json({
         statusCode: 400,
-        message: "Could not fetch delivery list ",
+        message: "Could not fetch delivery list.",
       });
   } catch (error) {
     res.status(500).json({ statusCode: 500, message: error });
@@ -83,13 +83,13 @@ const getParticularOrder = async (req, res) => {
     if (result)
       res.status(200).json({
         statusCode: 200,
-        message: "order details fetched",
+        message: "Order details fetched.",
         result,
       });
     else
       res.status(400).json({
         statusCode: 400,
-        message: "Could not fetch order details ",
+        message: "Could not fetch order details.",
       });
   } catch (error) {
     res.status(500).json({ statusCode: 500, message: error });
@@ -125,13 +125,13 @@ const addSummaryDetails = async (req, res) => {
     if (result)
       res.status(200).json({
         statusCode: 200,
-        message: "Summary added",
+        message: "Summary added.",
         // result,
       });
     else
       res.status(400).json({
         statusCode: 400,
-        message: "Could not add summary ",
+        message: "Could not add summary.",
       });
   } catch (error) {
     res.status(500).json({ statusCode: 500, message: error });
@@ -150,13 +150,13 @@ const getSummary = async (req, res) => {
     if (result)
       res.status(200).json({
         statusCode: 200,
-        message: "Summary fetched",
+        message: "Summary fetched.",
         result,
       });
     else
       res.status(400).json({
         statusCode: 400,
-        message: "Could not fetch summary ",
+        message: "Could not fetch summary.",
       });
   } catch (error) {
     res.status(500).json({ statusCode: 500, message: error });

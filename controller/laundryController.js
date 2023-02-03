@@ -17,9 +17,9 @@ const addLaundryList = async (req, res) => {
     });
     res
       .status(200)
-      .send({ statusCode: 200, message: "laundry list added successfully" });
+      .send({ statusCode: 200, message: "laundry list added successfully." });
   } catch (error) {
-    res.status(400).json({ statusCode: 400, message: error });
+    res.status(400).json({ statusCode: 400, message: error.message });
   }
 };
 
@@ -31,7 +31,7 @@ const getLaundry = async (req, res) => {
 
     res.status(200).send({ statusCode: 200, laundryList: list });
   } catch (error) {
-    res.status(400).json({ statusCode: 400, message: error });
+    res.status(400).json({ statusCode: 400, message: error.message });
   }
 };
 
@@ -76,7 +76,7 @@ const getLaundryList = async (req, res) => {
 
     res.status(200).send({ statusCode: 200, laundryList: list });
   } catch (error) {
-    res.status(500).json({ statusCode: 500, message: error });
+    res.status(500).json({ statusCode: 500, message: error.message });
   }
 };
 
@@ -89,7 +89,7 @@ const getAddOnsUrl = async (req, res) => {
       );
     res.status(200).json({ statusCode: 200, result });
   } catch (error) {
-    res.status(500).json({ statusCode: 500, message: error });
+    res.status(500).json({ statusCode: 500, message: error.message });
   }
 };
 
@@ -102,7 +102,7 @@ const getDescription = async (req, res) => {
       );
     res.status(200).json({ statusCode: 200, result });
   } catch (error) {
-    res.status(500).json({ statusCode: 500, message: error });
+    res.status(500).json({ statusCode: 500, message: error.message });
   }
 };
 module.exports = {

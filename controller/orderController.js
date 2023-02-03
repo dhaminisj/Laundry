@@ -144,13 +144,13 @@ const addressAndSlot = async (req, res) => {
     if (result)
       res.status(200).json({
         statusCode: 200,
-        message: "Address, pickup and delivery slot added successfully",
+        message: "Address, pickup and delivery slot added successfully.",
         result,
       });
     else
       res.status(400).json({
         statusCode: 400,
-        message: "Could not add address, pickup and delivery slot ",
+        message: "Could not add address, pickup and delivery slot.",
       });
   } catch (error) {
     res.status(500).json({ statusCode: 500, message: error.message });
@@ -179,20 +179,19 @@ const applyPromo = async (req, res) => {
           { _id: checkoutId },
           { totalAmount: totalAmount, discount: discount }
         );
-        res.status(200).send({
-          message: "Promo code applied successfully",
+        res.status(200).json({
+          statusCode: 200,
+          message: "Promo code applied successfully.",
           totalAmount: totalAmount,
           discount: discount,
         });
       } else {
-        res.status(400).send({
-          message: "Promo code is not applicable",
-        });
+        res
+          .status(400)
+          .json({ statusCode: 400, message: "Promo code is not applicable." });
       }
     } else {
-      res.status(404).send({
-        message: "No promo code found",
-      });
+      res.status(404).json({ statusCode: 404, message: "No promo code found." });
     }
   } catch (error) {
     res.status(500).json({ statusCode: 500, message: error.message });
@@ -227,13 +226,12 @@ const payment = async (req, res) => {
           { _id: req.users.userId },
           { totalSavedWater: totalSavedWater }
         );
-        res.status(200).send({
-          message: "Order placed money debited from wallet",
+        res.status(200).json({
+          statusCode: 200,
+          message: "Order placed money debited from wallet.",
         });
       } else {
-        res.status(400).send({
-          message: "maintain balance",
-        });
+        res.status(400).json({ statusCode: 400, message: "Maintain balance." });
       }
     } else if (req.body.card) {
       await Order.findByIdAndUpdate(
@@ -249,7 +247,8 @@ const payment = async (req, res) => {
         { _id: req.users.userId },
         { totalSavedWater: totalSavedWater }
       );
-      res.status(200).send({
+      res.status(200).json({
+        statusCode: 200,
         message: "Order placed money debited from " + req.body.card.cardType,
       });
     } else {
@@ -257,9 +256,9 @@ const payment = async (req, res) => {
         { _id: req.users.userId },
         { totalSavedWater: totalSavedWater }
       );
-      res.status(200).send({
-        message: "Order placed COD opted",
-      });
+      res
+        .status(200)
+        .json({ statusCode: 200, message: "Order placed COD opted." });
     }
   } catch (error) {
     res.status(500).json({ statusCode: 500, message: error.message });
@@ -275,13 +274,13 @@ const invoice = async (req, res) => {
     if (result)
       res.status(200).json({
         statusCode: 200,
-        message: "Invoice fetched ",
+        message: "Invoice fetched.",
         result,
       });
     else
       res.status(400).json({
         statusCode: 400,
-        message: "Could not get invoice ",
+        message: "Could not get invoice.",
       });
   } catch (error) {
     res.status(500).json({ statusCode: 500, message: error.message });

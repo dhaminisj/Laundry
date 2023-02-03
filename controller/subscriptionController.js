@@ -12,16 +12,16 @@ const addSubscriptionList = async (req, res) => {
       numberOfPickups: req.body.numberOfPickups,
       features: req.body.features,
     });
-    res.status(200).send({ statusCode: 200, message: "Added Successfully" });
+    res.status(200).json({ statusCode: 200, message: "Added Successfully." });
   } catch (error) {
-    res.status(400).json({ statusCode: 400, message: error });
+    res.status(400).json({ statusCode: 400, message: error.message });
   }
 };
 
 const getSubscriptionList = async (req, res) => {
   try {
     const list = await subscriptionList.find({});
-    res.status(200).send({ statusCode: 200, message:"successfull",list: list });
+    res.status(200).json({ statusCode: 200, message:"Subcription list fetched successfully.",list: list });
   } catch (error) {
     res.status(400).json({ statusCode: 400, message: error.message });
   }
@@ -59,7 +59,7 @@ const buySubscription = async (req, res) => {
           res
             .status(200)
             .send({ statusCode: 200,
-               message: "Maintain sufficient balance" });
+               message: "Maintain sufficient balance." });
         }
         await users.findOneAndUpdate(
           { _id: req.users.userId },
@@ -68,7 +68,7 @@ const buySubscription = async (req, res) => {
       }
       res.status(200).send({
         statusCode: 200,
-        message: "subscription order completed",
+        message: "Subscription order completed.",
         orderId: id,
       });
     } else {
@@ -94,7 +94,7 @@ const buySubscription = async (req, res) => {
           orderId: req.body.orderId,
           transactionType: "REFUND",
           transactionStatus: "CREDIT",
-          orderTitle: "Subscription canceled refund",
+          orderTitle: "Subscription cancelled refund",
           totalPrice: refund,
           walletBalance: amount,
         });
@@ -129,7 +129,7 @@ const buySubscription = async (req, res) => {
         }
       }
       res.status(200).send({
-        message: "Plan modified successfully",
+        message: "Plan modified successfully.",
         orderId: id,
       });
     }
@@ -183,19 +183,19 @@ const viewSubscription = async (req, res) => {
             view,
           });
         } else {
-          res.status(200).send({ statusCode: 200, message:"successfull",viewPlans });
+          res.status(200).send({ statusCode: 200, message:"Successfull",viewPlans });
         }
       } else {
         await subscription.findOneAndDelete({ userId: req.users.userId });
         res.status(200).send({
           status: 200,
-          message: "Subscription Expired",
+          message: "Subscription Expired.",
         });
       }
     } else {
       res.status(404).send({
         status: 404,
-        message: "No subscription",
+        message: "No subscription.",
       });
     }
   } catch (error) {
@@ -210,7 +210,7 @@ const editSubscription = async (req, res) => {
         pickupDays: req.body.pickupDays,
       }
     );
-    res.status(200).send({ statusCode: 200, message: "subscription edited" });
+    res.status(200).json({ statusCode: 200, message: "subscription edited." });
   } catch (error) {
     res.status(400).json({ statusCode: 400, message: error.message });
   }
@@ -221,7 +221,7 @@ const viewPickupDetails = async (req, res) => {
     const details = await subscription
       .find({ userId: req.users.userId })
       .select(["pickupDays"]);
-    res.status(200).send({ statusCode: 200, message:"successfull",details: details });
+    res.status(200).send({ statusCode: 200, message:"Successfull",details: details });
   } catch (error) {
     res.status(400).json({ statusCode: 400, message: error.message });
   }
@@ -291,7 +291,7 @@ const cancelSubscription = async (req, res) => {
     refundBy = new Date(refundBy).toDateString();
     res.status(200).send({
       statusCode: 200,
-      message: "subscription canceled successfully",
+      message: "Subscription canceled successfully.",
       amount: refund,
       card: cardNumber,
       type: card,
@@ -333,7 +333,7 @@ const pauseSubscription = async (req, res) => {
     );
     res.status(200).send({
       status: 200,
-      message: "subscription paused successfully",
+      message: "Subscription paused successfully.",
     });
   } catch (error) {
     res.status(400).json({ statusCode: 400, message: error.message });
@@ -377,7 +377,7 @@ const resumeSubscription = async (req, res) => {
       );
       res.status(200).send({
         status: 200,
-        message: "subscription resumed successfully",
+        message: "Subscription resumed successfully.",
       });
     } else {
       await subscription.findOneAndUpdate(
@@ -393,7 +393,7 @@ const resumeSubscription = async (req, res) => {
       );
       res.status(200).send({
         status: 200,
-        message: "subscription resumed successfully",
+        message: "Subscription resumed successfully.",
       });
     }
   } catch (error) {

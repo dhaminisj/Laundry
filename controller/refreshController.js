@@ -11,7 +11,7 @@ const handleRefreshToken = async (req, res) => {
       return res.status(401).json({
         status: false,
         statusCode: 401,
-        message: "Refresh header not found",
+        message: "Refresh header not found.",
       });
 
     const refreshToken = refreshHeader;
@@ -21,7 +21,7 @@ const handleRefreshToken = async (req, res) => {
         return res.status(400).json({
           status: false,
           statusCode: 400,
-          message: "An error occured",
+          message: "An error occured.",
           // errors: errors.array(),
         });
       
@@ -35,7 +35,7 @@ const handleRefreshToken = async (req, res) => {
               return res.status(403).json({
                 status: false,
                 statusCode: 403,
-                message: "Invalid token",
+                message: "Invalid token.",
               });
 
             const accessToken = jwt.sign(
@@ -49,7 +49,7 @@ const handleRefreshToken = async (req, res) => {
             res.status(200).json({
               status: true,
               statusCode: 200,
-              message: "Access token generated sucessfully",
+              message: "Access token generated sucessfully.",
               data: { accessToken },
             });
           }
@@ -58,7 +58,7 @@ const handleRefreshToken = async (req, res) => {
         res.status(401).json({
           status: false,
           statusCode: 401,
-          message: "No match for refresh token found",
+          message: "No match for refresh token found.",
         });
     });
   } catch (error) {

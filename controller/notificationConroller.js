@@ -11,14 +11,14 @@ const addNotifications = async (req, res) => {
       status: true,
       statusCode: 200,
 
-      message: "Notification added successfully",
+      message: "Notification added successfully.",
     });
   } catch (error) {
     res.status(400).json({
       status: false,
       statusCode: 400,
 
-      message: error,
+      message: error.message,
     });
   }
 };
@@ -31,15 +31,13 @@ const getNotifications = async (req, res) => {
     res.status(200).send({
       status: true,
       statusCode: 200,
-
       data: result,
     });
   } catch (error) {
     res.status(400).json({
       status: false,
       statusCode: 400,
-
-      message: error,
+      message: error.message,
     });
   }
 };
