@@ -132,7 +132,7 @@ const sendOtpPhoneLogin = async (req, res) => {
         .json({
           statusCode: 200,
           message: "otp sent successfully",
-          userDetails: userfound,
+          userDetails: userfound.name,
         });
     } else {
       res.status(404).send({ message: "user not  registered" });
