@@ -86,7 +86,9 @@ const sendOtpPhoneRegister = async (req, res) => {
         .status(200)
         .json({ statusCode: 200, message: "otp sent successfully" });
     } else {
-      res.status(223).send({ message: "user already registered" });
+      res
+        .status(223)
+        .send({ statuscode: 223, message: "user already registered" });
     }
   } catch (error) {
     res.status(500).json({ statusCode: 500, errorMessage: error.message });
@@ -95,7 +97,7 @@ const sendOtpPhoneRegister = async (req, res) => {
 
 const sendOtpPhoneLogin = async (req, res) => {
   try {
-    const userfound = await User.findOne({ phone: req.body.destination });
+    const [userfound]= await User.findOne({ phone: req.body.destination });
 
     totp.options = { digits: 4, algorithm: "sha512", step: 16660 };
 
@@ -127,15 +129,15 @@ const sendOtpPhoneLogin = async (req, res) => {
       //     }
       //   }
       // );
-      res
-        .status(200)
-        .json({
-          statusCode: 200,
-          message: "otp sent successfully",
-          userDetails: userfound.name,
-        });
+      res.status(200).json({
+        statusCode: 200,
+        message: "otp sent successfully",
+        userDetails: userfound.name,
+      });
     } else {
-      res.status(404).send({ message: "user not  registered" });
+      res
+        .status(404)
+        .send({ statuscode: 404, message: "user not  registered" });
     }
   } catch (error) {
     res.status(500).json({ statusCode: 500, errorMessage: error.message });
