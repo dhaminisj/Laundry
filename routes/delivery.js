@@ -12,9 +12,8 @@ router
 
 router.route("/delivery-order").post(deliveryController.getParticularOrder);
 
-router
-  .route("/summary")
-  .post(deliveryController.addSummaryDetails)
-  .get(deliveryController.getSummary);
+router.route("/summary").post(deliveryController.addSummaryDetails);
+
+router.route("/get-summary").post(deliveryController.getSummary);
 
 module.exports = router;

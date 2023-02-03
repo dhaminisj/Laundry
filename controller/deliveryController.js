@@ -140,7 +140,13 @@ const addSummaryDetails = async (req, res) => {
 
 const getSummary = async (req, res) => {
   try {
-    const result = await Summary.find({});
+    const { slot } = req.body;
+    let result;
+    if (slot == "morning") {
+      result = await Summary.findOne({ slot: "8AM-12PM" });
+    } else {
+      result = await Summary.findOne({ slot: "5PM-9PM" });
+    }
     if (result)
       res.status(200).json({
         statusCode: 200,
