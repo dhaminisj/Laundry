@@ -6,18 +6,26 @@ const Order = require("../models/orderSchema");
 
 const delivery = async (req, res) => {
   try {
-    const { type, orderId } = req.body;
+    const { type, orderId, slot } = req.body;
     const details = await Order.findOne({ orderId: orderId }).populate(
       "userId",
-      "name"
+      "name phone"
     );
     const data = new Delivery({
       type,
       orderId,
+      slot,
       name: details.userId.name,
+      phone: details.userId.phone,
       noOfItems: details.noOfItems,
       totalAmount: details.totalAmount,
       deliveryAddress: details.deliveryAddress,
+      isCompleted: details.isCompleted,
+      discount: details.discount,
+      deliveryCharge: details.deliveryCharge,
+      tax: details.tax,
+      basketTotal: details.basketTotal,
+      orders: details.orders,
     });
     const result = await data.save();
 
@@ -33,13 +41,23 @@ const delivery = async (req, res) => {
         message: "Could not add delivery ",
       });
   } catch (error) {
-    res.status(500).json({ statusCode: 500, message: error });
+    res.status(500).json({ statusCode: 500, message: error.message });
   }
 };
 
 const getDeliveryLists = async (req, res) => {
   try {
-    const result = await Delivery.find({});
+    const { slot } = req.body;
+    let result;
+    if (slot == "morning") {
+      result = await Delivery.find({ slot: "morning" }).select(
+        "type name address noOfItems totalAmount phone isSubscribed"
+      );
+    } else {
+      result = await Delivery.find({ slot: "evening" }).select(
+        "type name address noOfItems totalAmount phone isSubscribed"
+      );
+    }
     if (result)
       res.status(200).json({
         statusCode: 200,
@@ -59,17 +77,8 @@ const getDeliveryLists = async (req, res) => {
 const getParticularOrder = async (req, res) => {
   try {
     const { orderId } = req.body;
-    const result = await Order.findOne({ orderId });
+    const result = await Delivery.find({ orderId });
 
-    const data = await result.aggregate([
-      {
-        $group: {
-          _id: { category: "$category" },
-          count: { $sum: 1 },
-        },
-      },
-    ]);
-    console.log(data);
     if (result)
       res.status(200).json({
         statusCode: 200,
