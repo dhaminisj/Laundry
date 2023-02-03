@@ -97,7 +97,7 @@ const sendOtpPhoneRegister = async (req, res) => {
 
 const sendOtpPhoneLogin = async (req, res) => {
   try {
-    const [userfound]= await User.findOne({ phone: req.body.destination });
+    const userfound = await User.findOne({ phone: req.body.destination });
 
     totp.options = { digits: 4, algorithm: "sha512", step: 16660 };
 
@@ -132,7 +132,7 @@ const sendOtpPhoneLogin = async (req, res) => {
       res.status(200).json({
         statusCode: 200,
         message: "otp sent successfully",
-        userDetails: userfound.name,
+        userName: userfound.name,
       });
     } else {
       res
