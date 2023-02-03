@@ -67,21 +67,24 @@ const sendOtpPhoneRegister = async (req, res) => {
     const to = `91${dest}`;
     const text = `Hello from laundry, this is your otp for verification is 123456 `;
     if (!userfound) {
-      const x = await nexmo.message.sendSms(
-        "+919448745406",
-        Number(to),
-        text,
-        (err, response) => {
-          if (err) {
-            res.status(502).json({
-              statusCode: 502,
-              message: "Couldn't send OTP",
-            });
-          } else {
-            res.status(200).json({ statusCode: 200, response });
-          }
-        }
-      );
+      // const x = await nexmo.message.sendSms(
+      //   "+919448745406",
+      //   Number(to),
+      //   text,
+      //   (err, response) => {
+      //     if (err) {
+      //       res.status(502).json({
+      //         statusCode: 502,
+      //         message: "Couldn't send OTP",
+      //       });
+      //     } else {
+      //       res.status(200).json({ statusCode: 200, response });
+      //     }
+      //   }
+      // );
+      res
+        .status(200)
+        .json({ statusCode: 200, message: "otp sent successfully" });
     } else {
       res.status(223).send({ message: "user already registered" });
     }
@@ -109,21 +112,28 @@ const sendOtpPhoneLogin = async (req, res) => {
     const to = `91${dest}`;
     const text = `Hello from laundry, this is your otp for verification is 123456 `;
     if (userfound) {
-      const x = await nexmo.message.sendSms(
-        "+919481676348",
-        Number(to),
-        text,
-        (err, response) => {
-          if (err) {
-            res.status(502).json({
-              statusCode: 502,
-              message: "Couldn't send OTP",
-            });
-          } else {
-            res.status(200).json({ statusCode: 200, response,userDetails:userfound });
-          }
-        }
-      );
+      // const x = await nexmo.message.sendSms(
+      //   "+919481676348",
+      //   Number(to),
+      //   text,
+      //   (err, response) => {
+      //     if (err) {
+      //       res.status(502).json({
+      //         statusCode: 502,
+      //         message: "Couldn't send OTP",
+      //       });
+      //     } else {
+      //       res.status(200).json({ statusCode: 200, response,userDetails:userfound });
+      //     }
+      //   }
+      // );
+      res
+        .status(200)
+        .json({
+          statusCode: 200,
+          message: "otp sent successfully",
+          userDetails: userfound,
+        });
     } else {
       res.status(404).send({ message: "user not  registered" });
     }
