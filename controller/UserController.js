@@ -157,6 +157,7 @@ const login = async (req, res) => {
           status: true,
           statusCode: 200,
           message: "User Logged in Succesfully",
+          user:userfound
         });
       } else {
         res.status(401).json({ statusCode: 401, message: "otp invalid" });
