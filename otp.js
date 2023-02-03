@@ -120,7 +120,7 @@ const sendOtpPhoneLogin = async (req, res) => {
               message: "Couldn't send OTP",
             });
           } else {
-            res.status(200).json({ statusCode: 200, response });
+            res.status(200).json({ statusCode: 200, response,userDetails:userfound });
           }
         }
       );
