@@ -3,6 +3,7 @@ const { User } = require("../models");
 const Delivery = require("../models/deliverySchema");
 const { aggregate } = require("../models/orderSchema");
 const Order = require("../models/orderSchema");
+const Summary = require("../models/summarySchema");
 
 const delivery = async (req, res) => {
   try {
@@ -94,4 +95,71 @@ const getParticularOrder = async (req, res) => {
     res.status(500).json({ statusCode: 500, message: error });
   }
 };
-module.exports = { delivery, getDeliveryLists, getParticularOrder };
+
+const addSummaryDetails = async (req, res) => {
+  try {
+    const {
+      status,
+      date,
+      slot,
+      deliveryOrders,
+      deliveryBags,
+      pickup,
+      pickupBags,
+      totalCashCollected,
+      totalOrders,
+    } = req.body;
+
+    const data = new Summary({
+      status,
+      date,
+      slot,
+      deliveryOrders,
+      deliveryBags,
+      pickup,
+      pickupBags,
+      totalCashCollected,
+      totalOrders,
+    });
+    const result = await data.save();
+    if (result)
+      res.status(200).json({
+        statusCode: 200,
+        message: "Summary added",
+        // result,
+      });
+    else
+      res.status(400).json({
+        statusCode: 400,
+        message: "Could not add summary ",
+      });
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, message: error });
+  }
+};
+
+const getSummary = async (req, res) => {
+  try {
+    const result = await Summary.find({});
+    if (result)
+      res.status(200).json({
+        statusCode: 200,
+        message: "Summary fetched",
+        result,
+      });
+    else
+      res.status(400).json({
+        statusCode: 400,
+        message: "Could not fetch summary ",
+      });
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, message: error });
+  }
+};
+module.exports = {
+  delivery,
+  getDeliveryLists,
+  getParticularOrder,
+  addSummaryDetails,
+  getSummary,
+};
