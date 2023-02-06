@@ -27,6 +27,7 @@ const delivery = async (req, res) => {
       tax: details.tax,
       basketTotal: details.basketTotal,
       orders: details.orders,
+      isSubscribed: details.isSubscribed,
     });
     const result = await data.save();
 
