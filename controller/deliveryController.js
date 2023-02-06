@@ -108,6 +108,7 @@ const addSummaryDetails = async (req, res) => {
       pickupBags,
       totalCashCollected,
       totalOrders,
+      vanNumber,
     } = req.body;
 
     const data = new Summary({
@@ -120,6 +121,7 @@ const addSummaryDetails = async (req, res) => {
       pickupBags,
       totalCashCollected,
       totalOrders,
+      vanNumber,
     });
     const result = await data.save();
     if (result)
@@ -140,13 +142,7 @@ const addSummaryDetails = async (req, res) => {
 
 const getSummary = async (req, res) => {
   try {
-    const { slot } = req.body;
-    let result;
-    if (slot == "morning") {
-      result = await Summary.findOne({ slot: "8AM-12PM" });
-    } else {
-      result = await Summary.findOne({ slot: "5PM-9PM" });
-    }
+    const result = await Summary.find();
     if (result)
       res.status(200).json({
         statusCode: 200,

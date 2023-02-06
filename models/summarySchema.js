@@ -10,5 +10,6 @@ const summarySchema = new mongoose.Schema({
   pickupBags: { type: Number },
   totalCashCollected: { type: Number },
   totalOrders: { type: String },
+  vanNumber: { type: String },
 });
 module.exports = mongoose.model("summaryModel", summarySchema);
