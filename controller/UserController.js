@@ -1,5 +1,6 @@
 const { User } = require("../models/index");
 const transaction = require("../models/transactionSchema");
+const Subscription = require("../models/subscriptionSchema");
 const { validationResult } = require("express-validator");
 const jwt = require("jsonwebtoken");
 const { mongoose } = require("mongoose");
@@ -231,12 +232,15 @@ const getProfile = async (req, res) => {
   try {
     const { userId } = req.users;
     const user = await User.find({ _id: userId }).select("-refreshToken");
+    const subscriptionDetails = await Subscription.find({ userId });
+    console.log(subscriptionDetails);
     if (user)
       return res.status(200).json({
         status: true,
         statusCode: 200,
         message: "Profile fetched successfully.",
-        data: user,
+        user,
+        subscriptionDetails,
       });
     res.status(400).json({
       status: false,
