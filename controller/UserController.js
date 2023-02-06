@@ -138,7 +138,6 @@ const login = async (req, res) => {
     const { phone, otp } = req.body;
     const userfound = await User.findOne({ phone });
     if (userfound) {
-      
       if (req.body.otp === "123456") {
         const accessToken = jwt.sign(
           { userId: userfound._id, phone: userfound.phone },
@@ -157,7 +156,7 @@ const login = async (req, res) => {
           status: true,
           statusCode: 200,
           message: "User Logged in Succesfully.",
-          user:userfound
+          user: userfound,
         });
       } else {
         res.status(401).json({ statusCode: 401, message: "OTP invalid." });
@@ -231,7 +230,7 @@ const updateUserProfilePic = async (req, res) => {
 const getProfile = async (req, res) => {
   try {
     const { userId } = req.users;
-    const user = await User.find({ _id: userId });
+    const user = await User.find({ _id: userId }).select("-refreshToken");
     if (user)
       return res.status(200).json({
         status: true,
