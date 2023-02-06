@@ -8,7 +8,7 @@ const { Router } = require("express");
 router
   .route("/delivery")
   .post(deliveryController.delivery)
-  .get(deliveryController.getDeliveryLists);
+ router.route("/get-delivery") .post(deliveryController.getDeliveryLists);
 
 router.route("/delivery-order").post(deliveryController.getParticularOrder);
 
