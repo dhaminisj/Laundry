@@ -580,6 +580,29 @@ const getDetailsByPhone = async (req, res) => {
   }
 };
 
+const getOtp = async (req, res) => {
+  try {
+    const user = await User.findById({ _id: req.users.userId });
+    if (user) {
+      res.status(200).send({
+        statusCode: 200,
+        message: "Otp generated successfully",
+        otp: "123456",
+      });
+    } else {
+      res.status(404).send({
+        statusCode: 404,
+        message: "User Not found",
+      });
+    }
+  } catch (error) {
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
+  }
+};
 module.exports = {
   register,
   login,
@@ -592,4 +615,5 @@ module.exports = {
   editProfile,
   logout,
   getDetailsByPhone,
+  getOtp,
 };
