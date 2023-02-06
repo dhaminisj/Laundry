@@ -52,11 +52,11 @@ const getDeliveryLists = async (req, res) => {
     let result;
     if (slot == "morning") {
       result = await Delivery.find({ slot: "morning" }).select(
-        "type name address noOfItems totalAmount phone isSubscribed"
+        "type name address noOfItems totalAmount phone isSubscribed orderId deliveryAddress slot"
       );
     } else {
       result = await Delivery.find({ slot: "evening" }).select(
-        "type name address noOfItems totalAmount phone isSubscribed"
+        "type name address noOfItems totalAmount phone isSubscribed orderId deliveryAddress slot"
       );
     }
     if (result)
