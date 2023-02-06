@@ -27,6 +27,7 @@ const laundryListSchema = mongoose.Schema({
     type: Number,
     default: 8,
   },
+  singlePackImage: { type: String },
   singlePackDescription: {
     type: String,
     default:
@@ -40,6 +41,7 @@ const laundryListSchema = mongoose.Schema({
     type: Number,
     default: 10,
   },
+  hangerImage: { type: String },
   hangerDescription: {
     type: String,
     default:
@@ -53,6 +55,7 @@ const laundryListSchema = mongoose.Schema({
     type: Number,
     default: 0,
   },
+  multipackImage: { type: String },
   multiPackDescription: {
     type: String,
     default:
@@ -66,6 +69,7 @@ const laundryListSchema = mongoose.Schema({
     type: Number,
     default: 8,
   },
+  starchImage: { type: String },
   starchDescription: {
     type: String,
     default: "The process for making clothes wrinkle-free longer",
@@ -78,6 +82,7 @@ const laundryListSchema = mongoose.Schema({
     type: Number,
     default: 10,
   },
+  noStrachImage: { type: String },
   noStarchDescription: {
     type: String,
     default:
