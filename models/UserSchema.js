@@ -28,6 +28,7 @@ const UserSchema = new mongoose.Schema({
   totalearned: { type: Number, default: 0 },
   // referandearn :{
   code: { type: String },
+  isSubscribed:{type:Boolean,default:false},
   //reward:{ type: Number, default: 40 },
   // }
   totalSavedWater: { type: Number, default: 0 },
