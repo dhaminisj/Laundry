@@ -142,18 +142,15 @@ const addSummaryDetails = async (req, res) => {
 
 const getSummary = async (req, res) => {
   try {
-    const result = await Summary.find();
-    if (result)
-      res.status(200).json({
-        statusCode: 200,
-        message: "Summary fetched.",
-        result,
-      });
-    else
-      res.status(400).json({
-        statusCode: 400,
-        message: "Could not fetch summary.",
-      });
+    const morning = await Summary.find({ slot: "8AM-12PM" });
+    const evening = await Summary.find({ slot: "5PM-9PM" });
+
+    res.status(200).json({
+      statusCode: 200,
+      message: "Summary fetched.",
+      morning,
+      evening,
+    });
   } catch (error) {
     res.status(500).json({ statusCode: 500, message: error });
   }
