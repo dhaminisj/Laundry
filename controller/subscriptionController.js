@@ -21,7 +21,13 @@ const addSubscriptionList = async (req, res) => {
 const getSubscriptionList = async (req, res) => {
   try {
     const list = await subscriptionList.find({});
-    res.status(200).json({ statusCode: 200, message:"Subcription list fetched successfully.",list: list });
+    res
+      .status(200)
+      .json({
+        statusCode: 200,
+        message: "Subcription list fetched successfully.",
+        list: list,
+      });
   } catch (error) {
     res.status(400).json({ statusCode: 400, message: error.message });
   }
@@ -58,12 +64,11 @@ const buySubscription = async (req, res) => {
         } else {
           res
             .status(200)
-            .send({ statusCode: 200,
-               message: "Maintain sufficient balance." });
+            .send({ statusCode: 200, message: "Maintain sufficient balance." });
         }
         await users.findOneAndUpdate(
           { _id: req.users.userId },
-          { wallet: amount }
+          { wallet: amount, isSubscribed: true }
         );
       }
       res.status(200).send({
@@ -87,7 +92,7 @@ const buySubscription = async (req, res) => {
         refund = 6.633 * diffDays;
       }
       amount = parseInt(user.wallet);
-      amount += refund
+      amount += refund;
       if (sub.isWallet) {
         await transaction.insertMany({
           userId: req.users.userId,
@@ -101,7 +106,7 @@ const buySubscription = async (req, res) => {
       }
       await users.findOneAndUpdate(
         { _id: req.users.userId },
-        { wallet: amount }
+        { wallet: amount, isSubscribed: true }
       );
       await subscription.findOneAndDelete({ userId: req.users.userId });
       await subscription.create({
@@ -183,10 +188,16 @@ const viewSubscription = async (req, res) => {
             view,
           });
         } else {
-          res.status(200).send({ statusCode: 200, message:"Successfull",viewPlans });
+          res
+            .status(200)
+            .send({ statusCode: 200, message: "Successfull", viewPlans });
         }
       } else {
         await subscription.findOneAndDelete({ userId: req.users.userId });
+        await users.findOneAndUpdate(
+          { _id: req.users.userId },
+          { isSubscribed: false }
+        );
         res.status(200).send({
           status: 200,
           message: "Subscription Expired.",
@@ -221,7 +232,9 @@ const viewPickupDetails = async (req, res) => {
     const details = await subscription
       .find({ userId: req.users.userId })
       .select(["pickupDays"]);
-    res.status(200).send({ statusCode: 200, message:"Successfull",details: details });
+    res
+      .status(200)
+      .send({ statusCode: 200, message: "Successfull", details: details });
   } catch (error) {
     res.status(400).json({ statusCode: 400, message: error.message });
   }
@@ -252,12 +265,12 @@ const cancelSubscription = async (req, res) => {
       refund = 2.2166 * diffDays;
     } else if (sub.subscription.months === 3) {
       refund = 3.32 * diffDays;
-    } else if(sub.subscription.months === 1) {
+    } else if (sub.subscription.months === 1) {
       refund = 6.633 * diffDays;
     }
     amount = parseInt(user.wallet);
-    amount += refund
-   
+    amount += refund;
+
     if (sub.isWallet) {
       await transaction.insertMany({
         userId: req.users.userId,
@@ -268,8 +281,17 @@ const cancelSubscription = async (req, res) => {
         totalPrice: refund,
         walletBalance: amount,
       });
+      await users.findOneAndUpdate(
+        { _id: req.users.userId },
+        { wallet: amount, isSubscribed: false }
+      );
+    } else {
+      await users.findOneAndUpdate(
+        { _id: req.users.userId },
+        { isSubscribed: false }
+      );
     }
-    await users.findOneAndUpdate({ _id: req.users.userId }, { wallet: amount });
+
     await subscription.findOneAndDelete({
       $and: [{ userId: req.users.userId }, { orderId: req.body.orderId }],
     });
