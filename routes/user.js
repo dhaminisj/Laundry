@@ -31,5 +31,5 @@ router
 
 router.route("/addRating").put(verifyJWT, ratingController.addRating);
 router.route("/details-by-phone").post(userController.getDetailsByPhone);
-
+router.route("/get-otp").post(userController.getOtp);
 module.exports = router;
