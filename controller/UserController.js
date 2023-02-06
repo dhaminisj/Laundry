@@ -233,7 +233,7 @@ const getProfile = async (req, res) => {
     const { userId } = req.users;
     const user = await User.find({ _id: userId }).select("-refreshToken");
     const subscriptionDetails = await Subscription.find({ userId });
-    console.log(subscriptionDetails);
+    
     if (user)
       return res.status(200).json({
         status: true,
