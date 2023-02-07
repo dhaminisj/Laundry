@@ -233,7 +233,7 @@ const getProfile = async (req, res) => {
     const { userId } = req.users;
     const user = await User.find({ _id: userId }).select("-refreshToken");
     const subscriptionDetails = await Subscription.find({ userId });
-    
+
     if (user)
       return res.status(200).json({
         status: true,
@@ -501,18 +501,27 @@ const editProfile = async (req, res) => {
     const { userId } = req.users;
     const { name, phone, email } = req.body;
     const user = await User.findOne({ _id: userId });
-
-    const obj = {
+    let obj = {
       name,
       phone,
       email,
     };
-    await User.findOneAndUpdate({ _id: user._id }, obj);
-    return res.status(200).json({
-      status: true,
-      statusCode: 200,
-      message: "Profile succesfully updated.",
-    });
+    const userFound = await User.find({ phone });
+
+    if (userFound.length != 0) {
+      return res.status(403).json({
+        status: false,
+        statusCode: 403,
+        message: "User with this phone number already exists.",
+      });
+    } else {
+      await User.findOneAndUpdate({ _id: user._id }, obj);
+      return res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "Profile succesfully updated.",
+      });
+    }
   } catch (error) {
     res.status(500).send({
       status: false,
