@@ -191,7 +191,9 @@ const applyPromo = async (req, res) => {
           .json({ statusCode: 400, message: "Promo code is not applicable." });
       }
     } else {
-      res.status(404).json({ statusCode: 404, message: "No promo code found." });
+      res
+        .status(404)
+        .json({ statusCode: 404, message: "No promo code found." });
     }
   } catch (error) {
     res.status(500).json({ statusCode: 500, message: error.message });
@@ -230,8 +232,32 @@ const payment = async (req, res) => {
           statusCode: 200,
           message: "Order placed money debited from wallet.",
         });
+      } else if (user.wallet > 0) {
+        await User.findByIdAndUpdate({ _id: req.users.userId }, { wallet: 0 });
+        await transcation.create({
+          userId: req.users.userId,
+          orderId: order.orderId,
+          totalPrice: user.wallet,
+          walletBalance: 0,
+          orderTitle: "ORDER",
+          transactionType: "WASH ORDER",
+          transactionStatus: "DEBIT",
+        });
+        await User.findOneAndUpdate(
+          { _id: req.users.userId },
+          { totalSavedWater: totalSavedWater, 
+            "card.number": req.body.card.number,
+            "card.name": req.body.card.name,
+            "card.expDate": req.body.card.expDate,
+            "card.cardType": req.body.card.cardType,
+          }
+        );
+        res.status(200).json({
+          statusCode: 200,
+          message: "Order placed money debited from wallet + card.",
+        });
       } else {
-        res.status(400).json({ statusCode: 400, message: "Maintain balance." });
+        res.send("Balance is zero");
       }
     } else if (req.body.card) {
       await Order.findByIdAndUpdate(
