@@ -21,13 +21,11 @@ const addSubscriptionList = async (req, res) => {
 const getSubscriptionList = async (req, res) => {
   try {
     const list = await subscriptionList.find({});
-    res
-      .status(200)
-      .json({
-        statusCode: 200,
-        message: "Subcription list fetched successfully.",
-        list: list,
-      });
+    res.status(200).json({
+      statusCode: 200,
+      message: "Subcription list fetched successfully.",
+      list: list,
+    });
   } catch (error) {
     res.status(400).json({ statusCode: 400, message: error.message });
   }
@@ -50,13 +48,25 @@ const buySubscription = async (req, res) => {
         isWallet: req.body.isWallet,
       });
       if (req.body.isWallet) {
-        amount = parseInt(user.wallet) - req.body.subscription.amount;
+        amount = 0;
         if (req.body.subscription.amount < user.wallet) {
+          amount = parseInt(user.wallet) - req.body.subscription.amount;
           await transaction.create({
             userId: req.users.userId,
             orderId: id,
             totalPrice: req.body.subscription.amount,
             walletBalance: amount,
+            transactionType: "SUBSCRIPTION PURCHASED",
+            transactionStatus: "DEBIT",
+            orderTitle: "New subscription purchased",
+          });
+        } else if (user.wallet > 0) {
+          amount = 0;
+          await transaction.create({
+            userId: req.users.userId,
+            orderId: id,
+            totalPrice: user.wallet,
+            walletBalance: 0,
             transactionType: "SUBSCRIPTION PURCHASED",
             transactionStatus: "DEBIT",
             orderTitle: "New subscription purchased",
@@ -106,7 +116,7 @@ const buySubscription = async (req, res) => {
       }
       await users.findOneAndUpdate(
         { _id: req.users.userId },
-        { wallet: amount, isSubscribed: true }
+        { wallet: amount }
       );
       await subscription.findOneAndDelete({ userId: req.users.userId });
       await subscription.create({
@@ -120,8 +130,9 @@ const buySubscription = async (req, res) => {
         isWallet: req.body.isWallet,
       });
       if (req.body.isWallet) {
-        amount = parseInt(user.wallet) - req.body.subscription.amount;
+        amount = 0;
         if (req.body.subscription.amount < user.wallet) {
+          amount = parseInt(user.wallet) - req.body.subscription.amount;
           await transaction.create({
             userId: req.users.userId,
             orderId: id,
@@ -131,8 +142,27 @@ const buySubscription = async (req, res) => {
             transactionStatus: "DEBIT",
             orderTitle: "New subscription purchased",
           });
+        } else if (user.wallet > 0) {
+          amount = 0;
+          await transaction.create({
+            userId: req.users.userId,
+            orderId: id,
+            totalPrice: user.wallet,
+            walletBalance: 0,
+            transactionType: "SUBSCRIPTION PURCHASED",
+            transactionStatus: "DEBIT",
+            orderTitle: "New subscription purchased",
+          });
+        } else {
+          res.send({
+            message: "Balance is zero",
+          });
         }
       }
+      await users.findOneAndUpdate(
+        { _id: req.users.userId },
+        { wallet: amount, isSubscribed: true }
+      );
       res.status(200).send({
         message: "Plan modified successfully.",
         orderId: id,
@@ -190,7 +220,7 @@ const viewSubscription = async (req, res) => {
         } else {
           res
             .status(200)
-            .send({ statusCode: 200, message: "Successfull", viewPlans });
+            .send({ statusCode: 200, message: "Successful", viewPlans });
         }
       } else {
         await subscription.findOneAndDelete({ userId: req.users.userId });
@@ -234,7 +264,7 @@ const viewPickupDetails = async (req, res) => {
       .select(["pickupDays"]);
     res
       .status(200)
-      .send({ statusCode: 200, message: "Successfull", details: details });
+      .send({ statusCode: 200, message: "Successful", details: details });
   } catch (error) {
     res.status(400).json({ statusCode: 400, message: error.message });
   }
