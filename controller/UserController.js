@@ -589,17 +589,13 @@ const getDetailsByPhone = async (req, res) => {
   }
 };
 
-const getOtp = async (req, res) => {
+const getOtpPhone = async (req, res) => {
   try {
     const [user] = await User.find({
       phone: req.body.phone,
     });
-    const [user1] = await User.find({
-      email: req.body.email,
-    });
-    console.log( user1);
 
-    if (!user && !user1) {
+    if (!user) {
       res.status(200).send({
         statusCode: 200,
         message: "Otp generated successfully",
@@ -607,7 +603,33 @@ const getOtp = async (req, res) => {
     } else {
       res.status(400).send({
         statusCode: 400,
-        message: " Number/email  already exists",
+        message: "Number already exists",
+      });
+    }
+  } catch (error) {
+    res.status(500).send({
+      status: false,
+      statusCode: 500,
+      message: error,
+    });
+  }
+};
+
+const getOtpEmail = async (req, res) => {
+  try {
+    const [user] = await User.find({
+      phone: req.body.email,
+    });
+
+    if (!user) {
+      res.status(200).send({
+        statusCode: 200,
+        message: "Otp generated successfully",
+      });
+    } else {
+      res.status(400).send({
+        statusCode: 400,
+        message: "Email already exists",
       });
     }
   } catch (error) {
@@ -630,5 +652,6 @@ module.exports = {
   editProfile,
   logout,
   getDetailsByPhone,
-  getOtp,
+  getOtpPhone,
+  getOtpEmail
 };
