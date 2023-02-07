@@ -10,24 +10,26 @@ const delivery = async (req, res) => {
     const { type, orderId, slot } = req.body;
     const details = await Order.findOne({ orderId: orderId }).populate(
       "userId",
-      "name phone"
+      "name phone isSubscribed"
     );
     const data = new Delivery({
       type,
       orderId,
       slot,
-      name: details.userId.name,
-      phone: details.userId.phone,
       noOfItems: details.noOfItems,
       totalAmount: details.totalAmount,
-      deliveryAddress: details.deliveryAddress,
       isCompleted: details.isCompleted,
       discount: details.discount,
       deliveryCharge: details.deliveryCharge,
       tax: details.tax,
       basketTotal: details.basketTotal,
       orders: details.orders,
-      isSubscribed: details.isSubscribed,
+      userDetails: {
+        name: details.userId.name,
+        phone: details.userId.phone,
+        isSubscribed: details.userId.isSubscribed,
+        deliveryAddress: details.deliveryAddress,
+      },
     });
     const result = await data.save();
 
