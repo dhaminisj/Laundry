@@ -591,17 +591,23 @@ const getDetailsByPhone = async (req, res) => {
 
 const getOtp = async (req, res) => {
   try {
-    const user = await User.findById({ _id: req.users.userId });
-    if (user) {
+    const [user] = await User.find({
+      phone: req.body.phone,
+    });
+    const [user1] = await User.find({
+      email: req.body.email,
+    });
+    console.log( user1);
+
+    if (!user && !user1) {
       res.status(200).send({
         statusCode: 200,
         message: "Otp generated successfully",
-        otp: "123456",
       });
     } else {
-      res.status(404).send({
-        statusCode: 404,
-        message: "User Not found",
+      res.status(400).send({
+        statusCode: 400,
+        message: " Number/email  already exists",
       });
     }
   } catch (error) {
