@@ -18,17 +18,28 @@ const delivery = async (req, res) => {
       slot,
       noOfItems: details.noOfItems,
       totalAmount: details.totalAmount,
-      isCompleted: details.isCompleted,
-      discount: details.discount,
-      deliveryCharge: details.deliveryCharge,
-      tax: details.tax,
-      basketTotal: details.basketTotal,
-      orders: details.orders,
+      orderItems: {
+        orders: details.orders,
+        selected: details.selected,
+        paymentDetails: {
+          noOfItems: details.noOfItems,
+          totalAmount: details.totalAmount,
+          discount: details.discount,
+          deliveryCharge: details.deliveryCharge,
+          tax: details.tax,
+          basketTotal: details.basketTotal,
+        },
+      },
       userDetails: {
         name: details.userId.name,
         phone: details.userId.phone,
         isSubscribed: details.userId.isSubscribed,
         deliveryAddress: details.deliveryAddress,
+      },
+      status: {
+        isCompleted: details.isCompleted,
+        paymentStatus: details.paymentStatus,
+        returnStatus: details.returnStatus,
       },
     });
     const result = await data.save();
@@ -55,11 +66,11 @@ const getDeliveryLists = async (req, res) => {
     let result;
     if (slot == "morning") {
       result = await Delivery.find({ slot: "morning" }).select(
-        "type noOfItems totalAmount orderId slot orders userDetails isCompleted"
+        "type noOfItems totalAmount orderId slot userDetails orderItems status"
       );
     } else {
       result = await Delivery.find({ slot: "evening" }).select(
-        "type noOfItems totalAmount orderId slot orders userDetails isCompleted"
+        "type noOfItems totalAmount orderId slot orders status orderItems"
       );
     }
     if (result)
