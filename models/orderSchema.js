@@ -41,12 +41,12 @@ const orderSchema = mongoose.Schema(
     noOfItems: { type: Number },
     deliveryAddress: [
       {
-        latitude: { type: String },
-        longitude: { type: String },
+        latitude: { type: Number },
+        longitude: { type: Number },
         houseNo: { type: String },
-        flat: { type: String },
+        area: { type: String },
         pinCode: { type: String },
-        city: { type: String },
+        state: { type: String },
         types: { type: String, enum: ["home", "work", "other"] },
         primary: { type: Boolean },
       },
