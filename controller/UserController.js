@@ -270,7 +270,11 @@ const addAddress = async (req, res) => {
       latitude,
       longitude,
     } = req.body;
-    const obj = {
+
+    const data = await User.find({
+      $and: [{ _id: userId }, { "address.primary": true }],
+    });
+    let obj = {
       houseNo,
       area,
       pinCode,
@@ -280,12 +284,29 @@ const addAddress = async (req, res) => {
       latitude,
       longitude,
     };
-
-    const result = await User.findByIdAndUpdate(
-      { _id: userId },
-      { $push: { address: obj } },
-      { new: true }
-    );
+    let result;
+    if (data.length != 0) {
+      await User.findOneAndUpdate(
+        { $and: [{ _id: userId }, { "address.primary": true }] },
+        {
+          $set: {
+            "address.$.primary": false,
+          },
+        },
+        { new: true }
+      );
+      result = await User.findByIdAndUpdate(
+        { _id: userId },
+        { $push: { address: obj } },
+        { new: true }
+      );
+    } else {
+      result = await User.findByIdAndUpdate(
+        { _id: userId },
+        { $push: { address: obj } },
+        { new: true }
+      );
+    }
 
     res.status(200).json({
       status: true,
@@ -331,7 +352,6 @@ const updateAddress = async (req, res) => {
         latitude,
         longitude,
       };
-
       const result = await User.findOneAndUpdate(
         {
           _id: userId,
@@ -346,6 +366,7 @@ const updateAddress = async (req, res) => {
             "address.$.types": req.body.types,
             "address.$.latitude": req.body.latitude,
             "address.$.longitude": req.body.longitude,
+            "address.$.primary": req.body.primary,
           },
         },
         { new: true }
@@ -653,5 +674,5 @@ module.exports = {
   logout,
   getDetailsByPhone,
   getOtpPhone,
-  getOtpEmail
+  getOtpEmail,
 };
