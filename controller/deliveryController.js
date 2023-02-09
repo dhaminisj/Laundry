@@ -63,17 +63,7 @@ const delivery = async (req, res) => {
 
 const getDeliveryLists = async (req, res) => {
   try {
-    const { slot } = req.body;
-    let result;
-    if (slot == "morning") {
-      result = await Delivery.find({ slot: "morning" }).select(
-        "type noOfItems totalAmount orderId slot userDetails orderItems status"
-      );
-    } else {
-      result = await Delivery.find({ slot: "evening" }).select(
-        "type noOfItems totalAmount orderId slot orders status orderItems"
-      );
-    }
+    const result = await Delivery.find({});
     if (result)
       res.status(200).json({
         statusCode: 200,
