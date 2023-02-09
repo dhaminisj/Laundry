@@ -42,6 +42,7 @@ const deliverySchema = new mongoose.Schema({
       deliveryCharge: { type: Number },
       discount: { type: Number },
       lmWallet: { type: Number, default: 0 },
+      totalPayable: { type: Number },
       totalAmount: { type: Number },
     },
   },

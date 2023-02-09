@@ -23,6 +23,7 @@ const delivery = async (req, res) => {
         selected: details.selected,
         paymentDetails: {
           noOfItems: details.noOfItems,
+          totalPayable: details.totalAmount,
           totalAmount: details.totalAmount,
           discount: details.discount,
           deliveryCharge: details.deliveryCharge,
