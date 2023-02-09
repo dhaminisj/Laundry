@@ -340,7 +340,7 @@ const cancelSubscription = async (req, res) => {
     });
     refundBy = new Date();
     refundBy = refundBy.setDate(refundBy.getDate(Date.now()) + 7);
-    refundBy = new Date(refundBy).toDateString();
+    refundBy = new Date(refundBy);
     res.status(200).send({
       statusCode: 200,
       message: "Subscription canceled successfully.",
