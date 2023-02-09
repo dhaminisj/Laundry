@@ -341,43 +341,89 @@ const updateAddress = async (req, res) => {
     const addressFound = await User.find({
       $and: [{ _id: userId }, { "address._id": addressId }],
     });
-    if (addressFound.length != 0) {
-      const obj = {
-        houseNo,
-        area,
-        pinCode,
-        state,
-        types,
-        primary,
-        latitude,
-        longitude,
-      };
-      const result = await User.findOneAndUpdate(
-        {
-          _id: userId,
-          "address._id": addressId,
-        },
-        {
-          $set: {
-            "address.$.houseNo": req.body.houseNo,
-            "address.$.area": req.body.area,
-            "address.$.pinCode": req.body.pinCode,
-            "address.$.state": req.body.state,
-            "address.$.types": req.body.types,
-            "address.$.latitude": req.body.latitude,
-            "address.$.longitude": req.body.longitude,
-            "address.$.primary": req.body.primary,
-          },
-        },
-        { new: true }
-      );
 
-      res.status(200).json({
-        status: true,
-        statusCode: 200,
-        message: "Updated address successfully.",
-        data: result,
-      });
+    const data = await User.find({
+      $and: [{ _id: userId }, { "address.primary": true }],
+    });
+
+    let obj = {
+      houseNo,
+      area,
+      pinCode,
+      state,
+      types,
+      primary,
+      latitude,
+      longitude,
+    };
+
+    let result;
+
+    if (addressFound.length != 0) {
+      if (data.length != 0) {
+        await User.findOneAndUpdate(
+          { $and: [{ _id: userId }, { "address.primary": true }] },
+          {
+            $set: {
+              "address.$.primary": false,
+            },
+          },
+          { new: true }
+        );
+        result = await User.findOneAndUpdate(
+          {
+            _id: userId,
+            "address._id": addressId,
+          },
+          {
+            $set: {
+              "address.$.houseNo": req.body.houseNo,
+              "address.$.area": req.body.area,
+              "address.$.pinCode": req.body.pinCode,
+              "address.$.state": req.body.state,
+              "address.$.types": req.body.types,
+              "address.$.latitude": req.body.latitude,
+              "address.$.longitude": req.body.longitude,
+              "address.$.primary": req.body.primary,
+            },
+          },
+          { new: true }
+        );
+
+        res.status(200).json({
+          status: true,
+          statusCode: 200,
+          message: "Updated address successfully.",
+          data: result,
+        });
+      } else {
+        result = await User.findOneAndUpdate(
+          {
+            _id: userId,
+            "address._id": addressId,
+          },
+          {
+            $set: {
+              "address.$.houseNo": req.body.houseNo,
+              "address.$.area": req.body.area,
+              "address.$.pinCode": req.body.pinCode,
+              "address.$.state": req.body.state,
+              "address.$.types": req.body.types,
+              "address.$.latitude": req.body.latitude,
+              "address.$.longitude": req.body.longitude,
+              "address.$.primary": req.body.primary,
+            },
+          },
+          { new: true }
+        );
+
+        res.status(200).json({
+          status: true,
+          statusCode: 200,
+          message: "Updated address successfully.",
+          data: result,
+        });
+      }
     } else
       res.status(400).json({
         status: false,
