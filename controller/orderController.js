@@ -83,6 +83,29 @@ const checkoutOrder = async (req, res) => {
   }
 };
 
+const emptyBasket = async (req, res) => {
+  try {
+    const { userId } = req.users;
+    const { checkoutId } = req.body;
+
+    Order.findOneAndDelete({ _id: checkoutId }, function (err, docs) {
+      if (err) return res.status(400).json(err);
+      if (docs == null)
+        return res.status(401).json({
+          status: false,
+          statusCode: 401,
+          message: "Unable to remove items from basket.",
+        });
+      return res.status(200).json({
+        status: true,
+        statusCode: 200,
+        message: "Items removed from basket successfully.",
+      });
+    });
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, message: error.message });
+  }
+};
 const getOrderHistory = async (req, res) => {
   try {
     const { userId } = req.users;
@@ -245,7 +268,8 @@ const payment = async (req, res) => {
         });
         await User.findOneAndUpdate(
           { _id: req.users.userId },
-          { totalSavedWater: totalSavedWater, 
+          {
+            totalSavedWater: totalSavedWater,
             "card.number": req.body.card.number,
             "card.name": req.body.card.name,
             "card.expDate": req.body.card.expDate,
@@ -319,4 +343,5 @@ module.exports = {
   payment,
   invoice,
   getOrderHistory,
+  emptyBasket,
 };

@@ -11,7 +11,9 @@ router.route("/place-order").post(verifyJWT, orderController.addressAndSlot);
 router.route("/apply-promo").post(verifyJWT, orderController.applyPromo);
 router.route("/payment").post(verifyJWT, orderController.payment);
 router.route("/invoice").post(verifyJWT, orderController.invoice);
-router.route("/getOrderHistory").get(verifyJWT,orderController.getOrderHistory)
-
+router
+  .route("/getOrderHistory")
+  .get(verifyJWT, orderController.getOrderHistory);
+router.route("/empty-basket").delete(verifyJWT, orderController.emptyBasket);
 
 module.exports = router;
