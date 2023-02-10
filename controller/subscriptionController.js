@@ -164,6 +164,7 @@ const buySubscription = async (req, res) => {
         { wallet: amount, isSubscribed: true }
       );
       res.status(200).send({
+        statusCode:200,
         message: "Plan modified successfully.",
         orderId: id,
       });
