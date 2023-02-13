@@ -132,9 +132,7 @@ const addressAndSlot = async (req, res) => {
   try {
     const { userId } = req.users;
     const { address, checkoutId, pickupAndDelivery } = req.body;
-    const [orderData] = await Order.find({ _id: checkoutId }).select(
-      "basketTotal tax deliveryCharge -_id"
-    );
+    const [orderData] = await Order.find({ _id: checkoutId })
     const totalAmount = parseFloat(
       orderData.basketTotal + orderData.tax + orderData.deliveryCharge
     );
