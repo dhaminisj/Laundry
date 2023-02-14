@@ -385,7 +385,7 @@ const pauseSubscription = async (req, res) => {
       }
     );
     res.status(200).send({
-      status: 200,
+      statusCode: 200,
       message: "Subscription paused successfully.",
     });
   } catch (error) {
@@ -429,7 +429,7 @@ const resumeSubscription = async (req, res) => {
         }
       );
       res.status(200).send({
-        status: 200,
+        statusCode: 200,
         message: "Subscription resumed successfully.",
       });
     } else {
@@ -445,7 +445,7 @@ const resumeSubscription = async (req, res) => {
         }
       );
       res.status(200).send({
-        status: 200,
+        statusCode: 200,
         message: "Subscription resumed successfully.",
       });
     }
