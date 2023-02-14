@@ -56,7 +56,7 @@ const buySubscription = async (req, res) => {
             orderId: id,
             totalPrice: req.body.subscription.amount,
             walletBalance: amount,
-            transactionType: "SUBSCRIPTION PURCHASED",
+            transactionType: "PAYMENT",
             transactionStatus: "DEBIT",
             orderTitle: "New subscription purchased",
           });
@@ -67,7 +67,7 @@ const buySubscription = async (req, res) => {
             orderId: id,
             totalPrice: user.wallet,
             walletBalance: 0,
-            transactionType: "SUBSCRIPTION PURCHASED",
+            transactionType: "PAYMENT",
             transactionStatus: "DEBIT",
             orderTitle: "New subscription purchased",
           });
@@ -138,7 +138,7 @@ const buySubscription = async (req, res) => {
             orderId: id,
             totalPrice: req.body.subscription.amount,
             walletBalance: amount,
-            transactionType: "SUBSCRIPTION PURCHASED",
+            transactionType: "PAYMENT",
             transactionStatus: "DEBIT",
             orderTitle: "New subscription purchased",
           });
@@ -149,7 +149,7 @@ const buySubscription = async (req, res) => {
             orderId: id,
             totalPrice: user.wallet,
             walletBalance: 0,
-            transactionType: "SUBSCRIPTION PURCHASED",
+            transactionType: "PAYMENT",
             transactionStatus: "DEBIT",
             orderTitle: "New subscription purchased",
           });

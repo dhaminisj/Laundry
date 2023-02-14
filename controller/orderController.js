@@ -242,7 +242,7 @@ const payment = async (req, res) => {
           totalPrice: order.totalAmount,
           walletBalance: amount,
           orderTitle: "ORDER",
-          transactionType: "WASH ORDER",
+          transactionType: "PAYMENT",
           transactionStatus: "DEBIT",
         });
         await User.findOneAndUpdate(
@@ -261,7 +261,7 @@ const payment = async (req, res) => {
           totalPrice: user.wallet,
           walletBalance: 0,
           orderTitle: "ORDER",
-          transactionType: "WASH ORDER",
+          transactionType: "PAYMENT",
           transactionStatus: "DEBIT",
         });
         await User.findOneAndUpdate(
