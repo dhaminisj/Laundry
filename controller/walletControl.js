@@ -27,7 +27,7 @@ const addMoneyToWallet = async (req, res) => {
         userId: req.users.userId,
         totalPrice: req.body.amount,
         walletBalance: user.wallet + req.body.amount,
-        transactionType: "MONEY TO WALLET",
+        transactionType: "ADD MONEY",
         transactionStatus: "CREDIT",
         orderTitle: "MONEY ADDED TO WALLET",
         card: req.body.card,
