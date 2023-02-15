@@ -81,8 +81,12 @@ const orderSchema = mongoose.Schema(
       },
     },
     discount: { type: Number, default: 0 },
-    isPickedup: { type: Boolean, default: false },
-    isdelivered: { type: Boolean, default: false },
+    orderConfirmed: { type: Boolean, default: false },
+    outForPickup: { type: Boolean, default: false },
+    orderPickedup: { type: Boolean, default: false },
+    orderProcessing: { type: Boolean, default: false },
+    outForDelivery: { type: Boolean, default: false },
+    orderdelivered: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
