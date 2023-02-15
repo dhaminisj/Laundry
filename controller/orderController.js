@@ -132,7 +132,7 @@ const addressAndSlot = async (req, res) => {
   try {
     const { userId } = req.users;
     const { address, checkoutId, pickupAndDelivery } = req.body;
-    const [orderData] = await Order.find({ _id: checkoutId })
+    const [orderData] = await Order.find({ _id: checkoutId });
     const totalAmount = parseFloat(
       orderData.basketTotal + orderData.tax + orderData.deliveryCharge
     );
@@ -316,9 +316,7 @@ const invoice = async (req, res) => {
   try {
     const { userId } = req.users;
     const { checkoutId } = req.body;
-    const result = await Order.find({ _id: checkoutId }).select(
-      "basketTotal tax deliveryCharge discount totalAmount isWallet -_id"
-    );
+    const result = await Order.find({ _id: checkoutId });
     if (result)
       res.status(200).json({
         statusCode: 200,
@@ -334,6 +332,7 @@ const invoice = async (req, res) => {
     res.status(500).json({ statusCode: 500, message: error.message });
   }
 };
+
 module.exports = {
   checkoutOrder,
   addressAndSlot,
