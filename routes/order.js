@@ -3,6 +3,8 @@ const { verify } = require("jsonwebtoken");
 const verifyJWT = require("../middleware/verifyJWT");
 const router = express.Router();
 const orderController = require("../controller/orderController");
+const upload = require("../utils/multer");
+
 const { Router } = require("express");
 
 router.route("/checkout").post(verifyJWT, orderController.checkoutOrder);
@@ -15,5 +17,8 @@ router
   .route("/getOrderHistory")
   .get(verifyJWT, orderController.getOrderHistory);
 router.route("/empty-basket").delete(verifyJWT, orderController.emptyBasket);
+router
+  .route("/upload-images")
+  .post(upload.array("image", 20), verifyJWT, orderController.uploadImages);
 
 module.exports = router;
