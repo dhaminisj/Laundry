@@ -17,6 +17,9 @@ const transactionSchema = mongoose.Schema({
   orderTitle: {
     type: String,
   },
+  orderDescription: {
+    type: String,
+  },
   transactionType: {
     type: String,
   },
