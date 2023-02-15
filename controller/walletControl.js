@@ -29,7 +29,8 @@ const addMoneyToWallet = async (req, res) => {
         walletBalance: user.wallet + req.body.amount,
         transactionType: "ADD MONEY",
         transactionStatus: "CREDIT",
-        orderTitle: "MONEY ADDED TO WALLET",
+        orderDescription: "MONEY ADDED TO WALLET",
+        orderTitle: "ADD MONEY",
         card: req.body.card,
       });
       await users.findOneAndUpdate(

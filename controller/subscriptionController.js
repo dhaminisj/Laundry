@@ -58,7 +58,8 @@ const buySubscription = async (req, res) => {
             walletBalance: amount,
             transactionType: "PAYMENT",
             transactionStatus: "DEBIT",
-            orderTitle: "New subscription purchased",
+            orderDescription: "New subscription purchased.",
+            orderTitle: "SUBSCRIPTION PURCHASED.",
           });
         } else if (user.wallet > 0) {
           amount = 0;
@@ -69,7 +70,8 @@ const buySubscription = async (req, res) => {
             walletBalance: 0,
             transactionType: "PAYMENT",
             transactionStatus: "DEBIT",
-            orderTitle: "New subscription purchased",
+            orderDescription: "New subscription purchased",
+            orderTitle: "SUBSCRIPTION PURCHASED.",
           });
         } else {
           res
@@ -109,7 +111,8 @@ const buySubscription = async (req, res) => {
           orderId: req.body.orderId,
           transactionType: "REFUND",
           transactionStatus: "CREDIT",
-          orderTitle: "Subscription cancelled refund",
+          orderDescription: "Subscription cancelled refund.",
+          orderTitle: "SUBSCRIPTION CANCELLED.",
           totalPrice: refund,
           walletBalance: amount,
         });
@@ -140,7 +143,8 @@ const buySubscription = async (req, res) => {
             walletBalance: amount,
             transactionType: "PAYMENT",
             transactionStatus: "DEBIT",
-            orderTitle: "New subscription purchased",
+            orderDescription: "New subscription purchased.",
+            orderTitle: "SUBSCRIPTION PURCHASED.",
           });
         } else if (user.wallet > 0) {
           amount = 0;
@@ -151,7 +155,8 @@ const buySubscription = async (req, res) => {
             walletBalance: 0,
             transactionType: "PAYMENT",
             transactionStatus: "DEBIT",
-            orderTitle: "New subscription purchased",
+            orderDescription: "New subscription purchased",
+            orderTitle: "SUBSCRIPTION PURCHASED.",
           });
         } else {
           res.send({
@@ -164,7 +169,7 @@ const buySubscription = async (req, res) => {
         { wallet: amount, isSubscribed: true }
       );
       res.status(200).send({
-        statusCode:200,
+        statusCode: 200,
         message: "Plan modified successfully.",
         orderId: id,
       });
@@ -308,7 +313,8 @@ const cancelSubscription = async (req, res) => {
         orderId: req.body.orderId,
         transactionType: "REFUND",
         transactionStatus: "CREDIT",
-        orderTitle: "Subscription canceled refund",
+        orderDescription: "Subscription cancelled refund",
+        orderTitle: "SUBSCRIPTION CANCELLED",
         totalPrice: refund,
         walletBalance: amount,
       });
@@ -344,7 +350,7 @@ const cancelSubscription = async (req, res) => {
     refundBy = new Date(refundBy);
     res.status(200).send({
       statusCode: 200,
-      message: "Subscription canceled successfully.",
+      message: "Subscription cancelled successfully.",
       amount: refund,
       card: cardNumber,
       type: card,
