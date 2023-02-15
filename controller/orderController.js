@@ -251,6 +251,10 @@ const payment = async (req, res) => {
           { _id: req.users.userId },
           { totalSavedWater: totalSavedWater }
         );
+        await Order.findOneAndUpdate(
+          { _id: req.body.checkoutId },
+          { orderConfirmed: true }
+        );
         res.status(200).json({
           statusCode: 200,
           message: "Order placed money debited from wallet.",
@@ -276,6 +280,14 @@ const payment = async (req, res) => {
             "card.cardType": req.body.card.cardType,
           }
         );
+        await User.findOneAndUpdate(
+          { _id: req.users.userId },
+          { totalSavedWater: totalSavedWater }
+        );
+        await Order.findOneAndUpdate(
+          { _id: req.body.checkoutId },
+          { orderConfirmed: true }
+        );
         res.status(200).json({
           statusCode: 200,
           message: "Order placed money debited from wallet + card.",
@@ -297,6 +309,10 @@ const payment = async (req, res) => {
         { _id: req.users.userId },
         { totalSavedWater: totalSavedWater }
       );
+      await Order.findOneAndUpdate(
+        { _id: req.body.checkoutId },
+        { orderConfirmed: true }
+      );
       res.status(200).json({
         statusCode: 200,
         message: "Order placed money debited from " + req.body.card.cardType,
@@ -305,6 +321,10 @@ const payment = async (req, res) => {
       await User.findOneAndUpdate(
         { _id: req.users.userId },
         { totalSavedWater: totalSavedWater }
+      );
+      await Order.findOneAndUpdate(
+        { _id: req.body.checkoutId },
+        { orderConfirmed: true }
       );
       res
         .status(200)
