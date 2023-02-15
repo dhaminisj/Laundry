@@ -352,7 +352,7 @@ const uploadImages = async (req, res) => {
       uploadfile.push(uploadUrl);
     }
     const result = await Image.create({
-      image: uploadfile,
+      uploadedImage: uploadfile,
       userId,
     });
     if (result)
