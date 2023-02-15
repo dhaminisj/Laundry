@@ -17,6 +17,8 @@ router
   .route("/getOrderHistory")
   .get(verifyJWT, orderController.getOrderHistory);
 router.route("/empty-basket").delete(verifyJWT, orderController.emptyBasket);
+router.route("/get-orders").post(verifyJWT, orderController.getUserOrders);
+
 router
   .route("/upload-images")
   .post(upload.array("image", 20), verifyJWT, orderController.uploadImages);

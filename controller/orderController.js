@@ -370,6 +370,26 @@ const uploadImages = async (req, res) => {
     res.status(500).json({ statusCode: 500, message: error.message });
   }
 };
+
+const getUserOrders = async (req, res) => {
+  try {
+    const { userId } = req.users;
+    const result = await Order.find({});
+    if (result)
+      res.status(200).json({
+        statusCode: 200,
+        message: "Orders fetched successfully.",
+        result,
+      });
+    else
+      res.status(400).json({
+        statusCode: 400,
+        message: "Could not fetch orders.",
+      });
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, message: error.message });
+  }
+};
 module.exports = {
   checkoutOrder,
   addressAndSlot,
@@ -379,4 +399,5 @@ module.exports = {
   getOrderHistory,
   emptyBasket,
   uploadImages,
+  getUserOrders,
 };
