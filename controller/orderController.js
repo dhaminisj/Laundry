@@ -4,6 +4,8 @@ const Laundry = require("../models/laundryListSchema");
 const mongoose = require("mongoose");
 const Promo = require("../models/promoSchema");
 const transcation = require("../models/transactionSchema");
+const Image = require("../models/ImageSchema");
+const cloudinary = require("../utils/cloudinaryConfig");
 
 const checkoutOrder = async (req, res) => {
   try {
@@ -333,6 +335,41 @@ const invoice = async (req, res) => {
   }
 };
 
+const uploadImages = async (req, res) => {
+  try {
+    const { userId } = req.users;
+    uploadFiles = [];
+    for (i = 0; i < req.files.length; i++) {
+      uploadFiles.push(req.files[i].path);
+    }
+    uploadfile = [];
+    for (i = 0; i < uploadFiles.length; i++) {
+      const upload = await cloudinary.uploader.upload(uploadFiles[i], {
+        folder: "Image",
+        use_filename: true,
+      });
+      uploadUrl = upload.url;
+      uploadfile.push(uploadUrl);
+    }
+    const result = await Image.create({
+      image: uploadfile,
+      userId,
+    });
+    if (result)
+      res.status(200).json({
+        statusCode: 200,
+        message: "Images uploaded successfully.",
+        result,
+      });
+    else
+      res.status(400).json({
+        statusCode: 400,
+        message: "Could upload images.",
+      });
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, message: error.message });
+  }
+};
 module.exports = {
   checkoutOrder,
   addressAndSlot,
@@ -341,4 +378,5 @@ module.exports = {
   invoice,
   getOrderHistory,
   emptyBasket,
+  uploadImages,
 };
