@@ -394,7 +394,7 @@ const uploadImages = async (req, res) => {
 const getUserOrders = async (req, res) => {
   try {
     const { userId } = req.users;
-    const result = await Order.find({});
+    const result = await Order.find({ userId, orderConfirmed: true });
     if (result)
       res.status(200).json({
         statusCode: 200,
