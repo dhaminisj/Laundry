@@ -253,7 +253,7 @@ const payment = async (req, res) => {
         );
         await Order.findOneAndUpdate(
           { _id: req.body.checkoutId },
-          { orderConfirmed: true }
+          { orderConfirmed: true, fromWallet: order.totalAmount }
         );
         res.status(200).json({
           statusCode: 200,
@@ -270,6 +270,7 @@ const payment = async (req, res) => {
           transactionType: "PAYMENT",
           transactionStatus: "DEBIT",
         });
+        fromOtherSource = order.totalAmount - user.wallet;
         await User.findOneAndUpdate(
           { _id: req.users.userId },
           {
@@ -286,7 +287,11 @@ const payment = async (req, res) => {
         );
         await Order.findOneAndUpdate(
           { _id: req.body.checkoutId },
-          { orderConfirmed: true }
+          {
+            orderConfirmed: true,
+            fromOtherSource: fromOtherSource,
+            fromWallet: user.wallet,
+          }
         );
         res.status(200).json({
           statusCode: 200,
@@ -311,7 +316,9 @@ const payment = async (req, res) => {
       );
       await Order.findOneAndUpdate(
         { _id: req.body.checkoutId },
-        { orderConfirmed: true }
+        { orderConfirmed: true },
+        { fromWallet: 0 },
+        { fromOtherSource: order.totalAmount }
       );
       res.status(200).json({
         statusCode: 200,
@@ -324,7 +331,9 @@ const payment = async (req, res) => {
       );
       await Order.findOneAndUpdate(
         { _id: req.body.checkoutId },
-        { orderConfirmed: true }
+        { orderConfirmed: true },
+        { fromWallet: 0 },
+        { fromOtherSource: order.totalAmount }
       );
       res
         .status(200)
