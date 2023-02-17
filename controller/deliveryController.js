@@ -24,7 +24,8 @@ const delivery = async (req, res) => {
         paymentDetails: {
           noOfItems: details.noOfItems,
           totalPayable: details.totalAmount,
-          totalAmount: details.totalAmount,
+          totalAmount: details.fromOtherSource,
+          lmWallet: details.fromWallet,
           discount: details.discount,
           deliveryCharge: details.deliveryCharge,
           tax: details.tax,

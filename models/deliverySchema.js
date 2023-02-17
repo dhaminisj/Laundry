@@ -49,14 +49,6 @@ const deliverySchema = new mongoose.Schema({
   slot: { type: String },
   noOfItems: { type: Number },
   totalAmount: { type: Number },
-  washFold: { type: Number, default: 0 },
-  washFoldAmount: { type: Number, default: 0 },
-  washIron: { type: Number, default: 0 },
-  washIronAmount: { type: Number, default: 0 },
-  steamIron: { type: Number, default: 0 },
-  steamIronAmount: { type: Number, default: 0 },
-  dryClean: { type: Number, default: 0 },
-  dryCleanAmount: { type: Number, default: 0 },
   userDetails: {
     phone: { type: String },
     isSubscribed: { type: Boolean },
@@ -80,4 +72,4 @@ const deliverySchema = new mongoose.Schema({
     returnStatus: { type: Boolean, default: false },
   },
 });
-module.exports = mongoose.model("delivery", deliverySchema);
+module.exports = mongoose.model("deliveryModel", deliverySchema);
