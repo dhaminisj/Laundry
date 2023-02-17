@@ -87,6 +87,9 @@ const orderSchema = mongoose.Schema(
     orderProcessing: { type: Boolean, default: false },
     outForDelivery: { type: Boolean, default: false },
     orderdelivered: { type: Boolean, default: false },
+    fromWallet: { type: Number },
+    fromOtherSource: { type: Number },
+    isPaid: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
