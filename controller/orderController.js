@@ -407,7 +407,7 @@ const uploadImages = async (req, res) => {
     else
       res.status(400).json({
         statusCode: 400,
-        message: "Could upload images.",
+        message: "Could not upload images.",
       });
   } catch (error) {
     res.status(500).json({ statusCode: 500, message: error.message });
