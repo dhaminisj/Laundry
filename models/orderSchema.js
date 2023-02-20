@@ -25,6 +25,7 @@ const orderSchema = mongoose.Schema(
           type: String,
           required: true,
         },
+        price: { type: Number },
         uploadedImage: [],
         packagingType: {
           type: String,
