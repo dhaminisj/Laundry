@@ -41,7 +41,8 @@ const checkoutOrder = async (req, res) => {
       },
     ]);
 
-    let basketTotal = 0;
+    let basketTotal = 0,
+      deliveryCharge = 50;
     for (let index1 in neededList) {
       for (let index2 in laundryDetails) {
         if (laundryDetails[index2]._id == neededList[index1]["laundryListId"]) {
@@ -62,6 +63,7 @@ const checkoutOrder = async (req, res) => {
       orders: list,
       basketTotal,
       tax: basketTotal * 0.3,
+      totalAmount: parseFloat(basketTotal + basketTotal * 0.3 + deliveryCharge),
       noOfItems: list.length,
     };
 
