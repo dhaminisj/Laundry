@@ -25,6 +25,7 @@ const orderSchema = mongoose.Schema(
           type: String,
           required: true,
         },
+        imageLink: { type: String },
         price: { type: Number },
         uploadedImage: [],
         packagingType: {
