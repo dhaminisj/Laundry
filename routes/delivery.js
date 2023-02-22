@@ -9,6 +9,8 @@ router.route("/delivery-register").post(deliveryController.deliveryRegister);
 
 router.route("/delivery-login").post(deliveryController.deliveryLogin);
 
+router.route("/send-otp").post(deliveryController.sendOtpDelivery);
+
 router.route("/delivery").post(deliveryController.delivery);
 
 router.route("/get-delivery").post(deliveryController.getDeliveryLists);
