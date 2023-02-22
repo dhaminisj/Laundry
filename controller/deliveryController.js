@@ -5,6 +5,8 @@ const { aggregate } = require("../models/orderSchema");
 const Order = require("../models/orderSchema");
 const Summary = require("../models/summarySchema");
 const jwt = require("jsonwebtoken");
+const { totp } = require("otplib");
+const Nexmo = require("nexmo");
 
 const deliveryRegister = async (req, res) => {
   if (!req.body)
@@ -100,6 +102,57 @@ const deliveryLogin = async (req, res) => {
     res.status(500).json({ statusCode: 500, message: error.message });
   }
 };
+
+const sendOtpDelivery = async (req, res) => {
+  try {
+    const userfound = await DeliveryUser.findOne({
+      phone: req.body.destination,
+    });
+    totp.options = { digits: 4, algorithm: "sha512", step: 16660 };
+
+    const otp = totp.generate(process.env.SECRET_OTP);
+
+    const dest = req.body.destination;
+
+    const nexmo = new Nexmo({
+      apiKey: process.env.VONAGE_API_KEY,
+      apiSecret: process.env.VONAGE_API_SECRET,
+    });
+
+    const from = "laundry Otp verification";
+    const to = `91${dest}`;
+    const text = `Hello from laundry, this is your otp for verification is 123456 `;
+    if (userfound) {
+      // const x = await nexmo.message.sendSms(
+      //   "+919481676348",
+      //   Number(to),
+      //   text,
+      //   (err, response) => {
+      //     if (err) {
+      //       res.status(502).json({
+      //         statusCode: 502,
+      //         message: "Couldn't send OTP",
+      //       });
+      //     } else {
+      //       res.status(200).json({ statusCode: 200, response,userDetails:userfound });
+      //     }
+      //   }
+      // );
+      res.status(200).json({
+        statusCode: 200,
+        message: "OTP sent successfully.",
+        userName: userfound.name,
+      });
+    } else {
+      res
+        .status(404)
+        .send({ statusCode: 404, message: "User not registered." });
+    }
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, errorMessage: error.message });
+  }
+};
+
 const delivery = async (req, res) => {
   try {
     const { type, orderId, slot } = req.body;
@@ -259,6 +312,7 @@ const getSummary = async (req, res) => {
 module.exports = {
   deliveryRegister,
   deliveryLogin,
+  sendOtpDelivery,
   delivery,
   getDeliveryLists,
   getParticularOrder,
