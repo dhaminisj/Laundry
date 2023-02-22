@@ -118,9 +118,9 @@ const register = async (req, res) => {
         message: " User succesfully registered.",
       });
     } else
-      res.status(500).json({
+      res.status(400).json({
         status: false,
-        statusCode: 200,
+        statusCode: 400,
         message: "Couldn't register user.",
         data: {},
       });

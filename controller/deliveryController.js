@@ -1,9 +1,64 @@
 const { mongoose } = require("mongoose");
-const { User } = require("../models");
+const DeliveryUser = require("../models/deliveryUserSchema");
 const Delivery = require("../models/deliverySchema");
 const { aggregate } = require("../models/orderSchema");
 const Order = require("../models/orderSchema");
 const Summary = require("../models/summarySchema");
+const jwt = require("jsonwebtoken");
+
+const deliveryRegister = async (req, res) => {
+  if (!req.body)
+    res
+      .status(400)
+      .json({ status: false, statusCode: 400, message: "Body not found." });
+  const { name, phone } = req.body;
+
+  const userfound = await DeliveryUser.findOne({ phone });
+  if (userfound)
+    return res.status(403).json({
+      status: false,
+      statusCode: 403,
+      message: "User with this phone number already present.",
+    });
+  else
+    try {
+      const user = new DeliveryUser({
+        name,
+        phone,
+      });
+      const result = await user.save();
+      if (result) {
+        const accessToken = jwt.sign(
+          { userId: result._id, phone: result.phone },
+          process.env.ACCESS_TOKEN_SECRET,
+          { expiresIn: "60d" }
+        );
+
+        const refreshToken = jwt.sign(
+          { userId: result._id, phone: result.phone },
+          process.env.REFRESH_TOKEN_SECRET,
+          { expiresIn: "100d" }
+        );
+        await DeliveryUser.findOneAndUpdate(
+          { _id: result._id },
+          { refreshToken: refreshToken }
+        );
+
+        res.header("Refresh-Token", refreshToken);
+        res.header("Authorization", "Bearer " + accessToken);
+        res.status(200).json({
+          statusCode: 200,
+          message: "Delivery user succesfully registered.",
+        });
+      } else
+        res.status(400).json({
+          statusCode: 400,
+          message: "Couldn't register.",
+        });
+    } catch (error) {
+      res.status(500).json({ statusCode: 500, message: error.message });
+    }
+};
 
 const delivery = async (req, res) => {
   try {
@@ -162,6 +217,7 @@ const getSummary = async (req, res) => {
   }
 };
 module.exports = {
+  deliveryRegister,
   delivery,
   getDeliveryLists,
   getParticularOrder,
