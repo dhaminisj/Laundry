@@ -7,7 +7,10 @@ const { Router } = require("express");
 
 router.route("/delivery-register").post(deliveryController.deliveryRegister);
 
+router.route("/delivery-login").post(deliveryController.deliveryLogin);
+
 router.route("/delivery").post(deliveryController.delivery);
+
 router.route("/get-delivery").post(deliveryController.getDeliveryLists);
 
 router.route("/delivery-order").post(deliveryController.getParticularOrder);
