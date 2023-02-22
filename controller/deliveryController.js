@@ -89,6 +89,7 @@ const deliveryLogin = async (req, res) => {
         return res.status(200).json({
           statusCode: 200,
           message: "User Logged in Succesfully.",
+          user: userfound,
         });
       } else {
         res.status(401).json({ statusCode: 401, message: "OTP invalid." });
