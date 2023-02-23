@@ -6,7 +6,7 @@ const UserSchema = new mongoose.Schema({
   profilePic: {
     type: String,
     default:
-      "https://res.cloudinary.com/dodityyjl/image/upload/v1671174941/pictures/przgw3kern5kyjb0fkox.jpg",
+      "http://res.cloudinary.com/dodityyjl/image/upload/v1677057851/Image/3e2bfb60ce04597982f37a1dc6690d1f_nubsbg.png",
   },
 
   address: [
