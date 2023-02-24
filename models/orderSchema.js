@@ -49,7 +49,7 @@ const orderSchema = mongoose.Schema(
         area: { type: String },
         pinCode: { type: String },
         state: { type: String },
-        types: { type: String, enum: ["home", "work", "other"] },
+        types: { type: String, enum: ["Home", "Work", "Other"] },
         primary: { type: Boolean },
       },
     ],
