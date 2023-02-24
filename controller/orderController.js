@@ -241,7 +241,6 @@ const payment = async (req, res) => {
     const totalSavedWater = parseInt(user.totalSavedWater + savedWater);
     const [promo] = await Promo.find({ bankCode: promoCode });
     if (promo) {
-      console.log("hi");
       if (order.totalAmount > promo.onOrderAbove) {
         discount = order.totalAmount * [promo.discountPercentage / 100];
         if (discount < parseInt(promo.discountUpto)) {
@@ -253,7 +252,7 @@ const payment = async (req, res) => {
         }
       }
     }
-    const data = await Order.findByIdAndUpdate(
+     await Order.findByIdAndUpdate(
       { _id: checkoutId },
       { totalAmount: totalAmount, discount: discount }
     );
@@ -270,7 +269,6 @@ const payment = async (req, res) => {
           totalPrice: order.totalAmount,
           walletBalance: amount,
           orderTitle: "ORDER",
-          orderDescription: "MONEY DEBITED",
           transactionType: "PAYMENT",
           transactionStatus: "DEBIT",
         });
@@ -299,7 +297,6 @@ const payment = async (req, res) => {
           totalPrice: user.wallet,
           walletBalance: 0,
           orderTitle: "ORDER",
-          orderDescription: "MONEY DEBITED",
           transactionType: "PAYMENT",
           transactionStatus: "DEBIT",
         });
