@@ -58,8 +58,8 @@ const buySubscription = async (req, res) => {
             walletBalance: amount,
             transactionType: "PAYMENT",
             transactionStatus: "DEBIT",
-            orderDescription: "New subscription purchased.",
-            orderTitle: "SUBSCRIPTION PURCHASED.",
+            orderDescription: "New subscription purchased",
+            orderTitle: "SUBSCRIPTION PURCHASED",
           });
         } else if (user.wallet > 0) {
           amount = 0;
@@ -71,12 +71,12 @@ const buySubscription = async (req, res) => {
             transactionType: "PAYMENT",
             transactionStatus: "DEBIT",
             orderDescription: "New subscription purchased",
-            orderTitle: "SUBSCRIPTION PURCHASED.",
+            orderTitle: "SUBSCRIPTION PURCHASED",
           });
         } else {
           res
             .status(200)
-            .send({ statusCode: 200, message: "Maintain sufficient balance." });
+            .send({ statusCode: 200, message: "Maintain sufficient balance" });
         }
         await users.findOneAndUpdate(
           { _id: req.users.userId },
@@ -111,8 +111,8 @@ const buySubscription = async (req, res) => {
           orderId: req.body.orderId,
           transactionType: "REFUND",
           transactionStatus: "CREDIT",
-          orderDescription: "Subscription cancelled refund.",
-          orderTitle: "SUBSCRIPTION CANCELLED.",
+          orderDescription: "Subscription cancelled refund",
+          orderTitle: "SUBSCRIPTION CANCELLED",
           totalPrice: refund,
           walletBalance: amount,
         });
@@ -143,8 +143,8 @@ const buySubscription = async (req, res) => {
             walletBalance: amount,
             transactionType: "PAYMENT",
             transactionStatus: "DEBIT",
-            orderDescription: "New subscription purchased.",
-            orderTitle: "SUBSCRIPTION PURCHASED.",
+            orderDescription: "New subscription purchased",
+            orderTitle: "SUBSCRIPTION PURCHASED",
           });
         } else if (user.wallet > 0) {
           amount = 0;
@@ -156,7 +156,7 @@ const buySubscription = async (req, res) => {
             transactionType: "PAYMENT",
             transactionStatus: "DEBIT",
             orderDescription: "New subscription purchased",
-            orderTitle: "SUBSCRIPTION PURCHASED.",
+            orderTitle: "SUBSCRIPTION PURCHASED",
           });
         } else {
           res.send({
@@ -350,7 +350,7 @@ const cancelSubscription = async (req, res) => {
     refundBy = new Date(refundBy);
     res.status(200).send({
       statusCode: 200,
-      message: "Subscription cancelled successfully.",
+      message: "Subscription cancelled successfully",
       amount: refund,
       card: cardNumber,
       type: card,
