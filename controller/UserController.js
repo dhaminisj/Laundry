@@ -68,7 +68,7 @@ const register = async (req, res) => {
         totalPrice: 40,
         walletBalance: data.wallet,
         transactionType: "CASHBACK",
-        orderDescription: "Money added to wallet.",
+        orderDescription: "Money added to wallet",
         orderTitle: "Cashback",
         transactionStatus: "CREDIT",
       });
@@ -91,7 +91,7 @@ const register = async (req, res) => {
       totalPrice: 40,
       walletBalance: data.wallet,
       transactionType: "CASHBACK",
-      orderDescription: "Money added to wallet.",
+      orderDescription: "Money added to wallet",
       orderTitle: "Cashback",
       transactionStatus: "CREDIT",
     });
