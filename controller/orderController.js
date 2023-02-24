@@ -136,16 +136,17 @@ const addressAndSlot = async (req, res) => {
     const { userId } = req.users;
     const { address, checkoutId, pickupAndDelivery, promoCode } = req.body;
     const [orderData] = await Order.find({ _id: checkoutId });
+    const [promo] = await Promo.find({ bankCode: promoCode });
     let totalAmount, discount;
-    if (promoCode) {
-      if (order.totalAmount > promoCode.onOrderAbove) {
-        discount = order.totalAmount * [promoCode.discountPercentage / 100];
-        if (discount < parseInt(promoCode.discountUpto)) {
+    if (promo) {
+      if (order.totalAmount > promo.onOrderAbove) {
+        discount = order.totalAmount * [promo.discountPercentage / 100];
+        if (discount < parseInt(promo.discountUpto)) {
           totalAmount = order.totalAmount - discount;
           discount = discount;
         } else {
-          totalAmount = order.totalAmount - promoCode.discountUpto;
-          discount = promoCode.discountUpto;
+          totalAmount = order.totalAmount - promo.discountUpto;
+          discount = promo.discountUpto;
         }
       }
     }
