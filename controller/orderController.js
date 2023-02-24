@@ -270,6 +270,7 @@ const payment = async (req, res) => {
           totalPrice: order.totalAmount,
           walletBalance: amount,
           orderTitle: "ORDER",
+          orderDescription: "MONEY DEBITED",
           transactionType: "PAYMENT",
           transactionStatus: "DEBIT",
         });
@@ -298,6 +299,7 @@ const payment = async (req, res) => {
           totalPrice: user.wallet,
           walletBalance: 0,
           orderTitle: "ORDER",
+          orderDescription: "MONEY DEBITED",
           transactionType: "PAYMENT",
           transactionStatus: "DEBIT",
         });
