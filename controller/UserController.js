@@ -70,6 +70,7 @@ const register = async (req, res) => {
         transactionType: "CASHBACK",
         orderDescription: "Money added to wallet.",
         orderTitle: "Cashback",
+        transactionStatus: "CREDIT",
       });
     } else {
       user = new User({
@@ -92,6 +93,7 @@ const register = async (req, res) => {
       transactionType: "CASHBACK",
       orderDescription: "Money added to wallet.",
       orderTitle: "Cashback",
+      transactionStatus: "CREDIT",
     });
     if (result) {
       const accessToken = jwt.sign(
