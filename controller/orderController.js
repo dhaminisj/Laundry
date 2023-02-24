@@ -131,13 +131,24 @@ const getOrderHistory = async (req, res) => {
     res.status(500).json({ statusCode: 500, message: error.message });
   }
 };
-let totalAmount, discount;
 const addressAndSlot = async (req, res) => {
   try {
     const { userId } = req.users;
-    const { address, checkoutId, pickupAndDelivery } = req.body;
+    const { address, checkoutId, pickupAndDelivery, promoCode } = req.body;
     const [orderData] = await Order.find({ _id: checkoutId });
-
+    let totalAmount, discount;
+    if (promoCode) {
+      if (order.totalAmount > promoCode.onOrderAbove) {
+        discount = order.totalAmount * [promoCode.discountPercentage / 100];
+        if (discount < parseInt(promoCode.discountUpto)) {
+          totalAmount = order.totalAmount - discount;
+          discount = discount;
+        } else {
+          totalAmount = order.totalAmount - promoCode.discountUpto;
+          discount = promoCode.discountUpto;
+        }
+      }
+    }
     const result = await Order.findByIdAndUpdate(
       { _id: checkoutId },
       {
@@ -186,7 +197,7 @@ const applyPromo = async (req, res) => {
     const { checkoutId, bankCode } = req.body;
     const [order] = await Order.find({ _id: checkoutId });
     const [promoCode] = await Promo.find({ bankCode });
-
+    let totalAmount, discount;
     if (promoCode) {
       if (order.totalAmount > promoCode.onOrderAbove) {
         discount = order.totalAmount * [promoCode.discountPercentage / 100];
@@ -221,30 +232,30 @@ const applyPromo = async (req, res) => {
 
 const payment = async (req, res) => {
   try {
-    const { checkoutId, bankCode } = req.body;
+    const { checkoutId, promoCode } = req.body;
     const [order] = await Order.find({ _id: req.body.checkoutId });
-
+    let totalAmount, discount, amount, fromOtherSource;
     const [user] = await User.find({ _id: req.users.userId });
     const savedWater = parseInt(order.noOfItems * 2);
     const totalSavedWater = parseInt(user.totalSavedWater + savedWater);
-    const [promoCode] = await Promo.find({ bankCode });
-    if (promoCode) {
-      if (order.totalAmount > promoCode.onOrderAbove) {
-        discount = order.totalAmount * [promoCode.discountPercentage / 100];
-        if (discount < parseInt(promoCode.discountUpto)) {
+    const [promo] = await Promo.find({ bankCode: promoCode });
+    if (promo) {
+      console.log("hi");
+      if (order.totalAmount > promo.onOrderAbove) {
+        discount = order.totalAmount * [promo.discountPercentage / 100];
+        if (discount < parseInt(promo.discountUpto)) {
           totalAmount = order.totalAmount - discount;
           discount = discount;
         } else {
-          totalAmount = order.totalAmount - promoCode.discountUpto;
-          discount = promoCode.discountUpto;
+          totalAmount = order.totalAmount - promo.discountUpto;
+          discount = promo.discountUpto;
         }
       }
     }
-    await Order.findByIdAndUpdate(
+    const data = await Order.findByIdAndUpdate(
       { _id: checkoutId },
       { totalAmount: totalAmount, discount: discount }
     );
-    let amount, fromOtherSource;
     if (req.body.isWallet) {
       if (user.wallet > order.totalAmount) {
         amount = user.wallet - order.totalAmount;
