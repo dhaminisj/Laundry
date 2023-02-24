@@ -131,15 +131,12 @@ const getOrderHistory = async (req, res) => {
     res.status(500).json({ statusCode: 500, message: error.message });
   }
 };
-
+let totalAmount, discount;
 const addressAndSlot = async (req, res) => {
   try {
     const { userId } = req.users;
     const { address, checkoutId, pickupAndDelivery } = req.body;
     const [orderData] = await Order.find({ _id: checkoutId });
-    const totalAmount = parseFloat(
-      orderData.basketTotal + orderData.tax + orderData.deliveryCharge
-    );
 
     const result = await Order.findByIdAndUpdate(
       { _id: checkoutId },
@@ -160,7 +157,6 @@ const addressAndSlot = async (req, res) => {
             deliveryDate: pickupAndDelivery.deliveryDate,
             slot: pickupAndDelivery.slot,
           },
-          totalAmount,
         },
       },
       { new: true }
@@ -171,6 +167,8 @@ const addressAndSlot = async (req, res) => {
         statusCode: 200,
         message: "Address, pickup and delivery slot added successfully.",
         result,
+        totalAmount: totalAmount,
+        discount: discount,
       });
     else
       res.status(400).json({
@@ -189,7 +187,6 @@ const applyPromo = async (req, res) => {
     const [order] = await Order.find({ _id: checkoutId });
     const [promoCode] = await Promo.find({ bankCode });
 
-    let totalAmount, discount;
     if (promoCode) {
       if (order.totalAmount > promoCode.onOrderAbove) {
         discount = order.totalAmount * [promoCode.discountPercentage / 100];
@@ -200,10 +197,7 @@ const applyPromo = async (req, res) => {
           totalAmount = order.totalAmount - promoCode.discountUpto;
           discount = promoCode.discountUpto;
         }
-        await Order.findByIdAndUpdate(
-          { _id: checkoutId },
-          { totalAmount: totalAmount, discount: discount }
-        );
+
         res.status(200).json({
           statusCode: 200,
           message: "Promo code applied successfully.",
@@ -227,11 +221,29 @@ const applyPromo = async (req, res) => {
 
 const payment = async (req, res) => {
   try {
+    const { checkoutId, bankCode } = req.body;
     const [order] = await Order.find({ _id: req.body.checkoutId });
+
     const [user] = await User.find({ _id: req.users.userId });
     const savedWater = parseInt(order.noOfItems * 2);
     const totalSavedWater = parseInt(user.totalSavedWater + savedWater);
-
+    const [promoCode] = await Promo.find({ bankCode });
+    if (promoCode) {
+      if (order.totalAmount > promoCode.onOrderAbove) {
+        discount = order.totalAmount * [promoCode.discountPercentage / 100];
+        if (discount < parseInt(promoCode.discountUpto)) {
+          totalAmount = order.totalAmount - discount;
+          discount = discount;
+        } else {
+          totalAmount = order.totalAmount - promoCode.discountUpto;
+          discount = promoCode.discountUpto;
+        }
+      }
+    }
+    await Order.findByIdAndUpdate(
+      { _id: checkoutId },
+      { totalAmount: totalAmount, discount: discount }
+    );
     let amount, fromOtherSource;
     if (req.body.isWallet) {
       if (user.wallet > order.totalAmount) {
