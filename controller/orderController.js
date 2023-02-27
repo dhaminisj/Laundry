@@ -252,7 +252,7 @@ const payment = async (req, res) => {
         }
       }
     }
-     await Order.findByIdAndUpdate(
+    await Order.findByIdAndUpdate(
       { _id: checkoutId },
       { totalAmount: totalAmount, discount: discount }
     );
@@ -439,6 +439,27 @@ const uploadImages = async (req, res) => {
   }
 };
 
+const getImages = async (req, res) => {
+  try {
+    const { userId } = req.users;
+    const result = await Image.find({ userId }).select("uploadedImage -_id");
+
+    if (result) {
+      res.status(200).json({
+        statusCode: 200,
+        message: "Images fetched successfully.",
+        result,
+      });
+    } else {
+      res.status(400).json({
+        statusCode: 400,
+        message: "Could not fetch images.",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ statusCode: 500, message: error.message });
+  }
+};
 const getUserOrders = async (req, res) => {
   try {
     const { userId } = req.users;
@@ -468,4 +489,5 @@ module.exports = {
   emptyBasket,
   uploadImages,
   getUserOrders,
+  getImages,
 };
