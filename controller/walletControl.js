@@ -63,6 +63,7 @@ const getWalletHistory = async (req, res) => {
     //     return e.paidAt;
     // });
     const walletHistory = await transactionSchema.aggregate([
+      { $match: { userId: userId } },
       {
         $group: {
           _id: {
