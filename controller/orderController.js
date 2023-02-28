@@ -451,7 +451,7 @@ const getImages = async (req, res) => {
       res.status(200).json({
         statusCode: 200,
         message: "Images fetched successfully.",
-        result: data.flat(),
+        data: data.flat(),
       });
     } else {
       res.status(400).json({
