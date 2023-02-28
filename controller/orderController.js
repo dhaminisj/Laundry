@@ -442,13 +442,16 @@ const uploadImages = async (req, res) => {
 const getImages = async (req, res) => {
   try {
     const { userId } = req.users;
-    const result = await Image.find({ userId }).select("uploadedImage -_id");
-
+    let result = await Image.find({ userId }).select("uploadedImage -_id");
+    data = [];
+    for (i = 0; i < result.length; i++) {
+      data.push(result[i].uploadedImage);
+    }
     if (result) {
       res.status(200).json({
         statusCode: 200,
         message: "Images fetched successfully.",
-        result,
+        result: data.flat(),
       });
     } else {
       res.status(400).json({
