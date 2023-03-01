@@ -15,8 +15,12 @@ const termsRouter = require("./routes/terms");
 const concernTextRouter = require("./routes/concernText");
 const helpAndSupportRouter = require("./routes/helpAndSupport");
 const deliveryRouter = require("./routes/delivery");
+const cors = require("cors");
+
 // const laundryList = require("./models/laundryListSchema");
 require("dotenv").config();
+app.use(cors());
+
 app.use(express.json());
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
