@@ -24,7 +24,6 @@ const handleRefreshToken = async (req, res) => {
           message: "An error occured.",
           // errors: errors.array(),
         });
-      
 
       if (docs) {
         jwt.verify(
@@ -41,7 +40,7 @@ const handleRefreshToken = async (req, res) => {
             const accessToken = jwt.sign(
               { userId: docs._id, email: decoded.email }, //TODO : Add email also
               process.env.ACCESS_TOKEN_SECRET,
-              { expiresIn: "1h" }
+              { expiresIn: "365d" }
             );
             delete req.headers["authorization"];
             res.header("Authorization", "Bearer " + accessToken);
