@@ -84,17 +84,20 @@ const register = async (req, res) => {
       });
     }
     const result = await user.save();
-    [data] = await User.find({ phone: req.body.phone });
-    await transaction.create({
-      userId: data._id,
-      orderId: "#id" + Math.random().toString(10).slice(3),
-      totalPrice: 40,
-      walletBalance: data.wallet,
-      transactionType: "CASHBACK",
-      orderDescription: "Money added to wallet",
-      orderTitle: "Cashback",
-      transactionStatus: "CREDIT",
-    });
+    if (codefound) {
+      [data] = await User.find({ phone: req.body.phone });
+      await transaction.create({
+        userId: data._id,
+        orderId: "#id" + Math.random().toString(10).slice(3),
+        totalPrice: 40,
+        walletBalance: data.wallet,
+        transactionType: "CASHBACK",
+        orderDescription: "Money added to wallet",
+        orderTitle: "Cashback",
+        transactionStatus: "CREDIT",
+      });
+    }
+
     if (result) {
       const accessToken = jwt.sign(
         { userId: result._id, phone: result.phone },
